@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mygate_coepd/screens/auth/login_screen.dart';
+import 'package:mygate_coepd/screens/auth/enter_email_mobile_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -287,7 +287,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const LoginScreen(),
+                                            const EnterEmailMobileScreen(),
                                       ),
                                     );
                                   },
