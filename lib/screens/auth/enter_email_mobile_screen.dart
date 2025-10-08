@@ -268,7 +268,7 @@ class _EnterEmailMobileScreenState extends State<EnterEmailMobileScreen>
                                   builder: (context) => NameEmailScreen(
                                     contactType: _selectedType,
                                     contactValue: _selectedType.value == 'phone'
-                                        ? '+91 ${_contactController.text}'
+                                        ? _contactController.text
                                         : _contactController.text.trim(),
                                   ),
                                 ),
