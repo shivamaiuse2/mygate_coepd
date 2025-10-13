@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mygate_coepd/blocs/auth/auth_bloc.dart';
 import 'package:mygate_coepd/blocs/auth/auth_event.dart';
 import 'package:mygate_coepd/blocs/auth/auth_state.dart';
+import 'package:mygate_coepd/config/app_config.dart';
 import 'package:mygate_coepd/screens/onboarding_screen.dart';
 import 'package:mygate_coepd/screens/auth_screen.dart';
 import 'package:mygate_coepd/screens/resident/resident_main_screen.dart';
@@ -50,9 +51,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           } else if (state is Unauthenticated) {
             Navigator.of(context).pushReplacementNamed('/auth');
           } else if (state is Authenticated) {
-            // Navigate based on user role
+            // Navigate based on the selected role from AppConfig, not the user's role from database
+            // This ensures navigation follows the role selected in role selection screen
+            final selectedRole = AppConfig.selectedRole ?? 'resident';
             Widget nextScreen;
-            switch (state.user.role) {
+            switch (selectedRole) {
               case 'guard':
                 nextScreen = const GuardMainScreen();
                 break;

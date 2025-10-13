@@ -243,14 +243,16 @@ class _AuthScreenState extends State<AuthScreen> {
                       ),
                     );
                   } else if (state is Authenticated) {
-                    // Navigate based on user role
-                    if (state.user.role == 'guard') {
+                    // Navigate based on the selected role from AppConfig, not the user's role from database
+                    // This ensures navigation follows the role selected in role selection screen
+                    final selectedRole = AppConfig.selectedRole ?? 'resident';
+                    if (selectedRole == 'guard') {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) => const GuardMainScreen(),
                         ),
                       );
-                    } else if (state.user.role == 'admin') {
+                    } else if (selectedRole == 'admin') {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) => const AdminMainScreen(),

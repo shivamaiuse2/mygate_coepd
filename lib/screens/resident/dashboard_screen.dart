@@ -9,7 +9,8 @@ class ResidentDashboardScreen extends StatefulWidget {
   const ResidentDashboardScreen({super.key});
 
   @override
-  State<ResidentDashboardScreen> createState() => _ResidentDashboardScreenState();
+  State<ResidentDashboardScreen> createState() =>
+      _ResidentDashboardScreenState();
 }
 
 class _ResidentDashboardScreenState extends State<ResidentDashboardScreen> {
@@ -58,8 +59,7 @@ class _ResidentDashboardScreenState extends State<ResidentDashboardScreen> {
     {
       'title': 'New Gym Equipment',
       'date': 'Starting Next Week',
-      'description':
-          'We have installed new equipment in the community gym.',
+      'description': 'We have installed new equipment in the community gym.',
       'image':
           'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=400&h=300',
       'tag': 'Amenity',
@@ -189,22 +189,64 @@ class _ResidentDashboardScreenState extends State<ResidentDashboardScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Welcome back',
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
-                            fontSize: 16,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              // mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Welcome back',
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.8),
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  user.name.split(' ')[0],
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    // Notification action
+                                  },
+                                  icon: const Icon(Icons.notifications),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    // Profile action
+                                  },
+                                  icon: CircleAvatar(
+                                    backgroundImage: user.profileImage != null
+                                        ? CachedNetworkImageProvider(
+                                            user.profileImage!,
+                                          )
+                                        : null,
+                                    child: user.profileImage == null
+                                        ? Icon(
+                                            Icons.person,
+                                            color: Theme.of(
+                                              context,
+                                            ).primaryColor,
+                                          )
+                                        : null,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          user.name.split(' ')[0],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+
                         const SizedBox(height: 20),
                         // Quick stats
                         SizedBox(
@@ -224,10 +266,7 @@ class _ResidentDashboardScreenState extends State<ResidentDashboardScreen> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(
-                                      stat['icon'],
-                                      color: Colors.white,
-                                    ),
+                                    Icon(stat['icon'], color: Colors.white),
                                     const SizedBox(height: 5),
                                     Text(
                                       stat['label'],
@@ -360,9 +399,8 @@ class _ResidentDashboardScreenState extends State<ResidentDashboardScreen> {
                                               Text(
                                                 announcement['date'],
                                                 style: TextStyle(
-                                                  color:
-                                                      Colors.white.withOpacity(
-                                                          0.8),
+                                                  color: Colors.white
+                                                      .withOpacity(0.8),
                                                   fontSize: 12,
                                                 ),
                                               ),
@@ -400,10 +438,10 @@ class _ResidentDashboardScreenState extends State<ResidentDashboardScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            crossAxisSpacing: 15,
-                            mainAxisSpacing: 15,
-                          ),
+                                crossAxisCount: 4,
+                                crossAxisSpacing: 15,
+                                mainAxisSpacing: 15,
+                              ),
                           itemCount: _quickActions.length,
                           itemBuilder: (context, index) {
                             final action = _quickActions[index];
@@ -427,7 +465,10 @@ class _ResidentDashboardScreenState extends State<ResidentDashboardScreen> {
                                     Navigator.pushNamed(context, '/community');
                                     break;
                                   case 'announcements':
-                                    Navigator.pushNamed(context, '/announcements');
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/announcements',
+                                    );
                                     break;
                                   case 'profile':
                                     Navigator.pushNamed(context, '/profile');
@@ -451,9 +492,7 @@ class _ResidentDashboardScreenState extends State<ResidentDashboardScreen> {
                                   Text(
                                     action['label'],
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                    ),
+                                    style: const TextStyle(fontSize: 12),
                                   ),
                                 ],
                               ),
@@ -556,28 +595,33 @@ class _ResidentDashboardScreenState extends State<ResidentDashboardScreen> {
                                                 children: [
                                                   const CircleAvatar(
                                                     radius: 10,
-                                                    backgroundColor: Colors.grey,
+                                                    backgroundColor:
+                                                        Colors.grey,
                                                   ),
                                                   const SizedBox(width: 3),
                                                   const CircleAvatar(
                                                     radius: 10,
-                                                    backgroundColor: Colors.grey,
+                                                    backgroundColor:
+                                                        Colors.grey,
                                                   ),
                                                   const SizedBox(width: 3),
                                                   const CircleAvatar(
                                                     radius: 10,
-                                                    backgroundColor: Colors.grey,
+                                                    backgroundColor:
+                                                        Colors.grey,
                                                   ),
                                                   const SizedBox(width: 5),
                                                   Container(
                                                     padding:
                                                         const EdgeInsets.all(3),
                                                     decoration: BoxDecoration(
-                                                      color: Theme.of(context)
-                                                          .primaryColor,
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).primaryColor,
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              10),
+                                                            10,
+                                                          ),
                                                     ),
                                                     child: Text(
                                                       '+${event['attendees']}',
@@ -622,11 +666,7 @@ class _ResidentDashboardScreenState extends State<ResidentDashboardScreen> {
             ),
           );
         }
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       },
     );
   }
