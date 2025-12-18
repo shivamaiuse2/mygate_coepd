@@ -104,23 +104,79 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
   ];
 
   final List<Map<String, dynamic>> _quickAccess = [
-    {'icon': Icons.apartment, 'label': 'Society Management', 'route': '/society-management'},
-    {'icon': Icons.people, 'label': 'Resident Management', 'route': '/resident-management'},
-    {'icon': Icons.business, 'label': 'Service Providers', 'route': '/service-providers'},
-    {'icon': Icons.checklist, 'label': 'Staff Attendance', 'route': '/staff-attendance'},
-    {'icon': Icons.house, 'label': 'Tenant Management', 'route': '/tenant-management'},
-    {'icon': Icons.swap_horiz, 'label': 'Move Process', 'route': '/move-process'},
-    {'icon': Icons.dashboard, 'label': 'Dashboard Config', 'route': '/dashboard-config'},
+    {
+      'icon': Icons.apartment,
+      'label': 'Society Management',
+      'route': '/society-management',
+    },
+    {
+      'icon': Icons.people,
+      'label': 'Resident Management',
+      'route': '/resident-management',
+    },
+    {
+      'icon': Icons.business,
+      'label': 'Service Providers',
+      'route': '/service-providers',
+    },
+    {
+      'icon': Icons.checklist,
+      'label': 'Staff Attendance',
+      'route': '/staff-attendance',
+    },
+    {
+      'icon': Icons.house,
+      'label': 'Tenant Management',
+      'route': '/tenant-management',
+    },
+    {
+      'icon': Icons.swap_horiz,
+      'label': 'Move Process',
+      'route': '/move-process',
+    },
+    {
+      'icon': Icons.dashboard,
+      'label': 'Dashboard Config',
+      'route': '/dashboard-config',
+    },
     {'icon': Icons.description, 'label': 'Reports', 'route': '/reports'},
     {'icon': Icons.settings, 'label': 'App Controls', 'route': '/app-controls'},
-    {'icon': Icons.camera, 'label': 'Selfie Attendance', 'route': '/selfie-attendance'},
-    {'icon': Icons.privacy_tip, 'label': 'Masked Directory', 'route': '/masked-directory'},
-    {'icon': Icons.business, 'label': 'Multi-Property', 'route': '/multi-property'},
+    {
+      'icon': Icons.camera,
+      'label': 'Selfie Attendance',
+      'route': '/selfie-attendance',
+    },
+    {
+      'icon': Icons.privacy_tip,
+      'label': 'Masked Directory',
+      'route': '/masked-directory',
+    },
+    {
+      'icon': Icons.business,
+      'label': 'Multi-Property',
+      'route': '/multi-property',
+    },
     {'icon': Icons.campaign, 'label': 'Notice Board', 'route': '/notice-board'},
-    {'icon': Icons.move_to_inbox, 'label': 'Resident Requests', 'route': '/resident-requests'},
-    {'icon': Icons.call, 'label': 'Resident Calling', 'route': '/resident-calling'},
-    {'icon': Icons.email, 'label': 'Email Campaigns', 'route': '/email-campaigns'},
-    {'icon': Icons.notifications, 'label': 'Push Notifications', 'route': '/push-notifications'},
+    {
+      'icon': Icons.move_to_inbox,
+      'label': 'Resident Requests',
+      'route': '/resident-requests',
+    },
+    {
+      'icon': Icons.call,
+      'label': 'Resident Calling',
+      'route': '/resident-calling',
+    },
+    {
+      'icon': Icons.email,
+      'label': 'Email Campaigns',
+      'route': '/email-campaigns',
+    },
+    {
+      'icon': Icons.notifications,
+      'label': 'Push Notifications',
+      'route': '/push-notifications',
+    },
   ];
 
   @override
@@ -151,483 +207,511 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
           // ignore: unused_local_variable
           final user = state.user;
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('Admin Dashboard'),
-              backgroundColor: Theme.of(context).primaryColor,
-              foregroundColor: Colors.white,
-              elevation: 0,
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    // Notification action
-                  },
-                  icon: const Icon(Icons.notifications),
-                ),
-                IconButton(
-                  onPressed: () {
-                    // Menu action
-                  },
-                  icon: const Icon(Icons.menu),
-                ),
-              ],
-              bottom: TabBar(
-                controller: _tabController,
-                isScrollable: true,
-                indicatorColor: Colors.white,
-                indicatorWeight: 3,
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.white70,
-                tabs: const [
-                  Tab(text: 'Overview'),
-                  Tab(text: 'Residents'),
-                  Tab(text: 'Billing'),
-                  Tab(text: 'Complaints'),
-                  Tab(text: 'Amenities'),
-                  Tab(text: 'Reports'),
-                ],
-              ),
-            ),
-            body: TabBarView(
-              controller: _tabController,
+            body: Column(
               children: [
-                // Overview Tab
-                SingleChildScrollView(
-                  child: Column(
+                TabBar(
+                  controller: _tabController,
+                  isScrollable: true,
+                  indicatorColor: Theme.of(context).primaryColor,
+                  indicatorWeight: 3.w,
+                  labelColor: Theme.of(context).primaryColor,
+                  unselectedLabelColor: Colors.grey,
+                  tabs: const [
+                    Tab(text: 'Overview'),
+                    Tab(text: 'Residents'),
+                    Tab(text: 'Billing'),
+                    Tab(text: 'Complaints'),
+                    Tab(text: 'Amenities'),
+                    Tab(text: 'Reports'),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
                     children: [
-                      // Stats Cards
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 15,
-                                mainAxisSpacing: 15,
+                      // Overview Tab
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          return SingleChildScrollView(
+                            child: Container(
+                              padding: EdgeInsets.all(15.r),
+                              constraints: BoxConstraints(
+                                minHeight: constraints.maxHeight,
                               ),
-                          itemCount: _stats.length,
-                          itemBuilder: (context, index) {
-                            final stat = _stats[index];
-                            return Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.all(10.r),
-                                          decoration: BoxDecoration(
-                                            color: stat['color'].withValues(alpha: 
-                                              0.1,
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              12.r,
-                                            ),
-                                          ),
-                                          child: Icon(
-                                            stat['icon'],
-                                            color: stat['color'],
-                                          ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Stats Cards
+                                  GridView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing: 15,
+                                          mainAxisSpacing: 15,
                                         ),
-                                        SizedBox(width: 10.w),
-                                      ],
-                                    ),
-                                    SizedBox(height: 10.h),
-                                    Text(
-                                      stat['title'],
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12.sp,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10.h),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          stat['value'],
-                                          style: const TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                    itemCount: _stats.length,
+                                    itemBuilder: (context, index) {
+                                      final stat = _stats[index];
+                                      return Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(16.r),
                                         ),
-                                        Text(
-                                          stat['change'],
-                                          style: TextStyle(
-                                            color: stat['isIncrease']
-                                                ? Colors.green
-                                                : Colors.red,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      // Quick Access
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Quick Access',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 4,
-                                    crossAxisSpacing: 15,
-                                    mainAxisSpacing: 15,
-                                    childAspectRatio: 0.85,
-                                  ),
-                              itemCount: _quickAccess.length,
-                              itemBuilder: (context, index) {
-                                final item = _quickAccess[index];
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        // Navigate to the respective module
-                                        Navigator.pushNamed(context, item['route']);
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.all(15),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(
-                                            context,
-                                          ).cardTheme.color,
-                                          borderRadius: BorderRadius.circular(16),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.grey.withValues(alpha: 0.1),
-                                              blurRadius: 5,
-                                              offset: const Offset(0, 2),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Icon(
-                                          item['icon'],
-                                          color: Theme.of(context).primaryColor,
-                                          size: 28,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      item['label'],
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Pending Approvals
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text(
-                                  'Pending Approvals',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 5,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    '${_pendingApprovals.length}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 15),
-                            if (_pendingApprovals.isNotEmpty)
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: _pendingApprovals.length,
-                                itemBuilder: (context, index) {
-                                  final approval = _pendingApprovals[index];
-                                  return Card(
-                                    margin: const EdgeInsets.only(bottom: 15),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    elevation: 2,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(15),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
+                                        child: Padding(
+                                          padding: EdgeInsets.all(15.w),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              CircleAvatar(
-                                                radius: 25,
-                                                backgroundImage:
-                                                    CachedNetworkImageProvider(
-                                                      approval['image'],
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    padding: EdgeInsets.all(10.r),
+                                                    decoration: BoxDecoration(
+                                                      color: stat['color'].withValues(
+                                                        alpha: 0.1,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(12.r),
                                                     ),
-                                                backgroundColor: Theme.of(
-                                                  context,
-                                                ).primaryColor.withValues(alpha: 0.1),
+                                                    child: Icon(
+                                                      stat['icon'],
+                                                      color: stat['color'],
+                                                      size: 24.sp,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 10.w),
+                                                ],
                                               ),
-                                              const SizedBox(width: 15),
-                                              Expanded(
+                                              SizedBox(height: 10.h),
+                                              Text(
+                                                stat['title'],
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 12.sp,
+                                                ),
+                                              ),
+                                              SizedBox(height: 10.h),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    stat['value'],
+                                                    style: TextStyle(
+                                                      fontSize: 24.sp,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    stat['change'],
+                                                    style: TextStyle(
+                                                      color: stat['isIncrease']
+                                                          ? Colors.green
+                                                          : Colors.red,
+                                                      fontSize: 12.sp,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  // Quick Access
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Quick Access',
+                                        style: TextStyle(
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 15.h),
+                                      GridView.builder(
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 4,
+                                              crossAxisSpacing: 15,
+                                              mainAxisSpacing: 15,
+                                              childAspectRatio: 0.7,
+                                            ),
+                                        itemCount: _quickAccess.length,
+                                        itemBuilder: (context, index) {
+                                          final item = _quickAccess[index];
+                                          return Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  // Navigate to the respective module
+                                                  Navigator.pushNamed(
+                                                    context,
+                                                    item['route'],
+                                                  );
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.all(15.w),
+                                                  decoration: BoxDecoration(
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).cardTheme.color,
+                                                    borderRadius:
+                                                        BorderRadius.circular(16.r),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.grey.withValues(
+                                                          alpha: 0.1,
+                                                        ),
+                                                        blurRadius: 5.w,
+                                                        offset: Offset(0, 2.h),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Icon(
+                                                    item['icon'],
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).primaryColor,
+                                                    size: 28.sp,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Flexible(
+                                                child: Text(
+                                                  item['label'],
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 12.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  // Pending Approvals
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Pending Approvals',
+                                            style: TextStyle(
+                                              fontSize: 18.sp,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 10.w,
+                                              vertical: 5.h,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.orange,
+                                              borderRadius: BorderRadius.circular(
+                                                20.r,
+                                              ),
+                                            ),
+                                            child: Text(
+                                              '${_pendingApprovals.length}',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 15.h),
+                                      if (_pendingApprovals.isNotEmpty)
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: _pendingApprovals.length,
+                                          itemBuilder: (context, index) {
+                                            final approval = _pendingApprovals[index];
+                                            return Card(
+                                              margin: EdgeInsets.only(bottom: 15.h),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                  16.r,
+                                                ),
+                                              ),
+                                              elevation: 2,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(15.w),
                                                 child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      approval['name'],
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
+                                                    Row(
+                                                      children: [
+                                                        CircleAvatar(
+                                                          radius: 25.r,
+                                                          backgroundImage:
+                                                              CachedNetworkImageProvider(
+                                                                approval['image'],
+                                                              ),
+                                                          backgroundColor:
+                                                              Theme.of(context)
+                                                                  .primaryColor
+                                                                  .withValues(
+                                                                    alpha: 0.1,
+                                                                  ),
+                                                        ),
+                                                        SizedBox(width: 15.w),
+                                                        Expanded(
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                approval['name'],
+                                                                style: TextStyle(
+                                                                  fontSize: 16.sp,
+                                                                  fontWeight:
+                                                                      FontWeight.bold,
+                                                                ),
+                                                              ),
+                                                              SizedBox(height: 5.h),
+                                                              Text(
+                                                                '${approval['type']} • ${approval['unit']}',
+                                                                style: TextStyle(
+                                                                  fontSize: 14.sp,
+                                                                  color: Colors.grey,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                'Requested: ${DateTime.parse(approval['requestedOn']).day}/${DateTime.parse(approval['requestedOn']).month}/${DateTime.parse(approval['requestedOn']).year}',
+                                                                style: TextStyle(
+                                                                  fontSize: 12.sp,
+                                                                  color: Colors.grey,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    const SizedBox(height: 5),
-                                                    Text(
-                                                      '${approval['type']} • ${approval['unit']}',
-                                                      style: const TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      'Requested: ${DateTime.parse(approval['requestedOn']).day}/${DateTime.parse(approval['requestedOn']).month}/${DateTime.parse(approval['requestedOn']).year}',
-                                                      style: const TextStyle(
-                                                        fontSize: 12,
-                                                        color: Colors.grey,
-                                                      ),
+                                                    SizedBox(height: 15.h),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        Expanded(
+                                                          child: OutlinedButton(
+                                                            onPressed: () {
+                                                              _handleReject(
+                                                                approval['id'],
+                                                              );
+                                                            },
+                                                            style: OutlinedButton.styleFrom(
+                                                              padding:
+                                                                  EdgeInsets.symmetric(
+                                                                vertical: 12.h,
+                                                              ),
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                      12.r,
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                            child: Text(
+                                                              'Reject',
+                                                              style: TextStyle(
+                                                                fontSize: 14.sp,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(width: 10.w),
+                                                        Expanded(
+                                                          child: ElevatedButton(
+                                                            onPressed: () {
+                                                              _handleApprove(
+                                                                approval['id'],
+                                                              );
+                                                            },
+                                                            style: ElevatedButton.styleFrom(
+                                                              padding:
+                                                                  EdgeInsets.symmetric(
+                                                                vertical: 12.h,
+                                                              ),
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                      12.r,
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                            child: Text(
+                                                              'Approve',
+                                                              style: TextStyle(
+                                                                fontSize: 14.sp,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                            ],
+                                            );
+                                          },
+                                        )
+                                      else
+                                        Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(16.r),
                                           ),
-                                          const SizedBox(height: 15),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Expanded(
-                                                child: OutlinedButton(
-                                                  onPressed: () {
-                                                    _handleReject(
-                                                      approval['id'],
-                                                    );
-                                                  },
-                                                  style: OutlinedButton.styleFrom(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          vertical: 12,
-                                                        ),
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            12,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  child: const Text('Reject'),
+                                          elevation: 2,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(20.w),
+                                            child: Column(
+                                              children: [
+                                                Icon(
+                                                  Icons.check_circle,
+                                                  color: Colors.green,
+                                                  size: 40.sp,
                                                 ),
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    _handleApprove(
-                                                      approval['id'],
-                                                    );
-                                                  },
-                                                  style: ElevatedButton.styleFrom(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          vertical: 12,
-                                                        ),
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            12,
-                                                          ),
-                                                    ),
+                                                SizedBox(height: 15.h),
+                                                Text(
+                                                  'No pending approvals',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 16.sp,
                                                   ),
-                                                  child: const Text('Approve'),
                                                 ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20.h),
+                                  // Recent Activity
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Recent Activity',
+                                            style: TextStyle(
+                                              fontSize: 18.sp,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              // View all activity
+                                            },
+                                            child: Text(
+                                              'View All',
+                                              style: TextStyle(
+                                                fontSize: 14.sp,
+                                                color: Theme.of(context).primaryColor,
                                               ),
-                                            ],
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  );
-                                },
-                              )
-                            else
-                              Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                elevation: 2,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    children: [
-                                      Icon(
-                                        Icons.check_circle,
-                                        color: Colors.green,
-                                        size: 40,
-                                      ),
-                                      const SizedBox(height: 15),
-                                      const Text(
-                                        'No pending approvals',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 16,
+                                      SizedBox(height: 15.h),
+                                      Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(16.r),
+                                        ),
+                                        elevation: 2,
+                                        child: Column(
+                                          children: _recentActivity
+                                              .map(
+                                                (activity) => ListTile(
+                                                  leading: Container(
+                                                    padding: EdgeInsets.all(10.w),
+                                                    decoration: BoxDecoration(
+                                                      color: activity['iconBg']
+                                                          .withValues(alpha: 0.1),
+                                                      borderRadius:
+                                                          BorderRadius.circular(12.r),
+                                                    ),
+                                                    child: Icon(
+                                                      activity['icon'],
+                                                      color: activity['iconColor'],
+                                                      size: 24.sp,
+                                                    ),
+                                                  ),
+                                                  title: Text(
+                                                    activity['title'],
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.w500,
+                                                      fontSize: 16.sp,
+                                                    ),
+                                                  ),
+                                                  subtitle: Text(
+                                                    activity['description'],
+                                                    style: TextStyle(fontSize: 14.sp),
+                                                  ),
+                                                  trailing: Text(
+                                                    activity['time'],
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 12.sp,
+                                                    ),
+                                                  ),
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                    horizontal: 16.w,
+                                                    vertical: 8.h,
+                                                  ),
+                                                ),
+                                              )
+                                              .toList(),
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      // Recent Activity
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text(
-                                  'Recent Activity',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    // View all activity
-                                  },
-                                  child: const Text('View All'),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 15),
-                            Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              elevation: 2,
-                              child: Column(
-                                children: _recentActivity
-                                    .map(
-                                      (activity) => ListTile(
-                                        leading: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            color: activity['iconBg']
-                                                .withValues(alpha: 0.1),
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                          ),
-                                          child: Icon(
-                                            activity['icon'],
-                                            color: activity['iconColor'],
-                                          ),
-                                        ),
-                                        title: Text(
-                                          activity['title'],
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        subtitle: Text(activity['description']),
-                                        trailing: Text(
-                                          activity['time'],
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                              horizontal: 16,
-                                              vertical: 8,
-                                            ),
-                                      ),
-                                    )
-                                    .toList(),
+                                  SizedBox(height: 80.h), // Space for bottom bar
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                      const SizedBox(height: 80), // Space for bottom bar
+                      // Other tabs would go here
+                      const Center(child: Text('Residents Tab')),
+                      const Center(child: Text('Billing Tab')),
+                      const Center(child: Text('Complaints Tab')),
+                      const Center(child: Text('Amenities Tab')),
+                      const Center(child: Text('Reports Tab')),
                     ],
                   ),
                 ),
-                // Other tabs would go here
-                const Center(child: Text('Residents Tab')),
-                const Center(child: Text('Billing Tab')),
-                const Center(child: Text('Complaints Tab')),
-                const Center(child: Text('Amenities Tab')),
-                const Center(child: Text('Reports Tab')),
               ],
             ),
             floatingActionButton: FloatingActionButton(
@@ -635,7 +719,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                 // Add new item
               },
               backgroundColor: Theme.of(context).primaryColor,
-              child: const Icon(Icons.add),
+              child: Icon(Icons.add, size: 24.sp),
             ),
           );
         }

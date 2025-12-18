@@ -11,6 +11,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AppStarted>(_onAppStarted);
     on<LoginRequested>(_onLoginRequested);
     on<RegisterRequested>(_onRegisterRequested);
+    on<OtpRequested>(_onOtpRequested);
     on<LogoutRequested>(_onLogoutRequested);
     on<RoleSelected>(_onRoleSelected);
     on<OnboardingCompleted>(_onOnboardingCompleted);
@@ -68,6 +69,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } catch (e) {
       emit(AuthError('Registration failed: $e'));
+    }
+  }
+
+  void _onOtpRequested(OtpRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      // Simulate OTP sending (in a real app, this would call an API)
+      await Future.delayed(const Duration(seconds: 1));
+      emit(OtpSent(phone: event.phone));
+    } catch (e) {
+      emit(AuthError('Failed to send OTP: $e'));
     }
   }
 

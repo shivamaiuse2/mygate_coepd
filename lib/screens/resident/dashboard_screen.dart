@@ -601,6 +601,8 @@ class _ResidentDashboardScreenState extends State<ResidentDashboardScreen>
                                             fontSize: 16.sp,
                                             fontWeight: FontWeight.bold,
                                           ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                         SizedBox(height: 5.h),
                                         Text(

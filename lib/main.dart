@@ -5,14 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mygate_coepd/config/app_config.dart';
+import 'package:mygate_coepd/screens/auth/address/LocationSelectionScreen.dart';
 import 'package:mygate_coepd/theme/app_theme.dart';
 import 'package:mygate_coepd/models/user.dart';
 import 'package:mygate_coepd/blocs/auth/auth_bloc.dart';
 import 'package:mygate_coepd/repositories/user_repository.dart';
-import 'package:mygate_coepd/screens/splash_screen.dart';
-import 'package:mygate_coepd/screens/onboarding_screen.dart';
-import 'package:mygate_coepd/screens/role_selection_screen.dart';
-import 'package:mygate_coepd/screens/auth_screen.dart';
+import 'package:mygate_coepd/screens/auth/splash_screen.dart';
+import 'package:mygate_coepd/screens/auth/onboarding_screen.dart';
+import 'package:mygate_coepd/screens/auth/role_selection_screen.dart';
+import 'package:mygate_coepd/screens/auth/auth_screen.dart';
 import 'package:mygate_coepd/screens/resident/resident_main_screen.dart';
 import 'package:mygate_coepd/screens/guard/guard_main_screen.dart';
 import 'package:mygate_coepd/screens/admin/admin_main_screen.dart';
@@ -116,6 +117,8 @@ class _CommunityLinkAppState extends State<CommunityLinkApp> with WidgetsBinding
       '/amenities': (context) => const AmenityBookingScreen(),
       '/community': (context) => const CommunityScreen(),
       '/profile': (context) => const ProfileScreen(),
+      '/location-selection': (context) => const LocationSelectionScreen(),
+
     };
   }
 }

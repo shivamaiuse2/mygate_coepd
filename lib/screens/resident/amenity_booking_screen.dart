@@ -23,7 +23,7 @@ class _AmenityBookingScreenState extends State<AmenityBookingScreen> with Ticker
       'id': 1,
       'name': 'Swimming Pool',
       'image':
-          'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&q=80&w=400&h=300',
+          'https://plus.unsplash.com/premium_photo-1675745329659-29044cb6adbb?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8U3dpbW1pbmclMjBQb29sfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=600',
       'description': 'Olympic size swimming pool with lifeguard',
       'availableSlots': [
         '06:00',
@@ -57,7 +57,7 @@ class _AmenityBookingScreenState extends State<AmenityBookingScreen> with Ticker
       'id': 3,
       'name': 'Tennis Court',
       'image':
-          'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&q=80&w=400&h=300',
+          'https://images.unsplash.com/photo-1564769353575-73f33a36d84f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8J1Rlbm5pcyUyMENvdXJ0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=600',
       'description': 'Professional tennis court with lights',
       'availableSlots': [
         '06:00',
@@ -74,7 +74,7 @@ class _AmenityBookingScreenState extends State<AmenityBookingScreen> with Ticker
       'id': 4,
       'name': 'Community Hall',
       'image':
-          'https://images.unsplash.com/photo-1519377238425-655f2b0ddee9?auto=format&fit=crop&q=80&w=400&h=300',
+          'https://media.istockphoto.com/id/1466734442/photo/empty-community-centre.webp?a=1&b=1&s=612x612&w=0&k=20&c=qWKFFRwhxvMuHH4hpJrF0bY0ldAcae0II1hvXef-3K4=',
       'description': 'Multi-purpose hall for events',
       'availableSlots': ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'],
     },

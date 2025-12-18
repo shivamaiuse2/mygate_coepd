@@ -16,6 +16,15 @@ class Unauthenticated extends AuthState {}
 
 class AuthLoading extends AuthState {}
 
+class OtpSent extends AuthState {
+  final String phone;
+
+  const OtpSent({required this.phone});
+
+  @override
+  List<Object?> get props => [phone];
+}
+
 class Authenticated extends AuthState {
   final User user;
 

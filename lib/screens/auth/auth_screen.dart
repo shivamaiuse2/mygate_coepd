@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_auth/smart_auth.dart';
 import 'package:mygate_coepd/blocs/auth/auth_bloc.dart';
 import 'package:mygate_coepd/blocs/auth/auth_event.dart';
 import 'package:mygate_coepd/blocs/auth/auth_state.dart';
@@ -8,7 +10,7 @@ import 'package:mygate_coepd/config/app_config.dart';
 import 'package:mygate_coepd/screens/resident/resident_main_screen.dart';
 import 'package:mygate_coepd/screens/guard/guard_main_screen.dart';
 import 'package:mygate_coepd/screens/admin/admin_main_screen.dart';
-import 'package:mygate_coepd/screens/approval_pending_screen.dart';
+import 'package:mygate_coepd/screens/auth/approval_pending_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -21,7 +23,9 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _isLogin = true;
   bool _otpSent = false;
   String _otp = '';
+  String _otpErrorMessage = ''; // Added for OTP error messages
   final _formKey = GlobalKey<FormState>();
+  late SmartAuth _smartAuth; // SmartAuth instance
 
   // Controllers
   final TextEditingController _nameController = TextEditingController();
@@ -29,14 +33,11 @@ class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _unitController = TextEditingController();
   final TextEditingController _societyIdController = TextEditingController();
-  final List<TextEditingController> _otpControllers = List.generate(
-    6,
-    (index) => TextEditingController(),
-  );
 
   @override
   void initState() {
     super.initState();
+    _smartAuth = SmartAuth.instance;
     // Pre-fill phone if remember device is enabled
     // Only pre-fill actual phone numbers, not role names
     if (AppConfig.rememberDevice && AppConfig.selectedRole != null) {
@@ -54,19 +55,34 @@ class _AuthScreenState extends State<AuthScreen> {
     _phoneController.dispose();
     _unitController.dispose();
     _societyIdController.dispose();
-    for (var controller in _otpControllers) {
-      controller.dispose();
-    }
     super.dispose();
   }
 
   void _submitForm() {
+    // Clear previous OTP error message
+    setState(() {
+      _otpErrorMessage = '';
+    });
+    
     if (_formKey.currentState!.validate()) {
+      // Validate OTP if it's sent
+      if (_otpSent) {
+        // Validate OTP format
+        if (_otp.length != 6 || !RegExp(r'^[0-9]{6}$').hasMatch(_otp)) {
+          setState(() {
+            _otpErrorMessage = 'Please enter a valid 6-digit OTP';
+          });
+          return;
+        }
+      }
+      
       if (_isLogin) {
         if (!_otpSent) {
           setState(() {
             _otpSent = true;
           });
+          // Request OTP using SmartAuth
+          _requestOtp();
         } else {
           // Login with OTP
           context.read<AuthBloc>().add(
@@ -78,12 +94,15 @@ class _AuthScreenState extends State<AuthScreen> {
           setState(() {
             _otpSent = true;
           });
+          // Request OTP using SmartAuth
+          _requestOtp();
         } else {
           // Register
           context.read<AuthBloc>().add(
             RegisterRequested(
               name: _nameController.text,
               phone: _phoneController.text,
+              email: _emailController.text,
               societyId: _societyIdController.text,
               unit: _unitController.text,
               role: AppConfig.selectedRole ?? 'resident',
@@ -94,8 +113,43 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
+  // Request OTP using SmartAuth
+  void _requestOtp() async {
+    try {
+      // Show loading state
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Sending OTP...'), backgroundColor: Colors.blue),
+      );
+      
+      // In a real implementation, you would call your backend API to send OTP
+      // For now, we'll simulate it with a delay
+      await Future.delayed(const Duration(seconds: 1));
+      
+      // Hide loading snackbar
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('OTP sent successfully!'), backgroundColor: Colors.green),
+      );
+    } catch (e) {
+      // Hide loading snackbar
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      
+      // Show error message
+      setState(() {
+        _otpErrorMessage = 'Failed to send OTP. Please try again.';
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, designSize: const Size(375, 812));
+    
     final selectedRole = AppConfig.selectedRole ?? 'resident';
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final backgroundColor = isDarkMode
@@ -131,11 +185,11 @@ class _AuthScreenState extends State<AuthScreen> {
                 children: [
                   // Decorative background elements
                   Positioned(
-                    top: -30,
-                    right: -30,
+                    top: -30.h,
+                    right: -30.w,
                     child: Container(
-                      width: 120,
-                      height: 120,
+                      width: 120.r,
+                      height: 120.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white.withValues(alpha: 0.1),
@@ -143,11 +197,11 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                   Positioned(
-                    bottom: -25,
-                    left: 30,
+                    bottom: -25.h,
+                    left: 30.w,
                     child: Container(
-                      width: 80,
-                      height: 80,
+                      width: 80.r,
+                      height: 80.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white.withValues(alpha: 0.1),
@@ -155,22 +209,22 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                      left: 24.0,
-                      right: 24.0,
-                      top: 50.0,
+                    padding: EdgeInsets.only(
+                      left: 24.w,
+                      right: 24.w,
+                      top: 50.h,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16.h),
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(12),
+                              padding: EdgeInsets.all(12.r),
                               decoration: BoxDecoration(
                                 color: Colors.white.withValues(alpha: 0.2),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: Icon(
                                 selectedRole == 'guard'
@@ -179,10 +233,10 @@ class _AuthScreenState extends State<AuthScreen> {
                                     ? Icons.admin_panel_settings_outlined
                                     : Icons.home_outlined,
                                 color: Colors.white,
-                                size: 24,
+                                size: 24.sp,
                               ),
                             ),
-                            const SizedBox(width: 12),
+                            SizedBox(width: 12.w),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -190,7 +244,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   'Logging in as',
                                   style: TextStyle(
                                     color: Colors.white.withValues(alpha: 0.9),
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                   ),
                                 ),
                                 Text(
@@ -199,9 +253,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                       : selectedRole == 'admin'
                                       ? 'Administrator'
                                       : 'Resident',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: 18.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -209,26 +263,26 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
                         Text(
                           _isLogin ? 'Welcome Back' : 'Join Your Community',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
-                            fontSize: 28,
+                            fontSize: 28.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 5),
+                        SizedBox(height: 5.h),
                         Text(
                           _isLogin
                               ? 'Sign in to access your community'
                               : 'Create an account to get started',
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.9),
-                            fontSize: 16,
+                            fontSize: 16.sp,
                           ),
                         ),
-                        const SizedBox(height: 30),
+                        SizedBox(height: 30.h),
                       ],
                     ),
                   ),
@@ -240,6 +294,13 @@ class _AuthScreenState extends State<AuthScreen> {
               child: BlocListener<AuthBloc, AuthState>(
                 listener: (context, state) {
                   if (state is AuthError) {
+                    // Check if it's an OTP related error
+                    if (state.message.toLowerCase().contains('otp') || 
+                        state.message.toLowerCase().contains('code')) {
+                      setState(() {
+                        _otpErrorMessage = state.message;
+                      });
+                    }
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(state.message),
@@ -297,7 +358,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   }
                 },
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: EdgeInsets.all(24.w),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -308,14 +369,14 @@ class _AuthScreenState extends State<AuthScreen> {
                           Container(
                             decoration: BoxDecoration(
                               color: surfaceColor,
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.r),
                               boxShadow: isDarkMode
                                   ? []
                                   : [
                                       BoxShadow(
                                         color: Colors.grey.withValues(alpha: 0.1),
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 5),
+                                        blurRadius: 10.r,
+                                        offset: Offset(0, 5.h),
                                       ),
                                     ],
                             ),
@@ -333,8 +394,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 18,
+                                  horizontal: 16.w,
+                                  vertical: 18.h,
                                 ),
                               ),
                               validator: (value) {
@@ -346,19 +407,19 @@ class _AuthScreenState extends State<AuthScreen> {
                               },
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20.h),
                           // Name for registration
                           Container(
                             decoration: BoxDecoration(
                               color: surfaceColor,
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.r),
                               boxShadow: isDarkMode
                                   ? []
                                   : [
                                       BoxShadow(
                                         color: Colors.grey.withValues(alpha: 0.1),
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 5),
+                                        blurRadius: 10.r,
+                                        offset: Offset(0, 5.h),
                                       ),
                                     ],
                             ),
@@ -376,8 +437,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 18,
+                                  horizontal: 16.w,
+                                  vertical: 18.h,
                                 ),
                               ),
                               validator: (value) {
@@ -389,20 +450,20 @@ class _AuthScreenState extends State<AuthScreen> {
                               },
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20.h),
                           // Unit for resident registration
                           if (selectedRole == 'resident')
                             Container(
                               decoration: BoxDecoration(
                                 color: surfaceColor,
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.r),
                                 boxShadow: isDarkMode
                                     ? []
                                     : [
                                         BoxShadow(
                                           color: Colors.grey.withValues(alpha: 0.1),
-                                          blurRadius: 10,
-                                          offset: const Offset(0, 5),
+                                          blurRadius: 10.r,
+                                          offset: Offset(0, 5.h),
                                         ),
                                       ],
                               ),
@@ -420,8 +481,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ),
                                   border: InputBorder.none,
                                   contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 18,
+                                    horizontal: 16.w,
+                                    vertical: 18.h,
                                   ),
                                 ),
                                 validator: (value) {
@@ -434,20 +495,20 @@ class _AuthScreenState extends State<AuthScreen> {
                                 },
                               ),
                             ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20.h),
                         ],
                         // Phone number
                         Container(
                           decoration: BoxDecoration(
                             color: surfaceColor,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                             boxShadow: isDarkMode
                                 ? []
                                 : [
                                     BoxShadow(
                                       color: Colors.grey.withValues(alpha: 0.1),
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 5),
+                                      blurRadius: 10.r,
+                                      offset: Offset(0, 5.h),
                                     ),
                                   ],
                           ),
@@ -463,8 +524,8 @@ class _AuthScreenState extends State<AuthScreen> {
                               ),
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 18,
+                                horizontal: 16.w,
+                                vertical: 18.h,
                               ),
                             ),
                             keyboardType: TextInputType.phone,
@@ -487,20 +548,20 @@ class _AuthScreenState extends State<AuthScreen> {
                             },
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
 
                         // Email address
                         Container(
                           decoration: BoxDecoration(
                             color: surfaceColor,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                             boxShadow: isDarkMode
                                 ? []
                                 : [
                                     BoxShadow(
                                       color: Colors.grey.withValues(alpha: 0.1),
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 5),
+                                      blurRadius: 10.r,
+                                      offset: Offset(0, 5.h),
                                     ),
                                   ],
                           ),
@@ -516,8 +577,8 @@ class _AuthScreenState extends State<AuthScreen> {
                               ),
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 18,
+                                horizontal: 16.w,
+                                vertical: 18.h,
                               ),
                             ),
                             keyboardType: TextInputType.emailAddress,
@@ -535,74 +596,81 @@ class _AuthScreenState extends State<AuthScreen> {
                             },
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
                         if (_otpSent) ...[
-                          const SizedBox(height: 20),
+                          SizedBox(height: 20.h),
                           Text(
                             'Enter OTP',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
                               color: textColor,
                             ),
                           ),
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: List.generate(6, (index) {
-                              return SizedBox(
-                                width: 50,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: surfaceColor,
-                                    borderRadius: BorderRadius.circular(12),
-                                    boxShadow: isDarkMode
-                                        ? []
-                                        : [
-                                            BoxShadow(
-                                              color: Colors.grey.withValues(alpha: 
-                                                0.1,
-                                              ),
-                                              blurRadius: 5,
-                                              offset: const Offset(0, 2),
-                                            ),
-                                          ],
-                                  ),
-                                  child: TextFormField(
-                                    controller: _otpControllers[index],
-                                    style: TextStyle(color: textColor),
-                                    decoration: InputDecoration(
-                                      counterText: '',
-                                      border: InputBorder.none,
-                                      contentPadding: EdgeInsets.all(15),
-                                      alignLabelWithHint: true,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    maxLength: 1,
-                                    keyboardType: TextInputType.number,
-                                    validator: (value) {
-                                      if (_otpSent &&
-                                          (value == null || value.isEmpty)) {
-                                        return '';
-                                      }
-                                      return null;
-                                    },
-                                    onChanged: (value) {
-                                      // Move to next field
-                                      if (value.isNotEmpty && index < 5) {
-                                        FocusScope.of(context).nextFocus();
-                                      }
-                                      // Update OTP string
-                                      _otp = _otpControllers
-                                          .map((controller) => controller.text)
-                                          .join();
-                                    },
-                                  ),
+                          SizedBox(height: 10.h),
+                          // SmartAuth OTP Input Field
+                          Container(
+                            decoration: BoxDecoration(
+                              color: surfaceColor,
+                              borderRadius: BorderRadius.circular(16.r),
+                              boxShadow: isDarkMode
+                                  ? []
+                                  : [
+                                      BoxShadow(
+                                        color: Colors.grey.withValues(alpha: 0.1),
+                                        blurRadius: 10.r,
+                                        offset: Offset(0, 5.h),
+                                      ),
+                                    ],
+                            ),
+                            child: TextFormField(
+                              initialValue: _otp,
+                              style: TextStyle(color: textColor, fontSize: 18.sp),
+                              decoration: InputDecoration(
+                                labelText: 'OTP',
+                                labelStyle: TextStyle(color: secondaryTextColor),
+                                prefixIcon: Icon(
+                                  Icons.lock_outline,
+                                  color: iconColor,
                                 ),
-                              );
-                            }),
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 16.w,
+                                  vertical: 18.h,
+                                ),
+                              ),
+                              keyboardType: TextInputType.number,
+                              maxLength: 6,
+                              onChanged: (value) {
+                                setState(() {
+                                  _otp = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (_otpSent && (value == null || value.isEmpty)) {
+                                  return 'Please enter OTP';
+                                }
+                                if (_otpSent && (value?.length != 6)) {
+                                  return 'OTP must be 6 digits';
+                                }
+                                return null;
+                              },
+                            ),
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: 10.h),
+                          // OTP Error Message Display
+                          if (_otpErrorMessage.isNotEmpty)
+                            Padding(
+                              padding: EdgeInsets.only(top: 10.h),
+                              child: Text(
+                                _otpErrorMessage,
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
                           if (_isLogin)
                             Row(
                               children: [
@@ -619,15 +687,15 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                                 Text(
                                   'Remember this device',
-                                  style: TextStyle(color: textColor),
+                                  style: TextStyle(color: textColor, fontSize: 14.sp),
                                 ),
                               ],
                             ),
                         ],
-                        const SizedBox(height: 30),
+                        SizedBox(height: 30.h),
                         SizedBox(
                           width: double.infinity,
-                          height: 55,
+                          height: 55.h,
                           child: BlocBuilder<AuthBloc, AuthState>(
                             builder: (context, state) {
                               return ElevatedButton(
@@ -639,7 +707,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: iconColor,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(16.r),
                                   ),
                                   elevation: isDarkMode ? 2 : 5,
                                 ),
@@ -658,8 +726,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                             : (_isLogin
                                                   ? 'Send OTP'
                                                   : 'Send OTP'),
-                                        style: const TextStyle(
-                                          fontSize: 18,
+                                        style: TextStyle(
+                                          fontSize: 18.sp,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
                                         ),
@@ -668,7 +736,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             },
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
                         Center(
                           child: TextButton(
                             onPressed: () {
@@ -676,10 +744,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 _isLogin = !_isLogin;
                                 _otpSent = false;
                                 _otp = '';
-                                // Clear OTP fields
-                                for (var controller in _otpControllers) {
-                                  controller.clear();
-                                }
+                                _otpErrorMessage = ''; // Clear OTP error message
                               });
                             },
                             child: Text(
@@ -687,7 +752,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ? "Don't have an account? Sign up"
                                   : 'Already have an account? Sign in',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 16.sp,
                                 color: iconColor,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -705,7 +770,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             child: Text(
                               'Change Role',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 color: secondaryTextColor,
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline,

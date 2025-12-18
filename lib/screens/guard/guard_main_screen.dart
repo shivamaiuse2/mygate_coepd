@@ -17,12 +17,13 @@ class GuardMainScreen extends StatefulWidget {
   State<GuardMainScreen> createState() => _GuardMainScreenState();
 }
 
-class _GuardMainScreenState extends State<GuardMainScreen> with TickerProviderStateMixin {
+class _GuardMainScreenState extends State<GuardMainScreen>
+    with TickerProviderStateMixin {
   int _currentIndex = 0;
   late AnimationController _animationController;
   late Animation<double> _animation;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  
+
   late final List<Widget> _screens;
   late final List<NavItem> _navItems;
 
@@ -35,7 +36,7 @@ class _GuardMainScreenState extends State<GuardMainScreen> with TickerProviderSt
       const AttendanceScreen(),
       const GuardProfileScreen(),
     ];
-    
+
     _navItems = [
       NavItem(
         icon: Icons.home_outlined,
@@ -62,17 +63,17 @@ class _GuardMainScreenState extends State<GuardMainScreen> with TickerProviderSt
         badgeCount: 0,
       ),
     ];
-    
+
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    
+
     _animation = CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
     );
-    
+
     // Start animation for the initially selected tab
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _animationController.forward();
@@ -122,14 +123,13 @@ class _GuardMainScreenState extends State<GuardMainScreen> with TickerProviderSt
             ),
             drawer: _buildDrawer(context, user),
             body: _screens[_currentIndex],
-            bottomNavigationBar: _buildPremiumNavigationBar(theme, primaryColor),
+            bottomNavigationBar: _buildPremiumNavigationBar(
+              theme,
+              primaryColor,
+            ),
           );
         }
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       },
     );
   }
@@ -140,9 +140,7 @@ class _GuardMainScreenState extends State<GuardMainScreen> with TickerProviderSt
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(
-              color: Color(0xFF006D77),
-            ),
+            decoration: const BoxDecoration(color: Color(0xFF006D77)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -153,13 +151,10 @@ class _GuardMainScreenState extends State<GuardMainScreen> with TickerProviderSt
                       ? NetworkImage(user.profileImage!)
                       : null,
                   child: user.profileImage == null
-                      ? const Icon(
-                          Icons.person,
-                          color: Colors.white,
-                        )
+                      ? const Icon(Icons.person, color: Colors.white)
                       : null,
                 ),
-                 SizedBox(height: 10.h),
+                SizedBox(height: 10.h),
                 Text(
                   user.name,
                   style: TextStyle(
@@ -169,12 +164,9 @@ class _GuardMainScreenState extends State<GuardMainScreen> with TickerProviderSt
                   ),
                 ),
                 SizedBox(height: 5.h),
-                 Text(
+                Text(
                   'Security Guard',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14.sp,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 14.sp),
                 ),
               ],
             ),
@@ -281,7 +273,7 @@ class _GuardMainScreenState extends State<GuardMainScreen> with TickerProviderSt
             children: List.generate(_navItems.length, (index) {
               final item = _navItems[index];
               final isSelected = _currentIndex == index;
-              
+
               return Expanded(
                 child: _BuildAnimatedNavItem(
                   animation: _animation,
@@ -304,9 +296,7 @@ class _GuardMainScreenState extends State<GuardMainScreen> with TickerProviderSt
         onPressed: () {
           // Show notifications
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Notifications would open here'),
-            ),
+            const SnackBar(content: Text('Notifications would open here')),
           );
         },
         icon: const Icon(Icons.notifications),
@@ -321,10 +311,7 @@ class _GuardMainScreenState extends State<GuardMainScreen> with TickerProviderSt
               ? NetworkImage(user.profileImage!)
               : null,
           child: user.profileImage == null
-              ? Icon(
-                  Icons.person,
-                  color: Theme.of(context).primaryColor,
-                )
+              ? Icon(Icons.person, color: Theme.of(context).primaryColor)
               : null,
         ),
       ),
@@ -387,7 +374,9 @@ class _GuardMainScreenState extends State<GuardMainScreen> with TickerProviderSt
                 // Trigger logout event in AuthBloc
                 context.read<AuthBloc>().add(LogoutRequested());
                 // Navigate to login screen
-                Navigator.of(context).pushNamedAndRemoveUntil('/auth', (route) => false);
+                Navigator.of(
+                  context,
+                ).pushNamedAndRemoveUntil('/auth', (route) => false);
               },
             ),
           ],
@@ -434,109 +423,104 @@ class _BuildAnimatedNavItem extends StatelessWidget {
         onTap: onTap,
         splashColor: primaryColor.withValues(alpha: 0.1),
         highlightColor: primaryColor.withValues(alpha: 0.05),
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 8.h),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Icon with animation
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Background highlight for selected item
-                  if (isSelected)
-                    ScaleTransition(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Icon with animation
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                // Background highlight for selected item
+                if (isSelected)
+                  ScaleTransition(
+                    scale: animation,
+                    child: Container(
+                      width: 40.w,
+                      height: 40.h,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            primaryColor.withValues(alpha: 0.15),
+                            primaryColor.withValues(alpha: 0.05),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                    ),
+                  ),
+
+                // Icon
+                Icon(
+                  isSelected ? item.activeIcon : item.icon,
+                  size: isSelected ? 26.r : 24.r,
+                  color: isSelected ? primaryColor : Colors.grey.shade600,
+                ),
+
+                // Badge
+                if (item.badgeCount > 0)
+                  Positioned(
+                    right: 0.w,
+                    top: -5.h,
+                    child: Container(
+                      padding: EdgeInsets.all(4.r),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2.w),
+                      ),
+                      constraints: BoxConstraints(
+                        minWidth: 16.w,
+                        minHeight: 16.h,
+                      ),
+                      child: Text(
+                        item.badgeCount.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.r,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+
+                // Active indicator dot
+                if (isSelected)
+                  Positioned(
+                    top: -1.h,
+                    child: ScaleTransition(
                       scale: animation,
                       child: Container(
-                        width: 40.w,
-                        height: 40.h,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              primaryColor.withValues(alpha: 0.15),
-                              primaryColor.withValues(alpha: 0.05),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
+                        width: 20.w,
+                        height: 4.h,
+                        decoration: BoxDecoration(color: primaryColor),
                       ),
                     ),
-                  
-                  // Icon
-                  Icon(
-                    isSelected ? item.activeIcon : item.icon,
-                    size: isSelected ? 26.r : 24.r,
-                    color: isSelected ? primaryColor : Colors.grey.shade600,
                   ),
-                  
-                  // Badge
-                  if (item.badgeCount > 0)
-                    Positioned(
-                      right: 0.w,
-                      top: -5.h,
-                      child: Container(
-                        padding: EdgeInsets.all(4.r),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2.w),
-                        ),
-                        constraints: BoxConstraints(
-                          minWidth: 16.w,
-                          minHeight: 16.h,
-                        ),
-                        child: Text(
-                          item.badgeCount.toString(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10.r,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  
-                  // Active indicator dot
-                  if (isSelected)
-                    Positioned(
-                      top: -1.h,
-                      child: ScaleTransition(
-                        scale: animation,
-                        child: Container(
-                          width: 20.w,
-                          height: 4.h,
-                          decoration: BoxDecoration(
-                            color: primaryColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              
-              SizedBox(height: 2.h),
-              
-              // Label with animation
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                transform: Matrix4.identity()..scale(isSelected ? 1.0 : 0.9),
-                child: Text(
-                  item.label,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                    color: isSelected ? primaryColor : Colors.grey.shade600,
-                    letterSpacing: isSelected ? 0.5 : 0.0,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+              ],
+            ),
+
+            SizedBox(height: 2.h),
+
+            // Label with animation
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              transform: Matrix4.identity()..scale(isSelected ? 1.0 : 0.9),
+              child: Text(
+                item.label,
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  color: isSelected ? primaryColor : Colors.grey.shade600,
+                  letterSpacing: isSelected ? 0.5 : 0.0,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

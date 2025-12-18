@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mygate_coepd/blocs/auth/auth_bloc.dart';
 import 'package:mygate_coepd/blocs/auth/auth_state.dart';
+import 'package:mygate_coepd/screens/guard/coming_soon.dart';
 import 'package:mygate_coepd/theme/app_theme.dart';
 import 'package:mygate_coepd/screens/guard/details/group_visitor_entry_screen.dart';
 import 'package:mygate_coepd/screens/guard/details/vendor_access_screen.dart';
@@ -12,7 +13,7 @@ import 'package:mygate_coepd/screens/guard/details/utility_vehicle_tracking_scre
 import 'package:mygate_coepd/screens/guard/details/guard_patrolling_screen.dart';
 import 'package:mygate_coepd/screens/guard/details/guard_calling_screen.dart';
 import 'package:mygate_coepd/screens/guard/details/temperature_mask_screen.dart';
-import 'package:mygate_coepd/screens/voice_command_entry_screen.dart';
+import 'package:mygate_coepd/screens/auth/voice_command_entry_screen.dart';
 import 'package:mygate_coepd/screens/guard/details/e_intercom_screen.dart';
 import 'package:mygate_coepd/screens/guard/details/offline_mode_screen.dart';
 import 'package:mygate_coepd/screens/guard/details/multilingual_support_screen.dart';
@@ -199,14 +200,16 @@ class _GuardDashboardScreenState extends State<GuardDashboardScreen> {
       case 'call_guard':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const GuardCallingScreen()),
+          // MaterialPageRoute(builder: (context) => const GuardCallingScreen()),
+          MaterialPageRoute(builder: (context) => const CommingSoonScreen()),
         );
         break;
       case 'temp_check':
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const TemperatureMaskScreen(),
+            // builder: (context) => const TemperatureMaskScreen(),
+            builder: (context) => const CommingSoonScreen(),
           ),
         );
         break;
@@ -214,14 +217,16 @@ class _GuardDashboardScreenState extends State<GuardDashboardScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const VoiceCommandEntryScreen(),
+            // builder: (context) => const VoiceCommandEntryScreen(),
+            builder: (context) => const CommingSoonScreen(),
           ),
         );
         break;
       case 'e_intercom':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const EIntercomScreen()),
+          // MaterialPageRoute(builder: (context) => const EIntercomScreen()),
+          MaterialPageRoute(builder: (context) => const CommingSoonScreen()),
         );
         break;
       case 'offline_mode':
@@ -234,7 +239,8 @@ class _GuardDashboardScreenState extends State<GuardDashboardScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const MultilingualSupportScreen(),
+            // builder: (context) => const MultilingualSupportScreen(),
+            builder: (context) => const CommingSoonScreen(),
           ),
         );
         break;

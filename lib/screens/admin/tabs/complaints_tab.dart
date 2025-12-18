@@ -1,0 +1,457 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+class ComplaintsTab extends StatelessWidget {
+  const ComplaintsTab({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> complaintStats = [
+      {
+        'title': 'Total Complaints',
+        'value': '42',
+        'change': '+5',
+        'isIncrease': true,
+        'icon': Icons.report_problem,
+        'color': Colors.red,
+      },
+      {
+        'title': 'Resolved',
+        'value': '32',
+        'change': '+8',
+        'isIncrease': true,
+        'icon': Icons.check_circle,
+        'color': Colors.green,
+      },
+      {
+        'title': 'Pending',
+        'value': '7',
+        'change': '-3',
+        'isIncrease': false,
+        'icon': Icons.pending,
+        'color': Colors.orange,
+      },
+      {
+        'title': 'In Progress',
+        'value': '3',
+        'change': '0',
+        'isIncrease': false,
+        'icon': Icons.hourglass_empty,
+        'color': Colors.blue,
+      },
+    ];
+
+    final List<Map<String, dynamic>> complaintList = [
+      {
+        'id': 1,
+        'title': 'Water Leakage',
+        'resident': 'Rahul Kumar',
+        'unit': 'A-101',
+        'date': '12 Jun 2023',
+        'priority': 'High',
+        'priorityColor': Colors.red,
+        'status': 'In Progress',
+        'statusColor': Colors.orange,
+      },
+      {
+        'id': 2,
+        'title': 'Lift Not Working',
+        'resident': 'Priya Sharma',
+        'unit': 'B-203',
+        'date': '11 Jun 2023',
+        'priority': 'Critical',
+        'priorityColor': Colors.red,
+        'status': 'Pending',
+        'statusColor': Colors.orange,
+      },
+      {
+        'id': 3,
+        'title': 'Parking Issue',
+        'resident': 'Amit Patel',
+        'unit': 'C-405',
+        'date': '10 Jun 2023',
+        'priority': 'Low',
+        'priorityColor': Colors.green,
+        'status': 'Resolved',
+        'statusColor': Colors.green,
+      },
+      {
+        'id': 4,
+        'title': 'Power Backup',
+        'resident': 'Sneha Gupta',
+        'unit': 'D-102',
+        'date': '09 Jun 2023',
+        'priority': 'Medium',
+        'priorityColor': Colors.orange,
+        'status': 'Resolved',
+        'statusColor': Colors.green,
+      },
+    ];
+
+    final List<Map<String, dynamic>> quickActions = [
+      {'icon': Icons.add, 'label': 'New Complaint', 'route': '/add-complaint'},
+      {'icon': Icons.search, 'label': 'Search', 'route': '/search-complaints'},
+      {'icon': Icons.file_download, 'label': 'Export', 'route': '/export-complaints'},
+      {'icon': Icons.bar_chart, 'label': 'Reports', 'route': '/complaint-reports'},
+    ];
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // Stats Cards
+          Padding(
+            padding: EdgeInsets.all(20.r),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 15.w,
+                mainAxisSpacing: 15.h,
+              ),
+              itemCount: complaintStats.length,
+              itemBuilder: (context, index) {
+                final stat = complaintStats[index];
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(15.r),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(10.r),
+                              decoration: BoxDecoration(
+                                color: stat['color'].withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              child: Icon(
+                                stat['icon'],
+                                color: stat['color'],
+                                size: 24.r,
+                              ),
+                            ),
+                            SizedBox(width: 10.w),
+                          ],
+                        ),
+                        SizedBox(height: 10.h),
+                        Text(
+                          stat['title'],
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              stat['value'],
+                              style: TextStyle(
+                                fontSize: 24.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              stat['change'],
+                              style: TextStyle(
+                                color: stat['isIncrease']
+                                    ? Colors.green
+                                    : Colors.red,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          // Quick Actions
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Quick Actions',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 15.h),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    crossAxisSpacing: 15.w,
+                    mainAxisSpacing: 15.h,
+                    childAspectRatio: 0.85,
+                  ),
+                  itemCount: quickActions.length,
+                  itemBuilder: (context, index) {
+                    final action = quickActions[index];
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            // Navigate to the respective action
+                            if (action['route'] != null) {
+                              Navigator.pushNamed(context, action['route']);
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(15.r),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardTheme.color,
+                              borderRadius: BorderRadius.circular(16.r),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withValues(alpha: 0.1),
+                                  blurRadius: 5.r,
+                                  offset: Offset(0, 2.h),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              action['icon'],
+                              color: Theme.of(context).primaryColor,
+                              size: 28.r,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        Text(
+                          action['label'],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          // Complaints List
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Complaints List',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 5.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Text(
+                        '${complaintList.length}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15.h),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: complaintList.length,
+                  itemBuilder: (context, index) {
+                    final complaint = complaintList[index];
+                    return Card(
+                      margin: EdgeInsets.only(bottom: 15.h),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                      elevation: 2,
+                      child: Padding(
+                        padding: EdgeInsets.all(15.r),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    complaint['title'],
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 10.w,
+                                    vertical: 5.h,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: complaint['priorityColor']
+                                        .withValues(alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(12.r),
+                                  ),
+                                  child: Text(
+                                    complaint['priority'],
+                                    style: TextStyle(
+                                      color: complaint['priorityColor'],
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      complaint['resident'],
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    SizedBox(height: 5.h),
+                                    Text(
+                                      'Unit: ${complaint['unit']}',
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    SizedBox(height: 5.h),
+                                    Text(
+                                      'Date: ${complaint['date']}',
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 10.w,
+                                    vertical: 5.h,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: complaint['statusColor']
+                                        .withValues(alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(12.r),
+                                  ),
+                                  child: Text(
+                                    complaint['status'],
+                                    style: TextStyle(
+                                      color: complaint['statusColor'],
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 15.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Expanded(
+                                  child: OutlinedButton(
+                                    onPressed: () {
+                                      // View details
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 12.h,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12.r),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'View',
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 10.w),
+                                Expanded(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      // Update status
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 12.h,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(12.r),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Update',
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 80.h), // Space for bottom bar
+        ],
+      ),
+    );
+  }
+}
