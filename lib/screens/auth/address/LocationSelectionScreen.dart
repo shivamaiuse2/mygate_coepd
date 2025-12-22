@@ -4,6 +4,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:dio/dio.dart';
 import 'package:mygate_coepd/screens/auth/address/BuildingUnitSelectionScreen.dart';
 import 'package:mygate_coepd/config/app_config.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class LocationSelectionScreen extends StatefulWidget {
   const LocationSelectionScreen({super.key});
@@ -200,12 +201,12 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
     final selectedRole = AppConfig.selectedRole ?? 'resident';
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final backgroundColor = isDarkMode
-        ? const Color(0xFF121212)
-        : const Color(0xFFf8f9fa);
-    final surfaceColor = isDarkMode ? const Color(0xFF1E1E1E) : Colors.white;
-    final textColor = isDarkMode ? Colors.white : Colors.black87;
-    final secondaryTextColor = isDarkMode ? Colors.white70 : Colors.grey;
-    final iconColor = const Color(0xFF006D77);
+        ? AppTheme.backgroundDark
+        : AppTheme.backgroundLight;
+    final surfaceColor = isDarkMode ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    final textColor = isDarkMode ? AppTheme.onPrimary : AppTheme.onBackgroundLight;
+    final secondaryTextColor = isDarkMode ? AppTheme.onPrimary.withValues(alpha: 0.7) : AppTheme.onBackgroundLight;
+    final iconColor = AppTheme.primary;
 
     final bool canContinue = selectedSociety != null;
 
@@ -218,11 +219,11 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
             // Header with role info - Matching AuthScreen design
             Container(
               width: double.infinity,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFF006D77), Color(0xFF005A63)],
+                  colors: [AppTheme.primary, AppTheme.primaryDark],
                 ),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(30),
@@ -240,7 +241,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                       height: 120.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: AppTheme.onPrimary.withValues(alpha: 0.1),
                       ),
                     ),
                   ),
@@ -252,7 +253,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                       height: 80.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: AppTheme.onPrimary.withValues(alpha: 0.1),
                       ),
                     ),
                   ),
@@ -271,7 +272,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                             Container(
                               padding: EdgeInsets.all(12.r),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
+                                color: AppTheme.onPrimary.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: Icon(
@@ -280,7 +281,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                                     : selectedRole == 'admin'
                                     ? Icons.admin_panel_settings_outlined
                                     : Icons.home_outlined,
-                                color: Colors.white,
+                                color: AppTheme.onPrimary,
                                 size: 24.sp,
                               ),
                             ),
@@ -291,7 +292,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                                 Text(
                                   'Registering as',
                                   style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.9),
+                                    color: AppTheme.onPrimary.withValues(alpha: 0.9),
                                     fontSize: 14.sp,
                                   ),
                                 ),
@@ -302,7 +303,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                                       ? 'Administrator'
                                       : 'Resident',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppTheme.onPrimary,
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -315,7 +316,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                         Text(
                           'Find Your Society',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.onPrimary,
                             fontSize: 28.sp,
                             fontWeight: FontWeight.bold,
                           ),
@@ -324,7 +325,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                         Text(
                           'Select country, city, and society',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: AppTheme.onPrimary.withValues(alpha: 0.9),
                             fontSize: 16.sp,
                           ),
                         ),
@@ -351,7 +352,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                             ? []
                             : [
                                 BoxShadow(
-                                  color: Colors.grey.withValues(alpha: 0.1),
+                                  color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                   blurRadius: 10.r,
                                   offset: Offset(0, 5.h),
                                 ),
@@ -401,7 +402,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                               ? []
                               : [
                                   BoxShadow(
-                                    color: Colors.grey.withValues(alpha: 0.1),
+                                    color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                     blurRadius: 10.r,
                                     offset: Offset(0, 5.h),
                                   ),
@@ -453,7 +454,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                               ? []
                               : [
                                   BoxShadow(
-                                    color: Colors.grey.withValues(alpha: 0.1),
+                                    color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                     blurRadius: 10.r,
                                     offset: Offset(0, 5.h),
                                   ),
@@ -571,7 +572,7 @@ class _LocationSelectionScreenState extends State<LocationSelectionScreen> {
                             style: TextStyle(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: AppTheme.onPrimary,
                             ),
                           ),
                         ),

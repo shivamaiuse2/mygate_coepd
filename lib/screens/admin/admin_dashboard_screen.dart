@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mygate_coepd/blocs/auth/auth_bloc.dart';
 import 'package:mygate_coepd/blocs/auth/auth_state.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -24,7 +25,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       'change': '+3',
       'isIncrease': true,
       'icon': Icons.people,
-      'color': Colors.blue,
+      'color': AppTheme.primary,
     },
     {
       'title': 'Pending Approvals',
@@ -32,7 +33,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       'change': '+5',
       'isIncrease': true,
       'icon': Icons.checklist,
-      'color': Colors.orange,
+      'color': AppTheme.secondary,
     },
     {
       'title': 'Active Complaints',
@@ -40,7 +41,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       'change': '-2',
       'isIncrease': false,
       'icon': Icons.report_problem,
-      'color': Colors.red,
+      'color': AppTheme.error,
     },
     {
       'title': 'Collection Rate',
@@ -48,7 +49,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       'change': '+4%',
       'isIncrease': true,
       'icon': Icons.credit_card,
-      'color': Colors.green,
+      'color': AppTheme.success,
     },
   ];
 
@@ -80,8 +81,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       'description': 'Amit Patel registered for unit C-405',
       'time': '1 hour ago',
       'icon': Icons.person_add,
-      'iconBg': Colors.blue,
-      'iconColor': Colors.white,
+      'iconBg': AppTheme.primary,
+      'iconColor': AppTheme.onPrimary,
     },
     {
       'id': 2,
@@ -89,8 +90,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       'description': 'Water leakage in B-201 fixed',
       'time': '3 hours ago',
       'icon': Icons.check_circle,
-      'iconBg': Colors.green,
-      'iconColor': Colors.white,
+      'iconBg': AppTheme.success,
+      'iconColor': AppTheme.onPrimary,
     },
     {
       'id': 3,
@@ -98,8 +99,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       'description': '₹15,000 received from A-302',
       'time': '5 hours ago',
       'icon': Icons.credit_card,
-      'iconBg': Colors.purple,
-      'iconColor': Colors.white,
+      'iconBg': AppTheme.primary,
+      'iconColor': AppTheme.onPrimary,
     },
   ];
 
@@ -215,7 +216,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                   indicatorColor: Theme.of(context).primaryColor,
                   indicatorWeight: 3.w,
                   labelColor: Theme.of(context).primaryColor,
-                  unselectedLabelColor: Colors.grey,
+                  unselectedLabelColor: AppTheme.onBackgroundLight,
                   tabs: const [
                     Tab(text: 'Overview'),
                     Tab(text: 'Residents'),
@@ -290,7 +291,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                               Text(
                                                 stat['title'],
                                                 style: TextStyle(
-                                                  color: Colors.grey,
+                                                  color: AppTheme.onBackgroundLight,
                                                   fontSize: 12.sp,
                                                 ),
                                               ),
@@ -310,8 +311,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                                     stat['change'],
                                                     style: TextStyle(
                                                       color: stat['isIncrease']
-                                                          ? Colors.green
-                                                          : Colors.red,
+                                                          ? AppTheme.success
+                                                          : AppTheme.error,
                                                       fontSize: 12.sp,
                                                       fontWeight: FontWeight.bold,
                                                     ),
@@ -370,7 +371,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                                         BorderRadius.circular(16.r),
                                                     boxShadow: [
                                                       BoxShadow(
-                                                        color: Colors.grey.withValues(
+                                                        color: AppTheme.onBackgroundLight.withValues(
                                                           alpha: 0.1,
                                                         ),
                                                         blurRadius: 5.w,
@@ -425,7 +426,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                               vertical: 5.h,
                                             ),
                                             decoration: BoxDecoration(
-                                              color: Colors.orange,
+                                              color: AppTheme.secondary,
                                               borderRadius: BorderRadius.circular(
                                                 20.r,
                                               ),
@@ -433,7 +434,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                             child: Text(
                                               '${_pendingApprovals.length}',
                                               style: TextStyle(
-                                                color: Colors.white,
+                                                color: AppTheme.onSecondary,
                                                 fontSize: 12.sp,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -473,8 +474,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                                                 approval['image'],
                                                               ),
                                                           backgroundColor:
-                                                              Theme.of(context)
-                                                                  .primaryColor
+                                                              AppTheme.primary
                                                                   .withValues(
                                                                     alpha: 0.1,
                                                                   ),
@@ -499,14 +499,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                                                 '${approval['type']} • ${approval['unit']}',
                                                                 style: TextStyle(
                                                                   fontSize: 14.sp,
-                                                                  color: Colors.grey,
+                                                                  color: AppTheme.onBackgroundLight,
                                                                 ),
                                                               ),
                                                               Text(
                                                                 'Requested: ${DateTime.parse(approval['requestedOn']).day}/${DateTime.parse(approval['requestedOn']).month}/${DateTime.parse(approval['requestedOn']).year}',
                                                                 style: TextStyle(
                                                                   fontSize: 12.sp,
-                                                                  color: Colors.grey,
+                                                                  color: AppTheme.onBackgroundLight,
                                                                 ),
                                                               ),
                                                             ],
@@ -595,14 +595,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                               children: [
                                                 Icon(
                                                   Icons.check_circle,
-                                                  color: Colors.green,
+                                                  color: AppTheme.success,
                                                   size: 40.sp,
                                                 ),
                                                 SizedBox(height: 15.h),
                                                 Text(
                                                   'No pending approvals',
                                                   style: TextStyle(
-                                                    color: Colors.grey,
+                                                    color: AppTheme.onBackgroundLight,
                                                     fontSize: 16.sp,
                                                   ),
                                                 ),
@@ -636,7 +636,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                               'View All',
                                               style: TextStyle(
                                                 fontSize: 14.sp,
-                                                color: Theme.of(context).primaryColor,
+                                                color: AppTheme.primary,
                                               ),
                                             ),
                                           ),
@@ -680,7 +680,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                                                   trailing: Text(
                                                     activity['time'],
                                                     style: TextStyle(
-                                                      color: Colors.grey,
+                                                      color: AppTheme.onBackgroundLight,
                                                       fontSize: 12.sp,
                                                     ),
                                                   ),
@@ -718,7 +718,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
               onPressed: () {
                 // Add new item
               },
-              backgroundColor: Theme.of(context).primaryColor,
+              backgroundColor: AppTheme.primary,
               child: Icon(Icons.add, size: 24.sp),
             ),
           );

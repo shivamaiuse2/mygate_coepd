@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart';
 import 'package:mygate_coepd/screens/auth/address/WhoAreYouScreen.dart';
 import 'package:mygate_coepd/config/app_config.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class BuildingUnitSelectionScreen extends StatefulWidget {
   final int societyId; // Pass this from previous screen
@@ -158,7 +159,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
       itemBuilder: (context, index) {
         return Container(
           decoration: BoxDecoration(
-            color: Colors.grey[300],
+            color: AppTheme.onBackgroundLight.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(16.r),
           ),
         );
@@ -172,10 +173,10 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
 
     final selectedRole = AppConfig.selectedRole ?? 'resident';
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor = isDarkMode ? const Color(0xFF121212) : const Color(0xFFf8f9fa);
-    final surfaceColor = isDarkMode ? const Color(0xFF1E1E1E) : Colors.white;
-    final textColor = isDarkMode ? Colors.white : Colors.black87;
-    final iconColor = const Color(0xFF006D77);
+    final backgroundColor = isDarkMode ? AppTheme.backgroundDark : AppTheme.backgroundLight;
+    final surfaceColor = isDarkMode ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    final textColor = isDarkMode ? AppTheme.onPrimary : AppTheme.onBackgroundLight;
+    final iconColor = AppTheme.primary;
 
     final bool canContinue = selectedFlat != null;
 
@@ -188,11 +189,11 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
             // Header with role info - Matching AuthScreen design
             Container(
               width: double.infinity,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFF006D77), Color(0xFF005A63)],
+                  colors: [AppTheme.primary, AppTheme.primaryDark],
                 ),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(30),
@@ -210,7 +211,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                       height: 120.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: AppTheme.onPrimary.withValues(alpha: 0.1),
                       ),
                     ),
                   ),
@@ -222,7 +223,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                       height: 80.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: AppTheme.onPrimary.withValues(alpha: 0.1),
                       ),
                     ),
                   ),
@@ -241,7 +242,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                             Container(
                               padding: EdgeInsets.all(12.r),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
+                                color: AppTheme.onPrimary.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: Icon(
@@ -250,7 +251,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                                     : selectedRole == 'admin'
                                     ? Icons.admin_panel_settings_outlined
                                     : Icons.home_outlined,
-                                color: Colors.white,
+                                color: AppTheme.onPrimary,
                                 size: 24.sp,
                               ),
                             ),
@@ -261,7 +262,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                                 Text(
                                   'Registering as',
                                   style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.9),
+                                    color: AppTheme.onPrimary.withValues(alpha: 0.9),
                                     fontSize: 14.sp,
                                   ),
                                 ),
@@ -272,7 +273,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                                       ? 'Administrator'
                                       : 'Resident',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppTheme.onPrimary,
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -285,7 +286,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                         Text(
                           'Select Your Home',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.onPrimary,
                             fontSize: 28.sp,
                             fontWeight: FontWeight.bold,
                           ),
@@ -294,7 +295,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                         Text(
                           'Choose building, floor, and flat',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: AppTheme.onPrimary.withValues(alpha: 0.9),
                             fontSize: 16.sp,
                           ),
                         ),
@@ -334,7 +335,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                                       Icon(
                                         Icons.apartment_outlined,
                                         size: 80.sp,
-                                        color: Colors.grey[400],
+                                        color: AppTheme.onBackgroundLight.withValues(alpha: 0.4),
                                       ),
                                       SizedBox(height: 20.h),
                                       Text(
@@ -380,19 +381,19 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                                         borderRadius: BorderRadius.circular(16.r),
                                         boxShadow: isDarkMode
                                             ? []
-                                            : [BoxShadow(color: Colors.grey.withValues(alpha: 0.1), blurRadius: 8.r, offset: Offset(0, 4.h))],
+                                            : [BoxShadow(color: AppTheme.onBackgroundLight.withValues(alpha: 0.1), blurRadius: 8.r, offset: Offset(0, 4.h))],
                                       ),
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Icon(Icons.apartment, size: 36.sp, color: isSelected ? Colors.white : iconColor),
+                                          Icon(Icons.apartment, size: 36.sp, color: isSelected ? AppTheme.onPrimary : iconColor),
                                           SizedBox(height: 8.h),
                                           Text(
                                             building['name'],
                                             style: TextStyle(
                                               fontSize: 16.sp,
                                               fontWeight: FontWeight.bold,
-                                              color: isSelected ? Colors.white : textColor,
+                                              color: isSelected ? AppTheme.onPrimary : textColor,
                                             ),
                                             textAlign: TextAlign.center,
                                           ),
@@ -400,7 +401,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                                             '${building['total_floors']} Floors',
                                             style: TextStyle(
                                               fontSize: 12.sp,
-                                              color: isSelected ? Colors.white70 : textColor.withValues(alpha: 0.6),
+                                              color: isSelected ? AppTheme.onPrimary.withValues(alpha: 0.7) : textColor.withValues(alpha: 0.6),
                                             ),
                                           ),
                                         ],
@@ -413,7 +414,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                     if (selectedBuilding != null) ...[
                       SizedBox(
                         height: 20.h,
-                      ), // Reduced separation between sections
+                      ),
 
                       Text(
                         'Floor',
@@ -433,7 +434,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                                     Icon(
                                       Icons.layers_outlined,
                                       size: 70.sp,
-                                      color: Colors.grey[400],
+                                      color: AppTheme.onBackgroundLight.withValues(alpha: 0.4),
                                     ),
                                     SizedBox(height: 16.h),
                                     Text(
@@ -483,7 +484,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                                           ? []
                                           : [
                                               BoxShadow(
-                                                color: Colors.grey.withValues(alpha: 
+                                                color: AppTheme.onBackgroundLight.withValues(alpha: 
                                                   0.1,
                                                 ),
                                                 blurRadius: 6.r,
@@ -497,7 +498,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                                           fontSize: 20.sp,
                                           fontWeight: FontWeight.bold,
                                           color: isSelected
-                                              ? Colors.white
+                                              ? AppTheme.onPrimary
                                               : textColor,
                                         ),
                                       ),
@@ -509,7 +510,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                     ],
 
                     if (selectedFloor != null) ...[
-                      SizedBox(height: 20.h), // Reduced separation
+                      SizedBox(height: 20.h),
 
                       if (isLoadingFlats)
                         Column(
@@ -544,13 +545,13 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                         flatsOnSelectedFloor.isEmpty
                             ? Center(
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 30.h), // Reduced vertical padding
+                                  padding: EdgeInsets.symmetric(vertical: 30.h),
                                   child: Column(
                                     children: [
                                       Icon(
                                         Icons.home_outlined,
                                         size: 70.sp,
-                                        color: Colors.grey[400],
+                                        color: AppTheme.onBackgroundLight.withValues(alpha: 0.4),
                                       ),
                                       SizedBox(height: 16.h),
                                       Text(
@@ -605,7 +606,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                                             ? []
                                             : [
                                                 BoxShadow(
-                                                  color: Colors.grey
+                                                  color: AppTheme.onBackgroundLight
                                                       .withValues(alpha: 0.1),
                                                   blurRadius: 8.r,
                                                   offset: Offset(0, 4.h),
@@ -619,7 +620,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                                             fontSize: 18.sp,
                                             fontWeight: FontWeight.bold,
                                             color: isSelected
-                                                ? Colors.white
+                                                ? AppTheme.onPrimary
                                                 : textColor,
                                           ),
                                         ),
@@ -658,7 +659,7 @@ class _BuildingUnitSelectionScreenState extends State<BuildingUnitSelectionScree
                         ),
                         child: Text(
                           'Continue',
-                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.white),
+                          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: AppTheme.onPrimary),
                         ),
                       ),
                     ),

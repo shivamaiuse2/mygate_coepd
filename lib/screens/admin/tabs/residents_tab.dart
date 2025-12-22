@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class ResidentsTab extends StatelessWidget {
   const ResidentsTab({super.key});
@@ -11,25 +12,25 @@ class ResidentsTab extends StatelessWidget {
         'title': 'Total Residents',
         'value': '246',
         'icon': Icons.people,
-        'color': Colors.blue,
+        'color': AppTheme.primary,
       },
       {
         'title': 'New This Month',
         'value': '12',
         'icon': Icons.person_add,
-        'color': Colors.green,
+        'color': AppTheme.success,
       },
       {
         'title': 'Pending Approval',
         'value': '8',
         'icon': Icons.hourglass_empty,
-        'color': Colors.orange,
+        'color': AppTheme.secondary,
       },
       {
         'title': 'Active Tenants',
         'value': '64',
         'icon': Icons.apartment,
-        'color': Colors.purple,
+        'color': AppTheme.primary,
       },
     ];
 
@@ -40,7 +41,7 @@ class ResidentsTab extends StatelessWidget {
         'unit': 'A-101',
         'phone': '+91 9876543210',
         'status': 'Active',
-        'statusColor': Colors.green,
+        'statusColor': AppTheme.success,
         'image': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100&h=100',
       },
       {
@@ -49,7 +50,7 @@ class ResidentsTab extends StatelessWidget {
         'unit': 'B-203',
         'phone': '+91 9876543211',
         'status': 'Pending',
-        'statusColor': Colors.orange,
+        'statusColor': AppTheme.secondary,
         'image': 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100&h=100',
       },
       {
@@ -58,7 +59,7 @@ class ResidentsTab extends StatelessWidget {
         'unit': 'C-405',
         'phone': '+91 9876543212',
         'status': 'Active',
-        'statusColor': Colors.green,
+        'statusColor': AppTheme.success,
         'image': 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=100&h=100',
       },
       {
@@ -67,7 +68,7 @@ class ResidentsTab extends StatelessWidget {
         'unit': 'D-102',
         'phone': '+91 9876543213',
         'status': 'Inactive',
-        'statusColor': Colors.grey,
+        'statusColor': AppTheme.onBackgroundLight,
         'image': 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100&h=100',
       },
     ];
@@ -127,7 +128,7 @@ class ResidentsTab extends StatelessWidget {
                         Text(
                           stat['title'],
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: AppTheme.onBackgroundLight,
                             fontSize: 12.sp,
                           ),
                         ),
@@ -189,7 +190,7 @@ class ResidentsTab extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.withValues(alpha: 0.1),
+                                  color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                   blurRadius: 5.r,
                                   offset: Offset(0, 2.h),
                                 ),
@@ -197,7 +198,7 @@ class ResidentsTab extends StatelessWidget {
                             ),
                             child: Icon(
                               action['icon'],
-                              color: Theme.of(context).primaryColor,
+                              color: AppTheme.primary,
                               size: 28.r,
                             ),
                           ),
@@ -240,13 +241,13 @@ class ResidentsTab extends StatelessWidget {
                         vertical: 5.h,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: AppTheme.primary,
                         borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: Text(
                         '${residentList.length}',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.onPrimary,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -295,7 +296,7 @@ class ResidentsTab extends StatelessWidget {
                                     resident['unit'],
                                     style: TextStyle(
                                       fontSize: 14.sp,
-                                      color: Colors.grey,
+                                      color: AppTheme.onBackgroundLight,
                                     ),
                                   ),
                                   SizedBox(height: 5.h),
@@ -303,7 +304,7 @@ class ResidentsTab extends StatelessWidget {
                                     resident['phone'],
                                     style: TextStyle(
                                       fontSize: 14.sp,
-                                      color: Colors.grey,
+                                      color: AppTheme.onBackgroundLight,
                                     ),
                                   ),
                                 ],
@@ -341,7 +342,7 @@ class ResidentsTab extends StatelessWidget {
                                       icon: Icon(
                                         Icons.edit,
                                         size: 20.r,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.primary,
                                       ),
                                     ),
                                     IconButton(
@@ -351,7 +352,7 @@ class ResidentsTab extends StatelessWidget {
                                       icon: Icon(
                                         Icons.visibility,
                                         size: 20.r,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.primary,
                                       ),
                                     ),
                                   ],

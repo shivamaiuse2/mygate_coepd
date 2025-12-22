@@ -59,7 +59,7 @@ class _OfflineModeScreenState extends State<OfflineModeScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Data synced successfully!'),
-          backgroundColor: Colors.green,
+          backgroundColor: AppTheme.success,
         ),
       );
     });
@@ -122,15 +122,15 @@ class _OfflineModeScreenState extends State<OfflineModeScreen> {
                             padding: const EdgeInsets.all(15),
                             decoration: BoxDecoration(
                               color: _isOfflineMode
-                                  ? Colors.orange.withValues(alpha: 0.2)
-                                  : Colors.green.withValues(alpha: 0.2),
+                                  ? AppTheme.secondary.withValues(alpha: 0.2)
+                                  : AppTheme.success.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
                               children: [
                                 Icon(
                                   _isOfflineMode ? Icons.wifi_off : Icons.wifi,
-                                  color: _isOfflineMode ? Colors.orange : Colors.green,
+                                  color: _isOfflineMode ? AppTheme.secondary : AppTheme.success,
                                   size: 30,
                                 ),
                                 const SizedBox(width: 15),
@@ -145,7 +145,7 @@ class _OfflineModeScreenState extends State<OfflineModeScreen> {
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
-                                          color: _isOfflineMode ? Colors.orange : Colors.green,
+                                          color: _isOfflineMode ? AppTheme.secondary : AppTheme.success,
                                         ),
                                       ),
                                       const SizedBox(height: 5),
@@ -154,7 +154,7 @@ class _OfflineModeScreenState extends State<OfflineModeScreen> {
                                             ? 'Data will be synced when connection is restored'
                                             : 'All data is being synced in real-time',
                                         style: const TextStyle(
-                                          color: Colors.grey,
+                                          color: AppTheme.onBackgroundLight,
                                         ),
                                       ),
                                     ],
@@ -207,7 +207,7 @@ class _OfflineModeScreenState extends State<OfflineModeScreen> {
                               ),
                               child: const Text(
                                 'Sync Now',
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: AppTheme.onPrimary),
                               ),
                             )
                           else
@@ -215,7 +215,7 @@ class _OfflineModeScreenState extends State<OfflineModeScreen> {
                               child: Text(
                                 'All data synced successfully!',
                                 style: TextStyle(
-                                  color: Colors.green,
+                                  color: AppTheme.success,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -266,13 +266,13 @@ class _OfflineModeScreenState extends State<OfflineModeScreen> {
                                       vertical: 5,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: Colors.orange.withValues(alpha: 0.2),
+                                      color: AppTheme.secondary.withValues(alpha: 0.2),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: const Text(
                                       'Pending Sync',
                                       style: TextStyle(
-                                        color: Colors.orange,
+                                        color: AppTheme.secondary,
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -284,14 +284,14 @@ class _OfflineModeScreenState extends State<OfflineModeScreen> {
                               Text(
                                 '${entry['type']} • ${entry['flat']}',
                                 style: const TextStyle(
-                                  color: Colors.grey,
+                                  color: AppTheme.onBackgroundLight,
                                 ),
                               ),
                               const SizedBox(height: 5),
                               Text(
                                 'Entry Time: ${entry['time']}',
                                 style: const TextStyle(
-                                  color: Colors.grey,
+                                  color: AppTheme.onBackgroundLight,
                                 ),
                               ),
                               const SizedBox(height: 15),
@@ -308,7 +308,7 @@ class _OfflineModeScreenState extends State<OfflineModeScreen> {
                                 '• Mask compliance: Yes\n'
                                 '• Approved by: Self',
                                 style: TextStyle(
-                                  color: Colors.grey,
+                                  color: AppTheme.onBackgroundLight,
                                 ),
                               ),
                             ],
@@ -376,7 +376,7 @@ class _OfflineModeScreenState extends State<OfflineModeScreen> {
         Text(
           label,
           style: const TextStyle(
-            color: Colors.grey,
+            color: AppTheme.onBackgroundLight,
           ),
         ),
       ],

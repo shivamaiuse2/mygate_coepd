@@ -113,7 +113,7 @@ class _GuardPatrollingScreenState extends State<GuardPatrollingScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Patrol completed successfully!'),
-        backgroundColor: Colors.green,
+        backgroundColor: AppTheme.success,
       ),
     );
   }
@@ -216,7 +216,7 @@ class _GuardPatrollingScreenState extends State<GuardPatrollingScreen> {
                               ),
                               child: const Text(
                                 'Start Patrol',
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: AppTheme.onPrimary),
                               ),
                             )
                           else
@@ -233,7 +233,7 @@ class _GuardPatrollingScreenState extends State<GuardPatrollingScreen> {
                                 const SizedBox(height: 15),
                                 LinearProgressIndicator(
                                   value: _currentCheckpoint / _checkpoints.length,
-                                  backgroundColor: Colors.grey[300],
+                                  backgroundColor: AppTheme.onBackgroundLight.withValues(alpha: 0.3),
                                   valueColor: const AlwaysStoppedAnimation<Color>(
                                     AppTheme.primary,
                                   ),
@@ -242,19 +242,19 @@ class _GuardPatrollingScreenState extends State<GuardPatrollingScreen> {
                                 Text(
                                   '$_currentCheckpoint/${_checkpoints.length} checkpoints completed',
                                   style: const TextStyle(
-                                    color: Colors.grey,
+                                    color: AppTheme.onBackgroundLight,
                                   ),
                                 ),
                                 const SizedBox(height: 15),
                                 ElevatedButton(
                                   onPressed: _completePatrol,
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.red,
+                                    backgroundColor: AppTheme.error,
                                     minimumSize: const Size(double.infinity, 50),
                                   ),
                                   child: const Text(
                                     'End Patrol',
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: AppTheme.onPrimary),
                                   ),
                                 ),
                               ],
@@ -292,13 +292,13 @@ class _GuardPatrollingScreenState extends State<GuardPatrollingScreen> {
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   color: checkpoint['scanned']
-                                      ? Colors.green.withValues(alpha: 0.2)
-                                      : Colors.grey.withValues(alpha: 0.2),
+                                      ? AppTheme.success.withValues(alpha: 0.2)
+                                      : AppTheme.onBackgroundLight.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Icon(
                                   checkpoint['scanned'] ? Icons.check : Icons.location_on,
-                                  color: checkpoint['scanned'] ? Colors.green : Colors.grey,
+                                  color: checkpoint['scanned'] ? AppTheme.success : AppTheme.onBackgroundLight,
                                 ),
                               ),
                               const SizedBox(width: 15),
@@ -317,14 +317,14 @@ class _GuardPatrollingScreenState extends State<GuardPatrollingScreen> {
                                     Text(
                                       checkpoint['location'],
                                       style: const TextStyle(
-                                        color: Colors.grey,
+                                        color: AppTheme.onBackgroundLight,
                                       ),
                                     ),
                                     if (checkpoint['scanned'])
                                       Text(
                                         'Scanned at: ${checkpoint['time']}',
                                         style: const TextStyle(
-                                          color: Colors.green,
+                                          color: AppTheme.success,
                                           fontSize: 12,
                                         ),
                                       ),
@@ -339,7 +339,7 @@ class _GuardPatrollingScreenState extends State<GuardPatrollingScreen> {
                                   ),
                                   child: const Text(
                                     'Scan',
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: AppTheme.onPrimary),
                                   ),
                                 ),
                             ],
@@ -377,7 +377,7 @@ class _GuardPatrollingScreenState extends State<GuardPatrollingScreen> {
         Text(
           label,
           style: const TextStyle(
-            color: Colors.grey,
+            color: AppTheme.onBackgroundLight,
           ),
         ),
       ],

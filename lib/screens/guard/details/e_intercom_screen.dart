@@ -146,13 +146,13 @@ class _EIntercomScreenState extends State<EIntercomScreen> {
                                       height: 12,
                                       decoration: BoxDecoration(
                                         color: resident['status'] == 'online'
-                                            ? Colors.green
+                                            ? AppTheme.success
                                             : resident['status'] == 'busy'
-                                                ? Colors.orange
-                                                : Colors.grey,
+                                                ? AppTheme.secondary
+                                                : AppTheme.onBackgroundLight,
                                         shape: BoxShape.circle,
                                         border: Border.all(
-                                          color: Colors.white,
+                                          color: AppTheme.onPrimary,
                                           width: 2,
                                         ),
                                       ),
@@ -176,7 +176,7 @@ class _EIntercomScreenState extends State<EIntercomScreen> {
                                     Text(
                                       'Flat: ${resident['flat']}',
                                       style: const TextStyle(
-                                        color: Colors.grey,
+                                        color: AppTheme.onBackgroundLight,
                                       ),
                                     ),
                                   ],
@@ -242,16 +242,16 @@ class _EIntercomScreenState extends State<EIntercomScreen> {
                                 ),
                                 decoration: BoxDecoration(
                                   color: call['status'] == 'connected'
-                                      ? Colors.green.withValues(alpha: 0.2)
-                                      : Colors.red.withValues(alpha: 0.2),
+                                      ? AppTheme.success.withValues(alpha: 0.2)
+                                      : AppTheme.error.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
                                   call['status'],
                                   style: TextStyle(
                                     color: call['status'] == 'connected'
-                                        ? Colors.green
-                                        : Colors.red,
+                                        ? AppTheme.success
+                                        : AppTheme.error,
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                   ),

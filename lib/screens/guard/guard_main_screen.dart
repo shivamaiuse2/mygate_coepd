@@ -9,6 +9,7 @@ import 'package:mygate_coepd/screens/guard/guard_dashboard_screen.dart';
 import 'package:mygate_coepd/screens/guard/visitor_management_screen.dart';
 import 'package:mygate_coepd/screens/guard/attendance_screen.dart';
 import 'package:mygate_coepd/screens/guard/profile_screen.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class GuardMainScreen extends StatefulWidget {
   const GuardMainScreen({super.key});
@@ -140,7 +141,7 @@ class _GuardMainScreenState extends State<GuardMainScreen>
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(color: Color(0xFF006D77)),
+            decoration: BoxDecoration(color: AppTheme.primary),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -328,13 +329,13 @@ class _GuardMainScreenState extends State<GuardMainScreen>
           content: SingleChildScrollView(
             child: ListBody(
               children: [
-                Text('CommunityLink App Help'),
+                Text('MyGateBell App Help'),
                 SizedBox(height: 10.h),
                 Text('For technical support, please contact:'),
-                Text('support@communitylink.com'),
+                Text('support@mygatebell.com'),
                 SizedBox(height: 10.h),
                 Text('For general inquiries, please contact:'),
-                Text('info@communitylink.com'),
+                Text('info@mygatebell.com'),
                 SizedBox(height: 10.h),
                 Text('Phone: +91 9876543210'),
               ],

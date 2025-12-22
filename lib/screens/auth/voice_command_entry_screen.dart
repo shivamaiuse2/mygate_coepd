@@ -59,7 +59,7 @@ class _VoiceCommandEntryScreenState extends State<VoiceCommandEntryScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Voice command processed successfully!'),
-          backgroundColor: Colors.green,
+          backgroundColor: AppTheme.success,
         ),
       );
       setState(() {
@@ -133,7 +133,7 @@ class _VoiceCommandEntryScreenState extends State<VoiceCommandEntryScreen> {
                                   Text(
                                     '  Example: ${command['example']}',
                                     style: const TextStyle(
-                                      color: Colors.grey,
+                                      color: AppTheme.onBackgroundLight,
                                       fontSize: 12,
                                     ),
                                   ),
@@ -171,12 +171,12 @@ class _VoiceCommandEntryScreenState extends State<VoiceCommandEntryScreen> {
                                 width: 100,
                                 height: 100,
                                 decoration: BoxDecoration(
-                                  color: _isListening ? Colors.red : AppTheme.primary,
+                                  color: _isListening ? AppTheme.error : AppTheme.primary,
                                   shape: BoxShape.circle,
                                   boxShadow: [
                                     BoxShadow(
                                       color: _isListening
-                                          ? Colors.red.withValues(alpha: 0.3)
+                                          ? AppTheme.error.withValues(alpha: 0.3)
                                           : AppTheme.primary.withValues(alpha: 0.3),
                                       blurRadius: 10,
                                       offset: const Offset(0, 5),
@@ -185,7 +185,7 @@ class _VoiceCommandEntryScreenState extends State<VoiceCommandEntryScreen> {
                                 ),
                                 child: Icon(
                                   _isListening ? Icons.stop : Icons.mic,
-                                  color: Colors.white,
+                                  color: AppTheme.onPrimary,
                                   size: 50,
                                 ),
                               ),
@@ -195,7 +195,7 @@ class _VoiceCommandEntryScreenState extends State<VoiceCommandEntryScreen> {
                           Text(
                             _isListening ? 'Listening...' : 'Tap microphone to speak',
                             style: TextStyle(
-                              color: _isListening ? Colors.red : AppTheme.primary,
+                              color: _isListening ? AppTheme.error : AppTheme.primary,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -232,7 +232,7 @@ class _VoiceCommandEntryScreenState extends State<VoiceCommandEntryScreen> {
                               ),
                               child: const Text(
                                 'Process Command',
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: AppTheme.onPrimary)
                               ),
                             ),
                         ],
@@ -265,7 +265,7 @@ class _VoiceCommandEntryScreenState extends State<VoiceCommandEntryScreen> {
                               ),
                               title: Text(_visitorName),
                               subtitle: Text('Flat: $_flatNumber'),
-                              trailing: const Icon(Icons.check_circle, color: Colors.green),
+                              trailing: const Icon(Icons.check_circle, color: AppTheme.success),
                             ),
                             const SizedBox(height: 15),
                             const Text(
@@ -295,7 +295,7 @@ class _VoiceCommandEntryScreenState extends State<VoiceCommandEntryScreen> {
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
                                           content: Text('Visitor entry approved!'),
-                                          backgroundColor: Colors.green,
+                                          backgroundColor: AppTheme.success,
                                         ),
                                       );
                                       setState(() {
@@ -309,7 +309,7 @@ class _VoiceCommandEntryScreenState extends State<VoiceCommandEntryScreen> {
                                     ),
                                     child: const Text(
                                       'Approve Entry',
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: AppTheme.onPrimary),
                                     ),
                                   ),
                                 ),

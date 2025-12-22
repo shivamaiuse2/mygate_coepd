@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:mygate_coepd/config/app_config.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class VerificationScreen extends StatefulWidget {
   const VerificationScreen({super.key});
@@ -12,9 +14,10 @@ class VerificationScreen extends StatefulWidget {
 }
 
 class _VerificationScreenState extends State<VerificationScreen> {
-  File? _image;
+  File? _selectedFile;
   final picker = ImagePicker();
   bool _isLoading = false;
+  String? _fileType;
 
   Future<void> _pickImage(ImageSource source) async {
     setState(() {
@@ -26,7 +29,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
       if (pickedFile != null) {
         setState(() {
-          _image = File(pickedFile.path);
+          _selectedFile = File(pickedFile.path);
+          _fileType = 'image';
         });
         
         // Simulate upload process
@@ -36,12 +40,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Document uploaded successfully!'),
-              backgroundColor: Colors.green,
+              backgroundColor: AppTheme.success,
             ),
           );
           
           // Navigate to next screen or show success message
-          // For now, we'll just show a success dialog
           _showSuccessDialog();
         }
       } else {
@@ -49,7 +52,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('No image selected'),
-              backgroundColor: Colors.orange,
+              backgroundColor: AppTheme.secondary,
             ),
           );
         }
@@ -59,7 +62,70 @@ class _VerificationScreenState extends State<VerificationScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppTheme.error,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _pickDocument() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+      );
+
+      if (result != null) {
+        PlatformFile file = result.files.first;
+        
+        setState(() {
+          _selectedFile = File(file.path!);
+          String extension = file.extension?.toLowerCase() ?? '';
+          _fileType = (extension == 'pdf') ? 'pdf' : 'image';
+        });
+        
+        // Simulate upload process
+        await Future.delayed(const Duration(seconds: 2));
+        
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Document uploaded successfully!'),
+              backgroundColor: AppTheme.success,
+            ),
+          );
+          
+          // Navigate to next screen or show success message
+          _showSuccessDialog();
+        }
+      } else {
+        // User canceled the picker
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('No file selected'),
+              backgroundColor: AppTheme.secondary,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: AppTheme.error,
           ),
         );
       }
@@ -106,11 +172,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
     
     final selectedRole = AppConfig.selectedRole ?? 'resident';
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor = isDarkMode ? const Color(0xFF121212) : const Color(0xFFf8f9fa);
-    final surfaceColor = isDarkMode ? const Color(0xFF1E1E1E) : Colors.white;
-    final textColor = isDarkMode ? Colors.white : Colors.black87;
-    final secondaryTextColor = isDarkMode ? Colors.white70 : Colors.grey;
-    final iconColor = const Color(0xFF006D77);
+    final backgroundColor = isDarkMode ? AppTheme.backgroundDark : AppTheme.backgroundLight;
+    final surfaceColor = isDarkMode ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    final textColor = isDarkMode ? AppTheme.onPrimary : AppTheme.onBackgroundLight;
+    final secondaryTextColor = isDarkMode ? AppTheme.onPrimary.withValues(alpha: 0.7) : AppTheme.onBackgroundLight;
+    final iconColor = AppTheme.primary;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -121,11 +187,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
             // Header with role info - Matching AuthScreen design
             Container(
               width: double.infinity,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFF006D77), Color(0xFF005A63)],
+                  colors: [AppTheme.primary, AppTheme.primaryDark],
                 ),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(30),
@@ -143,7 +209,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       height: 120.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: AppTheme.onPrimary.withValues(alpha: 0.1),
                       ),
                     ),
                   ),
@@ -155,7 +221,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       height: 80.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: AppTheme.onPrimary.withValues(alpha: 0.1),
                       ),
                     ),
                   ),
@@ -174,7 +240,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                             Container(
                               padding: EdgeInsets.all(12.r),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
+                                color: AppTheme.onPrimary.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: Icon(
@@ -183,7 +249,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                     : selectedRole == 'admin'
                                     ? Icons.admin_panel_settings_outlined
                                     : Icons.home_outlined,
-                                color: Colors.white,
+                                color: AppTheme.onPrimary,
                                 size: 24.sp,
                               ),
                             ),
@@ -194,7 +260,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                 Text(
                                   'Registering as',
                                   style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.9),
+                                    color: AppTheme.onPrimary.withValues(alpha: 0.9),
                                     fontSize: 14.sp,
                                   ),
                                 ),
@@ -205,7 +271,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                       ? 'Administrator'
                                       : 'Resident',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppTheme.onPrimary,
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -218,7 +284,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         Text(
                           'Verify Your Identity',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.onPrimary,
                             fontSize: 28.sp,
                             fontWeight: FontWeight.bold,
                           ),
@@ -227,7 +293,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         Text(
                           'Upload a document for verification',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: AppTheme.onPrimary.withValues(alpha: 0.9),
                             fontSize: 16.sp,
                           ),
                         ),
@@ -248,79 +314,125 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16.sp,
-                        color: textColor.withValues(alpha: 0.7),
+                        color: textColor.withOpacity(0.7),
                       ),
                     ),
                     SizedBox(height: 40.h),
 
-                    // Scanner Frame or Preview
-                    AspectRatio(
-                      aspectRatio: 3 / 4,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: iconColor, width: 4.w),
-                          borderRadius: BorderRadius.circular(24.r),
-                          color: _image == null
-                              ? Colors.black.withValues(alpha: 0.3)
-                              : null,
-                        ),
-                        child: _image == null
-                            ? Stack(
-                                children: [
-                                  Center(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.document_scanner,
-                                          size: 80.sp,
-                                          color: iconColor,
-                                        ),
-                                        SizedBox(height: 20.h),
-                                        Text(
-                                          'Place document here',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 20.sp,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  // Corners
-                                  ...[
-                                    Alignment.topLeft,
-                                    Alignment.topRight,
-                                    Alignment.bottomLeft,
-                                    Alignment.bottomRight
-                                  ].map(
-                                    (a) => Align(
-                                      alignment: a,
-                                      child: Container(
-                                        margin: EdgeInsets.all(20.w),
-                                        width: 50.w,
-                                        height: 50.w,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
+                    // Document Preview or Scanner Frame
+                    GestureDetector(
+                      onTap: _isLoading ? null : _pickDocument,
+                      child: AspectRatio(
+                        aspectRatio: 3 / 4,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: iconColor, width: 4.w),
+                            borderRadius: BorderRadius.circular(24.r),
+                            color: _selectedFile == null
+                                ? AppTheme.onBackgroundDark.withOpacity(0.3)
+                                : null,
+                          ),
+                          child: _selectedFile == null
+                              ? Stack(
+                                  children: [
+                                    Center(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.document_scanner,
+                                            size: 80.sp,
                                             color: iconColor,
-                                            width: 6.w,
+                                          ),
+                                          SizedBox(height: 20.h),
+                                          Text(
+                                            'Place document here',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 20.sp,
+                                              color: AppTheme.onPrimary,
+                                            ),
+                                          ),
+                                          SizedBox(height: 10.h),
+                                          Text(
+                                            'Tap to select file',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 14.sp,
+                                              color: AppTheme.onPrimary.withValues(alpha: 0.7),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    // Corners
+                                    ...[
+                                      Alignment.topLeft,
+                                      Alignment.topRight,
+                                      Alignment.bottomLeft,
+                                      Alignment.bottomRight
+                                    ].map(
+                                      (a) => Align(
+                                        alignment: a,
+                                        child: Container(
+                                          margin: EdgeInsets.all(20.w),
+                                          width: 50.w,
+                                          height: 50.w,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: iconColor,
+                                              width: 6.w,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(20.r),
-                                child: Image.file(
-                                  _image!,
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  height: double.infinity,
+                                  ],
+                                )
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.r),
+                                  child: _fileType == 'pdf'
+                                      ? Container(
+                                          color: AppTheme.onPrimary,
+                                          child: Center(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                  Icons.picture_as_pdf,
+                                                  size: 80.sp,
+                                                  color: AppTheme.error,
+                                                ),
+                                                SizedBox(height: 20.h),
+                                                Text(
+                                                  'PDF Document',
+                                                  style: TextStyle(
+                                                    fontSize: 18.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: AppTheme.onBackgroundLight,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 10.h),
+                                                Text(
+                                                  _selectedFile!.path.split('/').last,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 14.sp,
+                                                    color: AppTheme.onBackgroundLight.withValues(alpha: 0.54),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      : Image.file(
+                                          _selectedFile!,
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                        ),
                                 ),
-                              ),
+                        ),
                       ),
                     ),
 
@@ -341,10 +453,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                 height: 24,
                                 child: CircularProgressIndicator(
                                   valueColor:
-                                      AlwaysStoppedAnimation<Color>(Colors.white),
+                                      AlwaysStoppedAnimation<Color>(AppTheme.onPrimary),
                                 ),
                               )
-                            : const Icon(Icons.camera_alt, color: Colors.white),
+                            : Icon(Icons.camera_alt, color: AppTheme.onPrimary),
                         label: Text(
                           _isLoading ? 'Uploading...' : 'Take Photo',
                           style: TextStyle(
@@ -379,7 +491,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       ),
                     ),
                     
-                    if (_image != null) ...[
+                    if (_selectedFile != null) ...[
                       SizedBox(height: 20.h),
                       SizedBox(
                         width: double.infinity,
@@ -389,7 +501,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                               ? null
                               : () {
                                   setState(() {
-                                    _image = null;
+                                    _selectedFile = null;
+                                    _fileType = null;
                                   });
                                 },
                           style: OutlinedButton.styleFrom(

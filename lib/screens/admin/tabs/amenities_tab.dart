@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class AmenitiesTab extends StatelessWidget {
   const AmenitiesTab({super.key});
@@ -11,25 +12,25 @@ class AmenitiesTab extends StatelessWidget {
         'title': 'Total Amenities',
         'value': '12',
         'icon': Icons.pool,
-        'color': Colors.blue,
+        'color': AppTheme.primary,
       },
       {
         'title': 'Booked Today',
         'value': '8',
         'icon': Icons.event_available,
-        'color': Colors.green,
+        'color': AppTheme.success,
       },
       {
         'title': 'Pending Requests',
         'value': '3',
         'icon': Icons.pending_actions,
-        'color': Colors.orange,
+        'color': AppTheme.secondary,
       },
       {
         'title': 'Maintenance',
         'value': '2',
         'icon': Icons.build,
-        'color': Colors.red,
+        'color': AppTheme.error,
       },
     ];
 
@@ -40,7 +41,7 @@ class AmenitiesTab extends StatelessWidget {
         'icon': Icons.pool,
         'bookings': '24',
         'status': 'Available',
-        'statusColor': Colors.green,
+        'statusColor': AppTheme.success,
       },
       {
         'id': 2,
@@ -48,7 +49,7 @@ class AmenitiesTab extends StatelessWidget {
         'icon': Icons.fitness_center,
         'bookings': '18',
         'status': 'Available',
-        'statusColor': Colors.green,
+        'statusColor': AppTheme.success,
       },
       {
         'id': 3,
@@ -56,7 +57,7 @@ class AmenitiesTab extends StatelessWidget {
         'icon': Icons.house,
         'bookings': '12',
         'status': 'Maintenance',
-        'statusColor': Colors.red,
+        'statusColor': AppTheme.error,
       },
       {
         'id': 4,
@@ -64,7 +65,7 @@ class AmenitiesTab extends StatelessWidget {
         'icon': Icons.sports_tennis,
         'bookings': '9',
         'status': 'Available',
-        'statusColor': Colors.green,
+        'statusColor': AppTheme.success,
       },
       {
         'id': 5,
@@ -72,7 +73,7 @@ class AmenitiesTab extends StatelessWidget {
         'icon': Icons.child_friendly,
         'bookings': '15',
         'status': 'Available',
-        'statusColor': Colors.green,
+        'statusColor': AppTheme.success,
       },
     ];
 
@@ -131,7 +132,7 @@ class AmenitiesTab extends StatelessWidget {
                         Text(
                           stat['title'],
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: AppTheme.onBackgroundLight,
                             fontSize: 12.sp,
                           ),
                         ),
@@ -193,7 +194,7 @@ class AmenitiesTab extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.withValues(alpha: 0.1),
+                                  color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                   blurRadius: 5.r,
                                   offset: Offset(0, 2.h),
                                 ),
@@ -201,7 +202,7 @@ class AmenitiesTab extends StatelessWidget {
                             ),
                             child: Icon(
                               action['icon'],
-                              color: Theme.of(context).primaryColor,
+                              color: AppTheme.primary,
                               size: 28.r,
                             ),
                           ),
@@ -244,13 +245,13 @@ class AmenitiesTab extends StatelessWidget {
                         vertical: 5.h,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: AppTheme.primary,
                         borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: Text(
                         '${amenitiesList.length}',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.onPrimary,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -285,7 +286,7 @@ class AmenitiesTab extends StatelessWidget {
                               ),
                               child: Icon(
                                 amenity['icon'],
-                                color: Theme.of(context).primaryColor,
+                                color: AppTheme.primary,
                                 size: 32.r,
                               ),
                             ),
@@ -306,7 +307,7 @@ class AmenitiesTab extends StatelessWidget {
                                     '${amenity['bookings']} bookings this week',
                                     style: TextStyle(
                                       fontSize: 14.sp,
-                                      color: Colors.grey,
+                                      color: AppTheme.onBackgroundLight,
                                     ),
                                   ),
                                 ],
@@ -344,7 +345,7 @@ class AmenitiesTab extends StatelessWidget {
                                       icon: Icon(
                                         Icons.edit,
                                         size: 20.r,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.primary,
                                       ),
                                     ),
                                     IconButton(
@@ -354,7 +355,7 @@ class AmenitiesTab extends StatelessWidget {
                                       icon: Icon(
                                         Icons.visibility,
                                         size: 20.r,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.primary,
                                       ),
                                     ),
                                   ],

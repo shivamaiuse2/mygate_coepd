@@ -156,7 +156,7 @@ class _MultilingualSupportScreenState extends State<MultilingualSupportScreen> {
                           const Text(
                             'Enable voice assistance for real-time translation',
                             style: TextStyle(
-                              color: Colors.grey,
+                              color: AppTheme.onBackgroundLight,
                             ),
                           ),
                         ],
@@ -216,7 +216,7 @@ class _MultilingualSupportScreenState extends State<MultilingualSupportScreen> {
                               'Select a language to see translations',
                               style: TextStyle(
                                 fontStyle: FontStyle.italic,
-                                color: Colors.grey,
+                                color: AppTheme.onBackgroundLight,
                               ),
                             ),
                             const SizedBox(height: 15),
@@ -236,7 +236,7 @@ class _MultilingualSupportScreenState extends State<MultilingualSupportScreen> {
                                     Text(
                                       _getTranslation(phrase['english']),
                                       style: const TextStyle(
-                                        color: Colors.grey,
+                                        color: AppTheme.onBackgroundLight,
                                       ),
                                     ),
                                   ],
@@ -279,7 +279,7 @@ class _MultilingualSupportScreenState extends State<MultilingualSupportScreen> {
                             'Note: Language changes will be applied throughout the application.',
                             style: TextStyle(
                               fontStyle: FontStyle.italic,
-                              color: Colors.grey,
+                              color: AppTheme.onBackgroundLight,
                             ),
                           ),
                         ],

@@ -16,6 +16,9 @@ class ResidentDashboardScreen extends StatefulWidget {
 
 class _ResidentDashboardScreenState extends State<ResidentDashboardScreen>
     with TickerProviderStateMixin {
+
+        final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   final List<Map<String, dynamic>> _quickStats = [
     {
       'label': 'Visitors',
@@ -169,6 +172,7 @@ class _ResidentDashboardScreenState extends State<ResidentDashboardScreen>
         if (state is Authenticated) {
           final user = state.user;
           return Scaffold(
+            key: _scaffoldKey,
             body: Column(
               children: <Widget>[
                 // getAppBarUI(user),

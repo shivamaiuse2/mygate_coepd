@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mygate_coepd/blocs/auth/auth_bloc.dart';
 import 'package:mygate_coepd/blocs/auth/auth_event.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class RoleSelectionScreen extends StatefulWidget {
   const RoleSelectionScreen({super.key});
@@ -21,9 +22,9 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    backgroundColor = isDarkMode ? const Color(0xFF1E1E1E) : Colors.white;
-    textColor = isDarkMode ? Colors.white : Colors.black87;
-    secondaryTextColor = isDarkMode ? Colors.white70 : Colors.grey.shade600;
+    backgroundColor = isDarkMode ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    textColor = isDarkMode ? AppTheme.onPrimary : AppTheme.onBackgroundLight;
+    secondaryTextColor = isDarkMode ? AppTheme.onPrimary.withValues(alpha: 0.7) : AppTheme.onBackgroundLight.withValues(alpha: 0.6);
   }
 
   @override
@@ -37,8 +38,8 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF006D77),
-              Color(0xFF005A63),
+              AppTheme.primary,
+              AppTheme.primaryDark,
             ],
           ),
         ),
@@ -53,7 +54,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                 height: 350.r,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppTheme.onPrimary.withValues(alpha: 0.1),
                 ),
               ),
             ),
@@ -65,7 +66,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                 height: 450.r,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.1),
+                  color: AppTheme.onPrimary.withValues(alpha: 0.1),
                 ),
               ),
             ),
@@ -77,7 +78,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                 height: 60.r,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: AppTheme.onPrimary.withValues(alpha: 0.05),
                 ),
               ),
             ),
@@ -89,7 +90,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                 height: 45.r,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: AppTheme.onPrimary.withValues(alpha: 0.05),
                 ),
               ),
             ),
@@ -105,7 +106,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   height: 110.r,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: AppTheme.onPrimary.withValues(alpha: 0.2),
                   ),
                   child: Center(
                     child: Container(
@@ -113,13 +114,13 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                       height: 85.r,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white,
+                        color: AppTheme.onPrimary,
                       ),
                       child: Center(
                         child: Icon(
                           Icons.home_outlined,
                           size: 48.r,
-                          color: const Color(0xFF006D77),
+                          color: AppTheme.primary,
                         ),
                       ),
                     ),
@@ -128,11 +129,11 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                 SizedBox(height: 24.h),
 
                 Text(
-                  'CommunityLink',
+                  'MyGateBell',
                   style: TextStyle(
                     fontSize: 32.sp,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppTheme.onPrimary,
                     letterSpacing: 1.5,
                   ),
                 ),
@@ -142,7 +143,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                   'Connect. Simplify. Thrive.',
                   style: TextStyle(
                     fontSize: 16.sp,
-                    color: Colors.white70,
+                    color: AppTheme.onPrimary.withValues(alpha: 0.7),
                     letterSpacing: 1.2,
                     fontWeight: FontWeight.w500,
                   ),
@@ -176,7 +177,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                           ),
                           SizedBox(height: 12.h),
                           Text(
-                            'Select how you\'ll be using CommunityLink',
+                            'Select how you\'ll be using MyGateBell',
                             style: TextStyle(
                               fontSize: 16.sp,
                               color: secondaryTextColor,
@@ -226,10 +227,10 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
     required IconData icon,
     required String role,
   }) {
-    final cardColor = isDarkMode ? const Color(0xFF2A2A2A) : Colors.white;
-    final borderColor = isDarkMode ? Colors.grey.withValues(alpha: 0.4) : Colors.grey.withValues(alpha: 0.2);
-    final shadowColor = isDarkMode ? Colors.black.withValues(alpha: 0.5) : Colors.grey.withValues(alpha: 0.15);
-    const primaryColor = Color(0xFF006D77);
+    final cardColor = isDarkMode ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    final borderColor = isDarkMode ? AppTheme.onBackgroundLight.withValues(alpha: 0.4) : AppTheme.onBackgroundLight.withValues(alpha: 0.2);
+    final shadowColor = isDarkMode ? AppTheme.onBackgroundDark.withValues(alpha: 0.5) : AppTheme.onBackgroundLight.withValues(alpha: 0.15);
+    final primaryColor = AppTheme.primary;
 
     return GestureDetector(
       onTap: () {

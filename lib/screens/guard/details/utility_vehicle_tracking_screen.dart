@@ -123,7 +123,7 @@ class _UtilityVehicleTrackingScreenState extends State<UtilityVehicleTrackingScr
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Vehicle entry added successfully!'),
-                      backgroundColor: Colors.green,
+                      backgroundColor: AppTheme.success,
                     ),
                   );
                 }
@@ -149,7 +149,7 @@ class _UtilityVehicleTrackingScreenState extends State<UtilityVehicleTrackingScr
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Vehicle exit marked successfully!'),
-        backgroundColor: Colors.green,
+        backgroundColor: AppTheme.success,
       ),
     );
   }
@@ -220,20 +220,20 @@ class _UtilityVehicleTrackingScreenState extends State<UtilityVehicleTrackingScr
                                   ),
                                   decoration: BoxDecoration(
                                     color: vehicle['status'] == 'inside'
-                                        ? Colors.green.withValues(alpha: 0.2)
+                                        ? AppTheme.success.withValues(alpha: 0.2)
                                         : vehicle['status'] == 'exited'
-                                            ? Colors.grey.withValues(alpha: 0.2)
-                                            : Colors.orange.withValues(alpha: 0.2),
+                                            ? AppTheme.onBackgroundLight.withValues(alpha: 0.2)
+                                            : AppTheme.secondary.withValues(alpha: 0.2),
                                     borderRadius: BorderRadius.circular(12.r),
                                   ),
                                   child: Text(
                                     vehicle['status'].toString().toUpperCase(),
                                     style: TextStyle(
                                       color: vehicle['status'] == 'inside'
-                                          ? Colors.green
+                                          ? AppTheme.success
                                           : vehicle['status'] == 'exited'
-                                              ? Colors.grey
-                                              : Colors.orange,
+                                              ? AppTheme.onBackgroundLight
+                                              : AppTheme.secondary,
                                       fontSize: 12.sp,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -272,7 +272,7 @@ class _UtilityVehicleTrackingScreenState extends State<UtilityVehicleTrackingScr
                                     const Text(
                                       'Entry Time',
                                       style: TextStyle(
-                                        color: Colors.grey,
+                                        color: AppTheme.onBackgroundLight,
                                         fontSize: 14,
                                       ),
                                     ),
@@ -291,7 +291,7 @@ class _UtilityVehicleTrackingScreenState extends State<UtilityVehicleTrackingScr
                                     const Text(
                                       'Exit Time',
                                       style: TextStyle(
-                                        color: Colors.grey,
+                                        color: AppTheme.onBackgroundLight,
                                         fontSize: 14,
                                       ),
                                     ),
@@ -327,7 +327,7 @@ class _UtilityVehicleTrackingScreenState extends State<UtilityVehicleTrackingScr
                                       ),
                                       child: const Text(
                                         'Mark Exit',
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: AppTheme.onPrimary),
                                       ),
                                     ),
                                   ),
@@ -346,7 +346,7 @@ class _UtilityVehicleTrackingScreenState extends State<UtilityVehicleTrackingScr
                   child: FloatingActionButton(
                     onPressed: _showAddVehicleDialog,
                     backgroundColor: AppTheme.primary,
-                    child: const Icon(Icons.add, color: Colors.white),
+                    child: const Icon(Icons.add, color: AppTheme.onPrimary),
                   ),
                 ),
               ],

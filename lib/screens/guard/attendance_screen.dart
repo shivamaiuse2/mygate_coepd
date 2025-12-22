@@ -85,9 +85,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     {
       'icon': Icons.directions_walk,
       'label': 'Patrolling',
-      'color': Colors.blue,
+      'color': AppTheme.primary,
     },
-    {'icon': Icons.qr_code_scanner, 'label': 'Scan QR', 'color': Colors.green},
+    {'icon': Icons.qr_code_scanner, 'label': 'Scan QR', 'color': AppTheme.success},
   ];
 
   void _markAttendance() {
@@ -95,7 +95,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Attendance marked successfully!'),
-        backgroundColor: Colors.green,
+        backgroundColor: AppTheme.success,
       ),
     );
   }
@@ -127,7 +127,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.amber,
+                          color: AppTheme.warning,
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Row(
@@ -135,12 +135,12 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                           children: [
                             const Row(
                               children: [
-                                Icon(Icons.wifi_off, color: Colors.white),
+                                Icon(Icons.wifi_off, color: AppTheme.onPrimary),
                                 SizedBox(width: 10),
                                 Text(
                                   'Offline Mode',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppTheme.onPrimary,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -154,7 +154,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                               },
                               icon: const Icon(
                                 Icons.close,
-                                color: Colors.white,
+                                color: AppTheme.onPrimary,
                               ),
                             ),
                           ],
@@ -220,7 +220,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                         ),
                                         child: Icon(
                                           _quickActions[index]['icon'],
-                                          color: Colors.white,
+                                          color: AppTheme.onPrimary,
                                           size: 30.sp,
                                         ),
                                       ),
@@ -288,7 +288,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                   child: const Text(
                                     'Mark Attendance',
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: AppTheme.onPrimary,
                                       fontSize: 16,
                                     ),
                                   ),
@@ -331,7 +331,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                 const SizedBox(height: 10),
                                 LinearProgressIndicator(
                                   value: 0.5,
-                                  backgroundColor: Colors.grey[300],
+                                  backgroundColor: AppTheme.onBackgroundLight.withValues(alpha: 0.3),
                                   valueColor:
                                       const AlwaysStoppedAnimation<Color>(
                                         AppTheme.primary,
@@ -409,11 +409,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                           decoration: BoxDecoration(
                                             color:
                                                 route['status'] == 'Completed'
-                                                ? Colors.green.withValues(alpha: 0.2)
+                                                ? AppTheme.success.withValues(alpha: 0.2)
                                                 : route['status'] ==
                                                       'In Progress'
-                                                ? Colors.orange.withValues(alpha: 0.2)
-                                                : Colors.grey.withValues(alpha: 0.2),
+                                                ? AppTheme.secondary.withValues(alpha: 0.2)
+                                                : AppTheme.onBackgroundLight.withValues(alpha: 0.2),
                                             borderRadius: BorderRadius.circular(
                                               12.r,
                                             ),
@@ -423,11 +423,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                             style: TextStyle(
                                               color:
                                                   route['status'] == 'Completed'
-                                                  ? Colors.green
+                                                  ? AppTheme.success
                                                   : route['status'] ==
                                                         'In Progress'
-                                                  ? Colors.orange
-                                                  : Colors.grey,
+                                                  ? AppTheme.secondary
+                                                  : AppTheme.onBackgroundLight,
                                               fontSize: 12.sp,
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -444,7 +444,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                       value:
                                           route['completed'] /
                                           route['checkpoints'],
-                                      backgroundColor: Colors.grey[300],
+                                      backgroundColor: AppTheme.onBackgroundLight.withValues(alpha: 0.3),
                                       valueColor:
                                           const AlwaysStoppedAnimation<Color>(
                                             AppTheme.primary,
@@ -471,7 +471,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                             child: const Text(
                                               'Scan QR',
                                               style: TextStyle(
-                                                color: Colors.white,
+                                                color: AppTheme.onPrimary,
                                               ),
                                             ),
                                           ),
@@ -512,7 +512,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                   3: FlexColumnWidth(1),
                                 },
                                 border: TableBorder.all(
-                                  color: Colors.grey.withValues(alpha: 0.2),
+                                  color: AppTheme.onBackgroundLight.withValues(alpha: 0.2),
                                   width: 1,
                                 ),
                                 children: [
@@ -526,7 +526,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                         child: Text(
                                           'Date',
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: AppTheme.onPrimary,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -536,7 +536,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                         child: Text(
                                           'In',
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: AppTheme.onPrimary,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -546,7 +546,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                         child: Text(
                                           'Out',
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: AppTheme.onPrimary,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -556,7 +556,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                         child: Text(
                                           'Status',
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: AppTheme.onPrimary,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -585,10 +585,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                             style: TextStyle(
                                               color:
                                                   record['status'] == 'Present'
-                                                  ? Colors.green
+                                                  ? AppTheme.success
                                                   : record['status'] == 'Off'
-                                                  ? Colors.grey
-                                                  : Colors.red,
+                                                  ? AppTheme.onBackgroundLight
+                                                  : AppTheme.error,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -617,7 +617,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Widget _buildAttendanceStat(String label, String value) {
     return Column(
       children: [
-        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 14)),
+        Text(label, style: const TextStyle(color: AppTheme.onBackgroundLight, fontSize: 14)),
         const SizedBox(height: 5),
         Text(
           value,

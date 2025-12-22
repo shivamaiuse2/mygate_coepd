@@ -98,7 +98,7 @@ class _VendorAccessScreenState extends State<VendorAccessScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Vendor added successfully!'),
-                      backgroundColor: Colors.green,
+                      backgroundColor: AppTheme.success,
                     ),
                   );
                 }
@@ -200,14 +200,14 @@ class _VendorAccessScreenState extends State<VendorAccessScreen> {
                                         vendor['service'],
                                         style: TextStyle(
                                           fontSize: 14.sp,
-                                          color: Colors.grey,
+                                          color: AppTheme.onBackgroundLight,
                                         ),
                                       ),
                                       Text(
                                         'For: ${vendor['flat']} • ${vendor['time']}',
                                         style: const TextStyle(
                                           fontSize: 12,
-                                          color: Colors.grey,
+                                          color: AppTheme.onBackgroundLight,
                                         ),
                                       ),
                                       const SizedBox(height: 5),
@@ -218,20 +218,20 @@ class _VendorAccessScreenState extends State<VendorAccessScreen> {
                                         ),
                                         decoration: BoxDecoration(
                                           color: vendor['status'] == 'approved'
-                                              ? Colors.green.withValues(alpha: 0.2)
+                                              ? AppTheme.success.withValues(alpha: 0.2)
                                               : vendor['status'] == 'requested'
-                                                  ? Colors.orange.withValues(alpha: 0.2)
-                                                  : Colors.grey.withValues(alpha: 0.2),
+                                                  ? AppTheme.secondary.withValues(alpha: 0.2)
+                                                  : AppTheme.onBackgroundLight.withValues(alpha: 0.2),
                                           borderRadius: BorderRadius.circular(12.r),
                                         ),
                                         child: Text(
                                           vendor['status'].toString().toUpperCase(),
                                           style: TextStyle(
                                             color: vendor['status'] == 'approved'
-                                                ? Colors.green
+                                                ? AppTheme.success
                                                 : vendor['status'] == 'requested'
-                                                    ? Colors.orange
-                                                    : Colors.grey,
+                                                    ? AppTheme.secondary
+                                                    : AppTheme.onBackgroundLight,
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -261,7 +261,7 @@ class _VendorAccessScreenState extends State<VendorAccessScreen> {
                                       ),
                                       child: const Text(
                                         'Request Approval',
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(color: AppTheme.onPrimary),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.center,
@@ -275,7 +275,7 @@ class _VendorAccessScreenState extends State<VendorAccessScreen> {
                                 child: Text(
                                   'Waiting for resident approval...',
                                   style: TextStyle(
-                                    color: Colors.orange,
+                                    color: AppTheme.secondary,
                                     fontStyle: FontStyle.italic,
                                   ),
                                 ),
@@ -285,7 +285,7 @@ class _VendorAccessScreenState extends State<VendorAccessScreen> {
                                 child: Text(
                                   'Entry approved',
                                   style: TextStyle(
-                                    color: Colors.green,
+                                    color: AppTheme.success,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -303,7 +303,7 @@ class _VendorAccessScreenState extends State<VendorAccessScreen> {
                   child: FloatingActionButton(
                     onPressed: _showAddVendorDialog,
                     backgroundColor: AppTheme.primary,
-                    child: const Icon(Icons.add, color: Colors.white),
+                    child: const Icon(Icons.add, color: AppTheme.onPrimary),
                   ),
                 ),
               ],

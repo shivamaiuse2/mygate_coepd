@@ -9,6 +9,7 @@ import 'package:mygate_coepd/screens/resident/resident_main_screen.dart';
 import 'package:mygate_coepd/screens/guard/guard_main_screen.dart';
 import 'package:mygate_coepd/screens/admin/admin_main_screen.dart';
 import 'package:mygate_coepd/screens/auth/approval_pending_screen.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -60,8 +61,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           if (state is OnboardingState) {
             Navigator.of(context).pushReplacementNamed('/onboarding');
           } else if (state is Unauthenticated) {
-            // Navigator.of(context).pushReplacementNamed('/auth');
-            Navigator.of(context).pushReplacementNamed('/location-selection');
+            Navigator.of(context).pushReplacementNamed('/auth');
+            // Navigator.of(context).pushReplacementNamed('/location-selection');
           } else if (state is Authenticated) {
             final selectedRole = AppConfig.selectedRole ?? 'resident';
             Widget nextScreen;
@@ -87,13 +88,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color(0xFF006D77),
-                Color(0xFF005A63),
+                // Color(0xFF006D77),
+                // Color(0xFF005A63),
+                AppTheme.primary,
+                AppTheme.primaryDark
               ],
             ),
           ),
@@ -108,7 +111,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   height: 300.r,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: AppTheme.onPrimary.withValues(alpha: 0.1),
                   ),
                 ),
               ),
@@ -120,7 +123,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   height: 400.r,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: AppTheme.onPrimary.withValues(alpha: 0.1),
                   ),
                 ),
               ),
@@ -132,7 +135,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   height: 50.r,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.05),
+                    color: AppTheme.onPrimary.withValues(alpha: 0.05),
                   ),
                 ),
               ),
@@ -144,7 +147,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   height: 40.r,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.05),
+                    color: AppTheme.onPrimary.withValues(alpha: 0.05),
                   ),
                 ),
               ),
@@ -167,10 +170,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                               height: 140.r,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Colors.white.withValues(alpha: 0.25),
+                                color: AppTheme.onPrimary.withValues(alpha: 0.25),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.white.withValues(alpha: 0.2),
+                                    color: AppTheme.onPrimary.withValues(alpha: 0.2),
                                     blurRadius: 30.r,
                                     spreadRadius: 10.r,
                                   ),
@@ -182,13 +185,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                                   height: 110.r,
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.white,
+                                    color: AppTheme.onPrimary,
                                   ),
                                   child: Center(
                                     child: Icon(
                                       Icons.home_outlined,
                                       size: 68.r,
-                                      color: const Color(0xFF006D77),
+                                      color: AppTheme.primary,
                                     ),
                                   ),
                                 ),
@@ -202,11 +205,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                               style: TextStyle(
                                 fontSize: 40.sp,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: AppTheme.onPrimary,
                                 letterSpacing: 2.0,
                                 shadows: [
                                   Shadow(
-                                    color: Colors.black26,
+                                    color: AppTheme.onBackgroundDark.withValues(alpha: 0.26),
                                     offset: Offset(0, 2),
                                     blurRadius: 8.r,
                                   ),
@@ -220,7 +223,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                               'Connect. Simplify. Thrive.',
                               style: TextStyle(
                                 fontSize: 18.sp,
-                                color: Colors.white70,
+                                color: AppTheme.onPrimary,
                                 letterSpacing: 1.5,
                                 fontStyle: FontStyle.italic,
                               ),
@@ -232,9 +235,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                               width: 60.r,
                               height: 60.r,
                               child: CircularProgressIndicator(
-                                valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.onPrimary),
                                 strokeWidth: 5.w,
-                                backgroundColor: Colors.white.withValues(alpha: 0.2),
+                                backgroundColor: AppTheme.onPrimary.withValues(alpha: 0.2),
                               ),
                             ),
                             SizedBox(height: 20.h),
@@ -242,7 +245,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                               'Loading...',
                               style: TextStyle(
                                 fontSize: 14.sp,
-                                color: Colors.white70,
+                                color: AppTheme.onPrimary,
                                 letterSpacing: 1.0,
                               ),
                             ),

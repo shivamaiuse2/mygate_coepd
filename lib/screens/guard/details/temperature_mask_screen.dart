@@ -114,7 +114,7 @@ class _TemperatureMaskScreenState extends State<TemperatureMaskScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Temperature and mask status captured successfully!'),
-                      backgroundColor: Colors.green,
+                      backgroundColor: AppTheme.success,
                     ),
                   );
                 }
@@ -188,14 +188,14 @@ class _TemperatureMaskScreenState extends State<TemperatureMaskScreen> {
                                         visitor['type'],
                                         style: const TextStyle(
                                           fontSize: 14,
-                                          color: Colors.grey,
+                                          color: AppTheme.onBackgroundLight,
                                         ),
                                       ),
                                       Text(
                                         'For: ${visitor['flat']} • ${visitor['time']}',
                                         style: const TextStyle(
                                           fontSize: 12,
-                                          color: Colors.grey,
+                                          color: AppTheme.onBackgroundLight,
                                         ),
                                       ),
                                     ],
@@ -232,7 +232,7 @@ class _TemperatureMaskScreenState extends State<TemperatureMaskScreen> {
                                       const Text(
                                         'Temperature',
                                         style: TextStyle(
-                                          color: Colors.grey,
+                                          color: AppTheme.onBackgroundLight,
                                         ),
                                       ),
                                     ],
@@ -241,7 +241,7 @@ class _TemperatureMaskScreenState extends State<TemperatureMaskScreen> {
                                     children: [
                                       Icon(
                                         visitor['mask'] ? Icons.masks : Icons.masks_outlined,
-                                        color: visitor['mask'] ? Colors.green : Colors.red,
+                                        color: visitor['mask'] ? AppTheme.success : AppTheme.error,
                                         size: 30,
                                       ),
                                       const SizedBox(height: 5),
@@ -250,13 +250,13 @@ class _TemperatureMaskScreenState extends State<TemperatureMaskScreen> {
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
-                                          color: visitor['mask'] ? Colors.green : Colors.red,
+                                          color: visitor['mask'] ? AppTheme.success : AppTheme.error,
                                         ),
                                       ),
                                       const Text(
                                         'Compliance',
                                         style: TextStyle(
-                                          color: Colors.grey,
+                                          color: AppTheme.onBackgroundLight,
                                         ),
                                       ),
                                     ],
@@ -284,7 +284,7 @@ class _TemperatureMaskScreenState extends State<TemperatureMaskScreen> {
                                     ),
                                     child: const Text(
                                       'Update',
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: AppTheme.onPrimary),
                                     ),
                                   ),
                                 ),
@@ -303,7 +303,7 @@ class _TemperatureMaskScreenState extends State<TemperatureMaskScreen> {
                   child: FloatingActionButton(
                     onPressed: _showCaptureDialog,
                     backgroundColor: AppTheme.primary,
-                    child: const Icon(Icons.add, color: Colors.white),
+                    child: const Icon(Icons.add, color: AppTheme.onPrimary),
                   ),
                 ),
               ],

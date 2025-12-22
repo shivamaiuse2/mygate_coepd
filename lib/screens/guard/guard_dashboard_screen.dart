@@ -55,67 +55,67 @@ class _GuardDashboardScreenState extends State<GuardDashboardScreen> {
     {
       'icon': Icons.person_add,
       'label': 'Visitor Entry',
-      'color': Colors.blue,
+      'color': AppTheme.primary,
       'screen': 'visitor_entry',
     },
     {
       'icon': Icons.group,
       'label': 'Group Entry',
-      'color': Colors.purple,
+      'color': AppTheme.secondary,
       'screen': 'group_entry',
     },
     {
       'icon': Icons.build,
       'label': 'Vendor Access',
-      'color': Colors.green,
+      'color': AppTheme.success,
       'screen': 'vendor_access',
     },
     {
       'icon': Icons.directions_car,
       'label': 'Vehicle Log',
-      'color': Colors.orange,
+      'color': AppTheme.warning,
       'screen': 'vehicle_log',
     },
     {
       'icon': Icons.directions_walk,
       'label': 'Patrolling',
-      'color': Colors.indigo,
+      'color': AppTheme.primaryDark,
       'screen': 'patrolling',
     },
     {
       'icon': Icons.phone,
       'label': 'Call Guard',
-      'color': Colors.red,
+      'color': AppTheme.error,
       'screen': 'call_guard',
     },
     {
       'icon': Icons.thermostat,
       'label': 'Temp Check',
-      'color': Colors.teal,
+      'color': AppTheme.info,
       'screen': 'temp_check',
     },
     {
       'icon': Icons.keyboard_voice,
       'label': 'Voice Entry',
-      'color': Colors.pink,
+      'color': AppTheme.secondary,
       'screen': 'voice_entry',
     },
     {
       'icon': Icons.voicemail,
       'label': 'E-Intercom',
-      'color': Colors.cyan,
+      'color': AppTheme.info,
       'screen': 'e_intercom',
     },
     {
       'icon': Icons.wifi_off,
       'label': 'Offline Mode',
-      'color': Colors.brown,
+      'color': AppTheme.primaryDark,
       'screen': 'offline_mode',
     },
     {
       'icon': Icons.language,
       'label': 'Language',
-      'color': Colors.lime,
+      'color': AppTheme.success,
       'screen': 'language',
     },
   ];
@@ -126,24 +126,24 @@ class _GuardDashboardScreenState extends State<GuardDashboardScreen> {
       'title': 'Visitor Entry',
       'description': 'Amit Patel for B-404',
       'time': '10:32 AM',
-      'iconBg': Colors.blue,
-      'iconColor': Colors.white,
+      'iconBg': AppTheme.primary,
+      'iconColor': AppTheme.onPrimary,
     },
     {
       'icon': Icons.directions_car,
       'title': 'Vehicle Exit',
       'description': 'MH02 AB 1234',
       'time': '10:15 AM',
-      'iconBg': Colors.green,
-      'iconColor': Colors.white,
+      'iconBg': AppTheme.success,
+      'iconColor': AppTheme.onPrimary,
     },
     {
       'icon': Icons.inventory,
       'title': 'Delivery Accepted',
       'description': 'Amazon Package for A-101',
       'time': '9:45 AM',
-      'iconBg': Colors.orange,
-      'iconColor': Colors.white,
+      'iconBg': AppTheme.warning,
+      'iconColor': AppTheme.onPrimary,
     },
   ];
 
@@ -271,18 +271,18 @@ class _GuardDashboardScreenState extends State<GuardDashboardScreen> {
                     if (_isOffline)
                       Container(
                         padding: EdgeInsets.all(10.w),
-                        color: Colors.amber,
+                        color: AppTheme.warning,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               children: [
-                                Icon(Icons.wifi_off, color: Colors.white),
+                                Icon(Icons.wifi_off, color: AppTheme.onPrimary),
                                 SizedBox(width: 10.w),
                                 Text(
                                   'Offline Mode',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppTheme.onPrimary,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -296,7 +296,7 @@ class _GuardDashboardScreenState extends State<GuardDashboardScreen> {
                               },
                               icon: const Icon(
                                 Icons.close,
-                                color: Colors.white,
+                                color: AppTheme.onPrimary,
                               ),
                             ),
                           ],
@@ -312,7 +312,7 @@ class _GuardDashboardScreenState extends State<GuardDashboardScreen> {
                         decoration: InputDecoration(
                           hintText: 'Search visitors, vehicles or flats...',
                           hintStyle: TextStyle(
-                            color: Colors.grey,
+                            color: AppTheme.onBackgroundLight,
                             fontSize: 14.sp,
                           ),
                           border: InputBorder.none,

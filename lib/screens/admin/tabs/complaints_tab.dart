@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class ComplaintsTab extends StatelessWidget {
   const ComplaintsTab({super.key});
@@ -13,7 +14,7 @@ class ComplaintsTab extends StatelessWidget {
         'change': '+5',
         'isIncrease': true,
         'icon': Icons.report_problem,
-        'color': Colors.red,
+        'color': AppTheme.error,
       },
       {
         'title': 'Resolved',
@@ -21,7 +22,7 @@ class ComplaintsTab extends StatelessWidget {
         'change': '+8',
         'isIncrease': true,
         'icon': Icons.check_circle,
-        'color': Colors.green,
+        'color': AppTheme.success,
       },
       {
         'title': 'Pending',
@@ -29,7 +30,7 @@ class ComplaintsTab extends StatelessWidget {
         'change': '-3',
         'isIncrease': false,
         'icon': Icons.pending,
-        'color': Colors.orange,
+        'color': AppTheme.secondary,
       },
       {
         'title': 'In Progress',
@@ -37,7 +38,7 @@ class ComplaintsTab extends StatelessWidget {
         'change': '0',
         'isIncrease': false,
         'icon': Icons.hourglass_empty,
-        'color': Colors.blue,
+        'color': AppTheme.primary,
       },
     ];
 
@@ -49,9 +50,9 @@ class ComplaintsTab extends StatelessWidget {
         'unit': 'A-101',
         'date': '12 Jun 2023',
         'priority': 'High',
-        'priorityColor': Colors.red,
+        'priorityColor': AppTheme.error,
         'status': 'In Progress',
-        'statusColor': Colors.orange,
+        'statusColor': AppTheme.secondary,
       },
       {
         'id': 2,
@@ -60,9 +61,9 @@ class ComplaintsTab extends StatelessWidget {
         'unit': 'B-203',
         'date': '11 Jun 2023',
         'priority': 'Critical',
-        'priorityColor': Colors.red,
+        'priorityColor': AppTheme.error,
         'status': 'Pending',
-        'statusColor': Colors.orange,
+        'statusColor': AppTheme.secondary,
       },
       {
         'id': 3,
@@ -71,9 +72,9 @@ class ComplaintsTab extends StatelessWidget {
         'unit': 'C-405',
         'date': '10 Jun 2023',
         'priority': 'Low',
-        'priorityColor': Colors.green,
+        'priorityColor': AppTheme.success,
         'status': 'Resolved',
-        'statusColor': Colors.green,
+        'statusColor': AppTheme.success,
       },
       {
         'id': 4,
@@ -82,9 +83,9 @@ class ComplaintsTab extends StatelessWidget {
         'unit': 'D-102',
         'date': '09 Jun 2023',
         'priority': 'Medium',
-        'priorityColor': Colors.orange,
+        'priorityColor': AppTheme.secondary,
         'status': 'Resolved',
-        'statusColor': Colors.green,
+        'statusColor': AppTheme.success,
       },
     ];
 
@@ -143,7 +144,7 @@ class ComplaintsTab extends StatelessWidget {
                         Text(
                           stat['title'],
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: AppTheme.onBackgroundLight,
                             fontSize: 12.sp,
                           ),
                         ),
@@ -162,8 +163,8 @@ class ComplaintsTab extends StatelessWidget {
                               stat['change'],
                               style: TextStyle(
                                 color: stat['isIncrease']
-                                    ? Colors.green
-                                    : Colors.red,
+                                    ? AppTheme.success
+                                    : AppTheme.error,
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -220,7 +221,7 @@ class ComplaintsTab extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.withValues(alpha: 0.1),
+                                  color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                   blurRadius: 5.r,
                                   offset: Offset(0, 2.h),
                                 ),
@@ -228,7 +229,7 @@ class ComplaintsTab extends StatelessWidget {
                             ),
                             child: Icon(
                               action['icon'],
-                              color: Theme.of(context).primaryColor,
+                              color: AppTheme.primary,
                               size: 28.r,
                             ),
                           ),
@@ -271,13 +272,13 @@ class ComplaintsTab extends StatelessWidget {
                         vertical: 5.h,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: AppTheme.primary,
                         borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: Text(
                         '${complaintList.length}',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.onPrimary,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -355,7 +356,7 @@ class ComplaintsTab extends StatelessWidget {
                                       'Unit: ${complaint['unit']}',
                                       style: TextStyle(
                                         fontSize: 14.sp,
-                                        color: Colors.grey,
+                                        color: AppTheme.onBackgroundLight,
                                       ),
                                     ),
                                     SizedBox(height: 5.h),
@@ -363,7 +364,7 @@ class ComplaintsTab extends StatelessWidget {
                                       'Date: ${complaint['date']}',
                                       style: TextStyle(
                                         fontSize: 14.sp,
-                                        color: Colors.grey,
+                                        color: AppTheme.onBackgroundLight,
                                       ),
                                     ),
                                   ],

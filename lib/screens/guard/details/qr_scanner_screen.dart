@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class QRScannerScreen extends StatefulWidget {
   const QRScannerScreen({super.key});
@@ -18,8 +19,8 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Scan QR Code'),
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
+        backgroundColor: AppTheme.onBackgroundDark,
+        foregroundColor: AppTheme.onPrimary,
         actions: [
           IconButton(
             onPressed: () {
@@ -44,7 +45,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           Expanded(
             flex: 1,
             child: Container(
-              color: Colors.black,
+              color: AppTheme.onBackgroundDark,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -52,7 +53,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                     Text(
                       hasScanned ? 'QR Code Detected!' : 'Point camera at QR code',
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppTheme.onPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),

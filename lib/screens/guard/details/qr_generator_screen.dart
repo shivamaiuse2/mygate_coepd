@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRGeneratorScreen extends StatefulWidget {
@@ -45,7 +46,7 @@ class _QRGeneratorScreenState extends State<QRGeneratorScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please fill all fields'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppTheme.error,
         ),
       );
     }
@@ -74,8 +75,8 @@ class _QRGeneratorScreenState extends State<QRGeneratorScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('QR Code Generator'),
-        backgroundColor: Colors.purple,
-        foregroundColor: Colors.white,
+        backgroundColor: AppTheme.secondary,
+        foregroundColor: AppTheme.onPrimary,
         actions: [
           IconButton(
             onPressed: _clearForm,
@@ -111,8 +112,8 @@ class _QRGeneratorScreenState extends State<QRGeneratorScreen> {
                         return ElevatedButton(
                           onPressed: () => _usePreset(preset),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.purple.shade100,
-                            foregroundColor: Colors.purple.shade800,
+                            backgroundColor: AppTheme.secondary.withValues(alpha: 0.1),
+                            foregroundColor: AppTheme.secondary.withValues(alpha: 0.8),
                           ),
                           child: Text(preset['name']!),
                         );
@@ -172,8 +173,8 @@ class _QRGeneratorScreenState extends State<QRGeneratorScreen> {
                       child: ElevatedButton(
                         onPressed: _generateQR,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purple,
-                          foregroundColor: Colors.white,
+                          backgroundColor: AppTheme.secondary,
+                          foregroundColor: AppTheme.onPrimary,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
                         child: const Text(
@@ -206,22 +207,22 @@ class _QRGeneratorScreenState extends State<QRGeneratorScreen> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppTheme.onPrimary,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.grey.shade300),
+                          border: Border.all(color: AppTheme.onBackgroundLight.withValues(alpha: 0.3)),
                         ),
                         child: QrImageView(
                           data: _qrData,
                           version: QrVersions.auto,
                           size: 200.0,
-                          backgroundColor: Colors.white,
+                          backgroundColor: AppTheme.onPrimary,
                         ),
                       ),
                       const SizedBox(height: 16),
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
+                          color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Column(
@@ -250,7 +251,7 @@ class _QRGeneratorScreenState extends State<QRGeneratorScreen> {
                         'Scan this QR code with the visitor management scanner',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.grey,
+                          color: AppTheme.onBackgroundLight,
                         ),
                         textAlign: TextAlign.center,
                       ),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mygate_coepd/blocs/auth/auth_bloc.dart';
 import 'package:mygate_coepd/blocs/auth/auth_event.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class ApprovalPendingScreen extends StatelessWidget {
   const ApprovalPendingScreen({super.key});
@@ -10,8 +11,8 @@ class ApprovalPendingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final textColor = isDarkMode ? Colors.white : Colors.black87;
-    final subtitleColor = isDarkMode ? Colors.white70 : Colors.grey;
+    final textColor = isDarkMode ? AppTheme.onPrimary : AppTheme.onBackgroundLight;
+    final subtitleColor = isDarkMode ? AppTheme.onPrimary.withValues(alpha: 0.7) : AppTheme.onBackgroundLight;
 
     return Scaffold(
       body: Center(
@@ -24,13 +25,13 @@ class ApprovalPendingScreen extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(20.r),
                 decoration: BoxDecoration(
-                  color: Colors.amber.withValues(alpha: 0.1),
+                  color: AppTheme.warning.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(50.r),
                 ),
                 child: Icon(
                   Icons.access_time,
                   size: 60.r,
-                  color: Colors.amber,
+                  color: AppTheme.warning,
                 ),
               ),
               SizedBox(height: 30.h),
@@ -68,7 +69,7 @@ class ApprovalPendingScreen extends StatelessWidget {
                       ? null
                       : [
                           BoxShadow(
-                            color: Colors.grey.withValues(alpha: 0.1),
+                            color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                             blurRadius: 12.r,
                             offset: Offset(0, 6.h),
                           ),
@@ -104,12 +105,12 @@ class ApprovalPendingScreen extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Checking approval status...'),
-                        backgroundColor: Colors.blue,
+                        backgroundColor: AppTheme.primary,
                       ),
                     );
                   },
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                    side: BorderSide(color: AppTheme.primary, width: 2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.r),
                     ),
@@ -119,7 +120,7 @@ class ApprovalPendingScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
+                      color: AppTheme.primary,
                     ),
                   ),
                 ),
@@ -136,7 +137,7 @@ class ApprovalPendingScreen extends StatelessWidget {
                   'Logout',
                   style: TextStyle(
                     fontSize: 16.sp,
-                    color: Colors.redAccent,
+                    color: AppTheme.error,
                     fontWeight: FontWeight.w600,
                     decoration: TextDecoration.underline,
                   ),
@@ -165,12 +166,12 @@ class ApprovalPendingScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: completed
                 ? primaryColor.withValues(alpha: 0.15)
-                : Colors.grey.withValues(alpha: 0.15),
+                : AppTheme.onBackgroundLight.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(30.r),
           ),
           child: Icon(
             completed ? Icons.check_circle : Icons.circle_outlined,
-            color: completed ? primaryColor : Colors.grey,
+            color: completed ? primaryColor : AppTheme.onBackgroundLight,
             size: 24.r,
           ),
         ),
@@ -185,8 +186,8 @@ class ApprovalPendingScreen extends StatelessWidget {
                   fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
                   color: completed
-                      ? (isDarkMode ? Colors.white : Colors.black87)
-                      : Colors.grey,
+                      ? (isDarkMode ? AppTheme.onPrimary : AppTheme.onBackgroundLight)
+                      : AppTheme.onBackgroundLight,
                 ),
               ),
               SizedBox(height: 4.h),
@@ -194,7 +195,7 @@ class ApprovalPendingScreen extends StatelessWidget {
                 subtitle,
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: Colors.grey,
+                  color: AppTheme.onBackgroundLight,
                 ),
               ),
             ],

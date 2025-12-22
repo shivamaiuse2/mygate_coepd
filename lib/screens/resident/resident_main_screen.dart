@@ -6,10 +6,13 @@ import 'package:mygate_coepd/blocs/auth/auth_event.dart';
 import 'package:mygate_coepd/blocs/auth/auth_state.dart';
 import 'package:mygate_coepd/models/user.dart';
 import 'package:mygate_coepd/screens/resident/dashboard_screen.dart';
+import 'package:mygate_coepd/screens/resident/visitor_management_new.dart';
 import 'package:mygate_coepd/screens/resident/visitor_management_screen.dart';
 import 'package:mygate_coepd/screens/resident/service_requests_screen.dart';
 import 'package:mygate_coepd/screens/resident/bills_payments_screen.dart';
 import 'package:mygate_coepd/screens/resident/community_screen.dart';
+import 'package:mygate_coepd/screens/society/events_and_community_screen.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class ResidentMainScreen extends StatefulWidget {
   final int initialTabIndex;
@@ -26,13 +29,19 @@ class _ResidentMainScreenState extends State<ResidentMainScreen>
   late AnimationController _animationController;
   late Animation<double> _animation;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  
+  // Add the missing variables for visitor management functionality
+  bool _isBulkMode = false;
+  final Set<int> _selectedVisitors = {};
 
   final List<Widget> _screens = [
     const ResidentDashboardScreen(),
-    const VisitorManagementScreen(),
+    // const VisitorManagementScreen(),
+    const VisitorManagementScreenNew(),
     const ServiceRequestsScreen(),
     const BillsPaymentsScreen(),
-    const CommunityScreen(),
+    // const CommunityScreen(),
+    const EventsAndCommunityScreen(),
   ];
 
   final List<NavItem> _navItems = [
@@ -182,7 +191,7 @@ class _ResidentMainScreenState extends State<ResidentMainScreen>
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(color: Color(0xFF006D77)),
+            decoration: BoxDecoration(color: AppTheme.primary),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -217,7 +226,7 @@ class _ResidentMainScreenState extends State<ResidentMainScreen>
           _drawerTile(Icons.people, 'Visitors', 1),
           _drawerTile(Icons.checklist, 'Services', 2),
           _drawerTile(Icons.account_balance_wallet, 'Bills & Payments', 3),
-          _drawerTile(Icons.groups, 'Community', 4),
+          _drawerTile(Icons.groups, 'Community & Events', 4),
           const Divider(),
           _drawerTile(
             Icons.settings,
@@ -352,23 +361,18 @@ class _ResidentMainScreenState extends State<ResidentMainScreen>
       case 1:
         return [
           IconButton(
-            icon: Icon(Icons.qr_code_scanner, size: 26.sp),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('QR Scanner would open here')),
-              );
-            },
+            icon: Icon(
+              _isBulkMode ? Icons.close : Icons.checklist,
+              color: Colors.white,
+              size: 24,
+            ),
+            onPressed: _toggleBulkMode,
           ),
-          IconButton(
-            icon: Icon(Icons.search, size: 26.sp),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Search functionality would open here'),
-                ),
-              );
-            },
-          ),
+          if (_isBulkMode && _selectedVisitors.isNotEmpty)
+            IconButton(
+              icon: Icon(Icons.check_circle, color: Colors.white, size: 24),
+              onPressed: _bulkApprove,
+            ),
         ];
       case 2:
       case 3:
@@ -436,22 +440,19 @@ class _ResidentMainScreenState extends State<ResidentMainScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('CommunityLink App Help', style: TextStyle(fontSize: 15.sp)),
+              Text('MyGateBell App Help', style: TextStyle(fontSize: 15.sp)),
               SizedBox(height: 12.h),
               Text(
                 'For technical support, please contact:',
                 style: TextStyle(fontSize: 14.sp),
               ),
-              Text(
-                'support@communitylink.com',
-                style: TextStyle(fontSize: 14.sp),
-              ),
+              Text('support@mygatebell.com', style: TextStyle(fontSize: 14.sp)),
               SizedBox(height: 12.h),
               Text(
                 'For general inquiries, please contact:',
                 style: TextStyle(fontSize: 14.sp),
               ),
-              Text('info@communitylink.com', style: TextStyle(fontSize: 14.sp)),
+              Text('info@mygatebell.com', style: TextStyle(fontSize: 14.sp)),
               SizedBox(height: 12.h),
               Text('Phone: +91 9876543210', style: TextStyle(fontSize: 14.sp)),
             ],
@@ -495,6 +496,31 @@ class _ResidentMainScreenState extends State<ResidentMainScreen>
             },
           ),
         ],
+      ),
+    );
+  }
+
+  // Add the missing methods for visitor management functionality
+  void _toggleBulkMode() {
+    setState(() {
+      _isBulkMode = !_isBulkMode;
+      if (!_isBulkMode) {
+        _selectedVisitors.clear();
+      }
+    });
+  }
+
+  void _bulkApprove() {
+    // Placeholder implementation - in a real app this would communicate with the visitor screen
+    setState(() {
+      _selectedVisitors.clear();
+      _isBulkMode = false;
+    });
+    
+    // Show a snackbar to indicate the action
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Bulk approve functionality would be implemented here'),
       ),
     );
   }

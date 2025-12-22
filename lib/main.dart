@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -25,29 +26,70 @@ import 'package:mygate_coepd/screens/resident/amenity_booking_screen.dart';
 import 'package:mygate_coepd/screens/resident/community_screen.dart';
 import 'package:mygate_coepd/screens/resident/profile_screen.dart';
 import 'package:mygate_coepd/routes/admin_routes.dart';
+import 'package:sizer/sizer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
+  bool hasShownError = false;
+
+  // 🚨 CRITICAL: Custom error handling - DO NOT REMOVE
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    if (!hasShownError) {
+      hasShownError = true;
+
+      // Reset flag after 3 seconds to allow error widget on new screens
+      Future.delayed(Duration(seconds: 5), () {
+        hasShownError = false;
+      });
+
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'An error has occurred',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            Text(details.exceptionAsString(), style: TextStyle(fontSize: 16)),
+            SizedBox(height: 16),
+            Text(
+              'Please restart the app and try again.',
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      );
+    }
+    return SizedBox.shrink();
+  };
+
   // Initialize Hive
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(FamilyMemberAdapter());
-  
+
   // Initialize app configuration
   await AppConfig.init();
-  
-  runApp(const CommunityLinkApp());
+
+  // runApp(const MyGateBell());
+  // 🚨 CRITICAL: Device orientation lock - DO NOT REMOVE
+  Future.wait([
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
+  ]).then((value) {
+    runApp(const MyGateBell());
+  });
 }
 
-class CommunityLinkApp extends StatefulWidget {
-  const CommunityLinkApp({super.key});
+class MyGateBell extends StatefulWidget {
+  const MyGateBell({super.key});
 
   @override
-  State<CommunityLinkApp> createState() => _CommunityLinkAppState();
+  State<MyGateBell> createState() => _MyGateBellState();
 }
 
-class _CommunityLinkAppState extends State<CommunityLinkApp> with WidgetsBindingObserver {
+class _MyGateBellState extends State<MyGateBell> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -71,29 +113,34 @@ class _CommunityLinkAppState extends State<CommunityLinkApp> with WidgetsBinding
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     log("Log Screen size: $screenWidth x $screenHeight");
-    return ScreenUtilInit(
-      designSize: const Size(375, 812), // Standard/common mobile device size
-      // designSize: Size(screenWidth, screenHeight), // According to current device size
-      minTextAdapt: true,
-      splitScreenMode: true,
-      child: RepositoryProvider(
-        create: (context) => UserRepository(),
-        child: BlocProvider(
-          create: (context) => AuthBloc(userRepository: context.read<UserRepository>()),
-          child: MaterialApp(
-            title: 'CommunityLink',
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            themeMode: ThemeMode.system,
-            initialRoute: '/',
-            routes: {
-              ..._getMainRoutes(),
-              ...AdminRoutes.getRoutes(),
-            },
-            debugShowCheckedModeBanner: false,
+    return Sizer(
+      builder: (context, orientation, screenType) {
+        return ScreenUtilInit(
+          designSize: const Size(
+            375,
+            812,
+          ), // Standard/common mobile device size
+          // designSize: Size(screenWidth, screenHeight), // According to current device size
+          minTextAdapt: true,
+          splitScreenMode: true,
+          child: RepositoryProvider(
+            create: (context) => UserRepository(),
+            child: BlocProvider(
+              create: (context) =>
+                  AuthBloc(userRepository: context.read<UserRepository>()),
+              child: MaterialApp(
+                title: 'MyGateBell',
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: ThemeMode.system,
+                initialRoute: '/',
+                routes: {..._getMainRoutes(), ...AdminRoutes.getRoutes()},
+                debugShowCheckedModeBanner: false,
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -104,10 +151,14 @@ class _CommunityLinkAppState extends State<CommunityLinkApp> with WidgetsBinding
       '/role-selection': (context) => const RoleSelectionScreen(),
       '/auth': (context) => const AuthScreen(),
       '/resident-main': (context) => const ResidentMainScreen(),
-      '/resident-main/visitors': (context) => ResidentMainScreen(initialTabIndex: 1),
-      '/resident-main/services': (context) => ResidentMainScreen(initialTabIndex: 2),
-      '/resident-main/bills': (context) => ResidentMainScreen(initialTabIndex: 3),
-      '/resident-main/community': (context) => ResidentMainScreen(initialTabIndex: 4),
+      '/resident-main/visitors': (context) =>
+          ResidentMainScreen(initialTabIndex: 1),
+      '/resident-main/services': (context) =>
+          ResidentMainScreen(initialTabIndex: 2),
+      '/resident-main/bills': (context) =>
+          ResidentMainScreen(initialTabIndex: 3),
+      '/resident-main/community': (context) =>
+          ResidentMainScreen(initialTabIndex: 4),
       '/guard-main': (context) => const GuardMainScreen(),
       '/admin-main': (context) => const AdminMainScreen(),
       '/visitors': (context) => const VisitorManagementScreen(),
@@ -118,7 +169,6 @@ class _CommunityLinkAppState extends State<CommunityLinkApp> with WidgetsBinding
       '/community': (context) => const CommunityScreen(),
       '/profile': (context) => const ProfileScreen(),
       '/location-selection': (context) => const LocationSelectionScreen(),
-
     };
   }
 }

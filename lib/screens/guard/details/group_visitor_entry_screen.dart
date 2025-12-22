@@ -60,7 +60,7 @@ class _GroupVisitorEntryScreenState extends State<GroupVisitorEntryScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Visitor added successfully!'),
-          backgroundColor: Colors.green,
+          backgroundColor: AppTheme.success,
         ),
       );
     }
@@ -211,7 +211,7 @@ class _GroupVisitorEntryScreenState extends State<GroupVisitorEntryScreen> {
                             ),
                             child: const Text(
                               'Add Visitor',
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: AppTheme.onPrimary),
                             ),
                           ),
                         ],
@@ -239,7 +239,7 @@ class _GroupVisitorEntryScreenState extends State<GroupVisitorEntryScreen> {
                           'No visitors added yet. Add visitors to the group.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: AppTheme.onBackgroundLight,
                           ),
                         ),
                       ),
@@ -279,7 +279,7 @@ class _GroupVisitorEntryScreenState extends State<GroupVisitorEntryScreen> {
                                       Text(
                                         '${visitor['type']} • ${visitor['flat']}',
                                         style: const TextStyle(
-                                          color: Colors.grey,
+                                          color: AppTheme.onBackgroundLight,
                                         ),
                                       ),
                                     ],
@@ -287,7 +287,7 @@ class _GroupVisitorEntryScreenState extends State<GroupVisitorEntryScreen> {
                                 ),
                                 IconButton(
                                   onPressed: () => _removeVisitor(visitor['id']),
-                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                  icon: const Icon(Icons.delete, color: AppTheme.error),
                                 ),
                               ],
                             ),

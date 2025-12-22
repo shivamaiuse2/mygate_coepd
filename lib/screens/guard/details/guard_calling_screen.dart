@@ -150,11 +150,11 @@ class _GuardCallingScreenState extends State<GuardCallingScreen> {
                                       height: 12,
                                       decoration: BoxDecoration(
                                         color: guard['status'] == 'online'
-                                            ? Colors.green
-                                            : Colors.grey,
+                                            ? AppTheme.success
+                                            : AppTheme.onBackgroundLight,
                                         shape: BoxShape.circle,
                                         border: Border.all(
-                                          color: Colors.white,
+                                          color: AppTheme.onPrimary,
                                           width: 2,
                                         ),
                                       ),
@@ -178,7 +178,7 @@ class _GuardCallingScreenState extends State<GuardCallingScreen> {
                                     Text(
                                       guard['position'],
                                       style: const TextStyle(
-                                        color: Colors.grey,
+                                        color: AppTheme.onBackgroundLight,
                                       ),
                                     ),
                                   ],
@@ -201,7 +201,7 @@ class _GuardCallingScreenState extends State<GuardCallingScreen> {
                                 const Text(
                                   'Offline',
                                   style: TextStyle(
-                                    color: Colors.grey,
+                                    color: AppTheme.onBackgroundLight,
                                   ),
                                 ),
                             ],
@@ -247,7 +247,7 @@ class _GuardCallingScreenState extends State<GuardCallingScreen> {
                               const SizedBox(height: 5),
                               Icon(
                                 call['type'] == 'outgoing' ? Icons.call_made : Icons.call_received,
-                                color: call['type'] == 'outgoing' ? Colors.green : Colors.blue,
+                                color: call['type'] == 'outgoing' ? AppTheme.success : AppTheme.primary,
                                 size: 16,
                               ),
                             ],
@@ -285,7 +285,7 @@ class _GuardCallingScreenState extends State<GuardCallingScreen> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text('Emergency alert sent to all guards!'),
-                                      backgroundColor: Colors.red,
+                                      backgroundColor: AppTheme.error,
                                     ),
                                   );
                                 },

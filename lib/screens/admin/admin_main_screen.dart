@@ -6,6 +6,7 @@ import 'package:mygate_coepd/blocs/auth/auth_event.dart';
 import 'package:mygate_coepd/blocs/auth/auth_state.dart';
 import 'package:mygate_coepd/models/user.dart';
 import 'package:mygate_coepd/screens/admin/admin_dashboard_screen.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class AdminMainScreen extends StatefulWidget {
   const AdminMainScreen({super.key});
@@ -46,7 +47,7 @@ class _BuildAnimatedNavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: AppTheme.onPrimary.withValues(alpha: 0.0),
       child: InkWell(
         onTap: onTap,
         splashColor: primaryColor.withValues(alpha: 0.1),
@@ -83,7 +84,7 @@ class _BuildAnimatedNavItem extends StatelessWidget {
                 Icon(
                   isSelected ? item.activeIcon : item.icon,
                   size: isSelected ? 26.r : 24.r,
-                  color: isSelected ? primaryColor : Colors.grey.shade600,
+                  color: isSelected ? primaryColor : AppTheme.onBackgroundLight,
                 ),
 
                 // Badge
@@ -94,9 +95,9 @@ class _BuildAnimatedNavItem extends StatelessWidget {
                     child: Container(
                       padding: EdgeInsets.all(4.r),
                       decoration: BoxDecoration(
-                        color: Colors.red,
+                        color: AppTheme.error,
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2.w),
+                        border: Border.all(color: AppTheme.onPrimary, width: 2.w),
                       ),
                       constraints: BoxConstraints(
                         minWidth: 16.w,
@@ -105,7 +106,7 @@ class _BuildAnimatedNavItem extends StatelessWidget {
                       child: Text(
                         item.badgeCount.toString(),
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.onPrimary,
                           fontSize: 10.r,
                           fontWeight: FontWeight.bold,
                         ),
@@ -141,7 +142,7 @@ class _BuildAnimatedNavItem extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                  color: isSelected ? primaryColor : Colors.grey.shade600,
+                  color: isSelected ? primaryColor : AppTheme.onBackgroundLight,
                   letterSpacing: isSelected ? 0.5 : 0.0,
                 ),
                 maxLines: 1,
@@ -268,7 +269,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(color: Color(0xFF006D77)),
+            decoration: const BoxDecoration(color: AppTheme.primary),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -279,14 +280,14 @@ class _AdminMainScreenState extends State<AdminMainScreen>
                       ? NetworkImage(user.profileImage!)
                       : null,
                   child: user.profileImage == null
-                      ? Icon(Icons.person, size: 40.sp, color: Colors.white)
+                      ? Icon(Icons.person, size: 40.sp, color: AppTheme.onPrimary)
                       : null,
                 ),
                 SizedBox(height: 12.h),
                 Text(
                   user.name,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppTheme.onPrimary,
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -294,7 +295,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
                 SizedBox(height: 6.h),
                 Text(
                   'Administrator',
-                  style: TextStyle(color: Colors.white70, fontSize: 14.sp),
+                  style: TextStyle(color: AppTheme.onPrimary.withValues(alpha: 0.7), fontSize: 14.sp),
                 ),
               ],
             ),
@@ -354,7 +355,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
       leading: Icon(icon, size: 26.sp),
       title: Text(title, style: TextStyle(fontSize: 15.sp)),
       selected: index != null && _currentIndex == index,
-      selectedTileColor: Colors.grey.withValues(alpha: 0.1),
+      selectedTileColor: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
       onTap:
           onTap ??
           () {
@@ -370,7 +371,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
         color: theme.bottomNavigationBarTheme.backgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
+            color: AppTheme.onBackgroundDark.withValues(alpha: 0.15),
             blurRadius: 20.r,
             offset: Offset(0, -5.h),
           ),
@@ -418,14 +419,14 @@ class _AdminMainScreenState extends State<AdminMainScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('CommunityLink App Help', style: TextStyle(fontSize: 15.sp)),
+              Text('MyGateBell App Help', style: TextStyle(fontSize: 15.sp)),
               SizedBox(height: 12.h),
               Text(
                 'For technical support, please contact:',
                 style: TextStyle(fontSize: 14.sp),
               ),
               Text(
-                'support@communitylink.com',
+                'support@mygatebell.com',
                 style: TextStyle(fontSize: 14.sp),
               ),
               SizedBox(height: 12.h),
@@ -433,7 +434,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
                 'For general inquiries, please contact:',
                 style: TextStyle(fontSize: 14.sp),
               ),
-              Text('info@communitylink.com', style: TextStyle(fontSize: 14.sp)),
+              Text('info@mygatebell.com', style: TextStyle(fontSize: 14.sp)),
               SizedBox(height: 12.h),
               Text('Phone: +91 9876543210', style: TextStyle(fontSize: 14.sp)),
             ],
@@ -466,7 +467,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
           TextButton(
             child: Text(
               'Logout',
-              style: TextStyle(fontSize: 15.sp, color: Colors.red),
+              style: TextStyle(fontSize: 15.sp, color: AppTheme.error),
             ),
             onPressed: () {
               Navigator.of(context).pop();

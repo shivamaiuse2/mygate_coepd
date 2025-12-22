@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class OverviewTab extends StatelessWidget {
@@ -70,7 +71,7 @@ class OverviewTab extends StatelessWidget {
                         Text(
                           stat['title'],
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: AppTheme.onBackgroundLight,
                             fontSize: 12.sp,
                           ),
                         ),
@@ -89,8 +90,8 @@ class OverviewTab extends StatelessWidget {
                               stat['change'],
                               style: TextStyle(
                                 color: stat['isIncrease']
-                                    ? Colors.green
-                                    : Colors.red,
+                                    ? AppTheme.success
+                                    : AppTheme.error,
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -147,7 +148,7 @@ class OverviewTab extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.withValues(alpha: 0.1),
+                                  color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                   blurRadius: 5.r,
                                   offset: Offset(0, 2.h),
                                 ),
@@ -155,7 +156,7 @@ class OverviewTab extends StatelessWidget {
                             ),
                             child: Icon(
                               item['icon'],
-                              color: Theme.of(context).primaryColor,
+                              color: AppTheme.primary,
                               size: 28.r,
                             ),
                           ),
@@ -198,13 +199,13 @@ class OverviewTab extends StatelessWidget {
                         vertical: 5.h,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.orange,
+                        color: AppTheme.secondary,
                         borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: Text(
                         '${pendingApprovals.length}',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.onSecondary,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -260,14 +261,14 @@ class OverviewTab extends StatelessWidget {
                                           '${approval['type']} • ${approval['unit']}',
                                           style: TextStyle(
                                             fontSize: 14.sp,
-                                            color: Colors.grey,
+                                            color: AppTheme.onBackgroundLight,
                                           ),
                                         ),
                                         Text(
                                           'Requested: ${DateTime.parse(approval['requestedOn']).day}/${DateTime.parse(approval['requestedOn']).month}/${DateTime.parse(approval['requestedOn']).year}',
                                           style: TextStyle(
                                             fontSize: 12.sp,
-                                            color: Colors.grey,
+                                            color: AppTheme.onBackgroundLight,
                                           ),
                                         ),
                                       ],
@@ -345,14 +346,14 @@ class OverviewTab extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.check_circle,
-                            color: Colors.green,
+                            color: AppTheme.success,
                             size: 40.r,
                           ),
                           SizedBox(height: 15.h),
                           Text(
                             'No pending approvals',
                             style: TextStyle(
-                              color: Colors.grey,
+                              color: AppTheme.onBackgroundLight,
                               fontSize: 16.sp,
                             ),
                           ),
@@ -388,7 +389,7 @@ class OverviewTab extends StatelessWidget {
                         'View All',
                         style: TextStyle(
                           fontSize: 14.sp,
-                          color: Theme.of(context).primaryColor,
+                          color: AppTheme.primary,
                         ),
                       ),
                     ),
@@ -431,7 +432,7 @@ class OverviewTab extends StatelessWidget {
                         trailing: Text(
                           activity['time'],
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: AppTheme.onBackgroundLight,
                             fontSize: 12.sp,
                           ),
                         ),

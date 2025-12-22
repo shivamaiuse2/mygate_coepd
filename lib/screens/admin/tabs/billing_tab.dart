@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class BillingTab extends StatelessWidget {
   const BillingTab({super.key});
@@ -13,7 +14,7 @@ class BillingTab extends StatelessWidget {
         'change': '+12%',
         'isIncrease': true,
         'icon': Icons.account_balance_wallet,
-        'color': Colors.green,
+        'color': AppTheme.success,
       },
       {
         'title': 'Pending Payments',
@@ -21,7 +22,7 @@ class BillingTab extends StatelessWidget {
         'change': '-5%',
         'isIncrease': false,
         'icon': Icons.pending_actions,
-        'color': Colors.orange,
+        'color': AppTheme.secondary,
       },
       {
         'title': 'Overdue Bills',
@@ -29,7 +30,7 @@ class BillingTab extends StatelessWidget {
         'change': '+3',
         'isIncrease': true,
         'icon': Icons.warning,
-        'color': Colors.red,
+        'color': AppTheme.error,
       },
       {
         'title': 'Collection Rate',
@@ -37,7 +38,7 @@ class BillingTab extends StatelessWidget {
         'change': '+2%',
         'isIncrease': true,
         'icon': Icons.trending_up,
-        'color': Colors.blue,
+        'color': AppTheme.primary,
       },
     ];
 
@@ -49,7 +50,7 @@ class BillingTab extends StatelessWidget {
         'amount': '₹12,500',
         'dueDate': '15 Jun 2023',
         'status': 'Paid',
-        'statusColor': Colors.green,
+        'statusColor': AppTheme.success,
       },
       {
         'id': 2,
@@ -58,7 +59,7 @@ class BillingTab extends StatelessWidget {
         'amount': '₹8,750',
         'dueDate': '15 Jun 2023',
         'status': 'Pending',
-        'statusColor': Colors.orange,
+        'statusColor': AppTheme.secondary,
       },
       {
         'id': 3,
@@ -67,7 +68,7 @@ class BillingTab extends StatelessWidget {
         'amount': '₹15,200',
         'dueDate': '10 Jun 2023',
         'status': 'Overdue',
-        'statusColor': Colors.red,
+        'statusColor': AppTheme.error,
       },
       {
         'id': 4,
@@ -76,7 +77,7 @@ class BillingTab extends StatelessWidget {
         'amount': '₹11,300',
         'dueDate': '20 Jun 2023',
         'status': 'Pending',
-        'statusColor': Colors.orange,
+        'statusColor': AppTheme.secondary,
       },
     ];
 
@@ -135,7 +136,7 @@ class BillingTab extends StatelessWidget {
                         Text(
                           stat['title'],
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: AppTheme.onBackgroundLight,
                             fontSize: 12.sp,
                           ),
                         ),
@@ -154,8 +155,8 @@ class BillingTab extends StatelessWidget {
                               stat['change'],
                               style: TextStyle(
                                 color: stat['isIncrease']
-                                    ? Colors.green
-                                    : Colors.red,
+                                    ? AppTheme.success
+                                    : AppTheme.error,
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -212,7 +213,7 @@ class BillingTab extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.withValues(alpha: 0.1),
+                                  color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                   blurRadius: 5.r,
                                   offset: Offset(0, 2.h),
                                 ),
@@ -220,7 +221,7 @@ class BillingTab extends StatelessWidget {
                             ),
                             child: Icon(
                               action['icon'],
-                              color: Theme.of(context).primaryColor,
+                              color: AppTheme.primary,
                               size: 28.r,
                             ),
                           ),
@@ -263,13 +264,13 @@ class BillingTab extends StatelessWidget {
                         vertical: 5.h,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: AppTheme.primary,
                         borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: Text(
                         '${billingList.length}',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.onPrimary,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -337,7 +338,7 @@ class BillingTab extends StatelessWidget {
                                       'Unit: ${bill['unit']}',
                                       style: TextStyle(
                                         fontSize: 14.sp,
-                                        color: Colors.grey,
+                                        color: AppTheme.onBackgroundLight,
                                       ),
                                     ),
                                     SizedBox(height: 5.h),
@@ -345,7 +346,7 @@ class BillingTab extends StatelessWidget {
                                       'Due: ${bill['dueDate']}',
                                       style: TextStyle(
                                         fontSize: 14.sp,
-                                        color: Colors.grey,
+                                        color: AppTheme.onBackgroundLight,
                                       ),
                                     ),
                                   ],
@@ -355,7 +356,7 @@ class BillingTab extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor,
+                                    color: AppTheme.primary,
                                   ),
                                 ),
                               ],

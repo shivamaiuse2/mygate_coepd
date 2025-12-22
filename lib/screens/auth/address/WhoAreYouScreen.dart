@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mygate_coepd/screens/auth/address/VerificationScreen.dart';
 import 'package:mygate_coepd/config/app_config.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class WhoAreYouScreen extends StatelessWidget {
   const WhoAreYouScreen({super.key});
@@ -12,11 +13,11 @@ class WhoAreYouScreen extends StatelessWidget {
     
     final selectedRole = AppConfig.selectedRole ?? 'resident';
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor = isDarkMode ? const Color(0xFF121212) : const Color(0xFFf8f9fa);
-    final surfaceColor = isDarkMode ? const Color(0xFF1E1E1E) : Colors.white;
-    final textColor = isDarkMode ? Colors.white : Colors.black87;
-    final secondaryTextColor = isDarkMode ? Colors.white70 : Colors.grey;
-    final iconColor = const Color(0xFF006D77);
+    final backgroundColor = isDarkMode ? AppTheme.backgroundDark : AppTheme.backgroundLight;
+    final surfaceColor = isDarkMode ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    final textColor = isDarkMode ? AppTheme.onPrimary : AppTheme.onBackgroundLight;
+    final secondaryTextColor = isDarkMode ? AppTheme.onPrimary.withValues(alpha: 0.7) : AppTheme.onBackgroundLight;
+    final iconColor = AppTheme.primary;
 
     final options = [
       {'title': 'I Own this Place', 'icon': Icons.key_outlined},
@@ -33,11 +34,11 @@ class WhoAreYouScreen extends StatelessWidget {
             // Header with role info - Matching AuthScreen design
             Container(
               width: double.infinity,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFF006D77), Color(0xFF005A63)],
+                  colors: [AppTheme.primary, AppTheme.primaryDark],
                 ),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(30),
@@ -55,7 +56,7 @@ class WhoAreYouScreen extends StatelessWidget {
                       height: 120.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: AppTheme.onPrimary.withValues(alpha: 0.1),
                       ),
                     ),
                   ),
@@ -67,7 +68,7 @@ class WhoAreYouScreen extends StatelessWidget {
                       height: 80.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: AppTheme.onPrimary.withValues(alpha: 0.1),
                       ),
                     ),
                   ),
@@ -86,7 +87,7 @@ class WhoAreYouScreen extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.all(12.r),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
+                                color: AppTheme.onPrimary.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: Icon(
@@ -95,7 +96,7 @@ class WhoAreYouScreen extends StatelessWidget {
                                     : selectedRole == 'admin'
                                     ? Icons.admin_panel_settings_outlined
                                     : Icons.home_outlined,
-                                color: Colors.white,
+                                color: AppTheme.onPrimary,
                                 size: 24.sp,
                               ),
                             ),
@@ -106,7 +107,7 @@ class WhoAreYouScreen extends StatelessWidget {
                                 Text(
                                   'Registering as',
                                   style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.9),
+                                    color: AppTheme.onPrimary.withValues(alpha: 0.9),
                                     fontSize: 14.sp,
                                   ),
                                 ),
@@ -117,7 +118,7 @@ class WhoAreYouScreen extends StatelessWidget {
                                       ? 'Administrator'
                                       : 'Resident',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppTheme.onPrimary,
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -130,7 +131,7 @@ class WhoAreYouScreen extends StatelessWidget {
                         Text(
                           'Who are you?',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.onPrimary,
                             fontSize: 28.sp,
                             fontWeight: FontWeight.bold,
                           ),
@@ -139,7 +140,7 @@ class WhoAreYouScreen extends StatelessWidget {
                         Text(
                           'Choose how you live here',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: AppTheme.onPrimary.withValues(alpha: 0.9),
                             fontSize: 16.sp,
                           ),
                         ),
@@ -172,7 +173,7 @@ class WhoAreYouScreen extends StatelessWidget {
                                     ? []
                                     : [
                                         BoxShadow(
-                                          color: Colors.grey.withValues(alpha: 0.15),
+                                          color: AppTheme.onBackgroundLight.withValues(alpha: 0.15),
                                           blurRadius: 12.r,
                                           offset: Offset(0, 4.h),
                                         )

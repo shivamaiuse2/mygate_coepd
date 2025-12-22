@@ -11,6 +11,7 @@ import 'package:mygate_coepd/screens/resident/resident_main_screen.dart';
 import 'package:mygate_coepd/screens/guard/guard_main_screen.dart';
 import 'package:mygate_coepd/screens/admin/admin_main_screen.dart';
 import 'package:mygate_coepd/screens/auth/approval_pending_screen.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -118,7 +119,7 @@ class _AuthScreenState extends State<AuthScreen> {
     try {
       // Show loading state
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sending OTP...'), backgroundColor: Colors.blue),
+        const SnackBar(content: Text('Sending OTP...'), backgroundColor: AppTheme.primary),
       );
       
       // In a real implementation, you would call your backend API to send OTP
@@ -130,7 +131,7 @@ class _AuthScreenState extends State<AuthScreen> {
       
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('OTP sent successfully!'), backgroundColor: Colors.green),
+        const SnackBar(content: Text('OTP sent successfully!'), backgroundColor: AppTheme.success),
       );
     } catch (e) {
       // Hide loading snackbar
@@ -141,7 +142,7 @@ class _AuthScreenState extends State<AuthScreen> {
         _otpErrorMessage = 'Failed to send OTP. Please try again.';
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        SnackBar(content: Text('Error: $e'), backgroundColor: AppTheme.error),
       );
     }
   }
@@ -153,12 +154,12 @@ class _AuthScreenState extends State<AuthScreen> {
     final selectedRole = AppConfig.selectedRole ?? 'resident';
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final backgroundColor = isDarkMode
-        ? const Color(0xFF121212)
-        : const Color(0xFFf8f9fa);
-    final surfaceColor = isDarkMode ? const Color(0xFF1E1E1E) : Colors.white;
-    final textColor = isDarkMode ? Colors.white : Colors.black87;
-    final secondaryTextColor = isDarkMode ? Colors.white70 : Colors.grey;
-    final iconColor = const Color(0xFF006D77);
+        ? AppTheme.backgroundDark
+        : AppTheme.backgroundLight;
+    final surfaceColor = isDarkMode ? AppTheme.surfaceDark : AppTheme.surfaceLight;
+    final textColor = isDarkMode ? AppTheme.onPrimary : AppTheme.onBackgroundLight;
+    final secondaryTextColor = isDarkMode ? AppTheme.onPrimary.withValues(alpha: 0.7) : AppTheme.onBackgroundLight;
+    final iconColor = AppTheme.primary;
 
     return Scaffold(
       body: Container(
@@ -170,11 +171,11 @@ class _AuthScreenState extends State<AuthScreen> {
             // Header with role info
             Container(
               width: double.infinity,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFF006D77), Color(0xFF005A63)],
+                  colors: [AppTheme.primary, AppTheme.primaryDark],
                 ),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(30),
@@ -192,7 +193,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       height: 120.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: AppTheme.onPrimary.withValues(alpha: 0.1),
                       ),
                     ),
                   ),
@@ -204,7 +205,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       height: 80.r,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.1),
+                        color: AppTheme.onPrimary.withValues(alpha: 0.1),
                       ),
                     ),
                   ),
@@ -223,7 +224,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             Container(
                               padding: EdgeInsets.all(12.r),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
+                                color: AppTheme.onPrimary.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
                               child: Icon(
@@ -232,7 +233,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     : selectedRole == 'admin'
                                     ? Icons.admin_panel_settings_outlined
                                     : Icons.home_outlined,
-                                color: Colors.white,
+                                color: AppTheme.onPrimary,
                                 size: 24.sp,
                               ),
                             ),
@@ -243,7 +244,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 Text(
                                   'Logging in as',
                                   style: TextStyle(
-                                    color: Colors.white.withValues(alpha: 0.9),
+                                    color: AppTheme.onPrimary.withValues(alpha: 0.9),
                                     fontSize: 14.sp,
                                   ),
                                 ),
@@ -254,7 +255,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       ? 'Administrator'
                                       : 'Resident',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppTheme.onPrimary,
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -267,7 +268,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         Text(
                           _isLogin ? 'Welcome Back' : 'Join Your Community',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.onPrimary,
                             fontSize: 28.sp,
                             fontWeight: FontWeight.bold,
                           ),
@@ -278,7 +279,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               ? 'Sign in to access your community'
                               : 'Create an account to get started',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: AppTheme.onPrimary.withValues(alpha: 0.9),
                             fontSize: 16.sp,
                           ),
                         ),
@@ -304,14 +305,14 @@ class _AuthScreenState extends State<AuthScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(state.message),
-                        backgroundColor: Colors.red,
+                        backgroundColor: AppTheme.error,
                       ),
                     );
                   } else if (state is AuthLoading) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Processing...'),
-                        backgroundColor: Colors.blue,
+                        backgroundColor: AppTheme.primary,
                       ),
                     );
                   } else if (state is Authenticated) {
@@ -374,7 +375,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ? []
                                   : [
                                       BoxShadow(
-                                        color: Colors.grey.withValues(alpha: 0.1),
+                                        color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                         blurRadius: 10.r,
                                         offset: Offset(0, 5.h),
                                       ),
@@ -417,7 +418,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ? []
                                   : [
                                       BoxShadow(
-                                        color: Colors.grey.withValues(alpha: 0.1),
+                                        color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                         blurRadius: 10.r,
                                         offset: Offset(0, 5.h),
                                       ),
@@ -461,7 +462,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     ? []
                                     : [
                                         BoxShadow(
-                                          color: Colors.grey.withValues(alpha: 0.1),
+                                          color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                           blurRadius: 10.r,
                                           offset: Offset(0, 5.h),
                                         ),
@@ -506,7 +507,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ? []
                                 : [
                                     BoxShadow(
-                                      color: Colors.grey.withValues(alpha: 0.1),
+                                      color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                       blurRadius: 10.r,
                                       offset: Offset(0, 5.h),
                                     ),
@@ -559,7 +560,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ? []
                                 : [
                                     BoxShadow(
-                                      color: Colors.grey.withValues(alpha: 0.1),
+                                      color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                       blurRadius: 10.r,
                                       offset: Offset(0, 5.h),
                                     ),
@@ -617,7 +618,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ? []
                                   : [
                                       BoxShadow(
-                                        color: Colors.grey.withValues(alpha: 0.1),
+                                        color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
                                         blurRadius: 10.r,
                                         offset: Offset(0, 5.h),
                                       ),
@@ -665,7 +666,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               child: Text(
                                 _otpErrorMessage,
                                 style: TextStyle(
-                                  color: Colors.red,
+                                  color: AppTheme.error,
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -715,7 +716,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     ? const CircularProgressIndicator(
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
-                                              Colors.white,
+                                              AppTheme.onPrimary,
                                             ),
                                       )
                                     : Text(
@@ -729,7 +730,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                         style: TextStyle(
                                           fontSize: 18.sp,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                          color: AppTheme.onPrimary,
                                         ),
                                       ),
                               );

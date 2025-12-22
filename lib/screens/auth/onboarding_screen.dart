@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mygate_coepd/blocs/auth/auth_bloc.dart';
 import 'package:mygate_coepd/blocs/auth/auth_event.dart';
+import 'package:mygate_coepd/theme/app_theme.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -17,7 +18,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<Map<String, String>> _onboardingPages = [
     {
-      'title': 'Welcome to CommunityLink',
+      'title': 'Welcome to MyGateBell',
       'description': 'Your complete solution for seamless community living',
       'image':
           'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&q=80&w=800&h=1000',
@@ -84,7 +85,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 'Skip',
                 style: TextStyle(
                   fontSize: 16.sp,
-                  color: Colors.white70,
+                  color: AppTheme.onPrimary.withValues(alpha: 0.7),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -112,7 +113,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       decoration: BoxDecoration(
                         color: _currentPage == index
                             ? primaryColor
-                            : (isDarkMode ? Colors.white38 : Colors.grey),
+                            : (isDarkMode ? AppTheme.onPrimary.withValues(alpha: 0.38) : AppTheme.onBackgroundLight),
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                     ),
@@ -152,7 +153,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       style: TextStyle(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: AppTheme.onPrimary,
                       ),
                     ),
                   ),
@@ -190,8 +191,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: 0.7),
+                    AppTheme.onPrimary.withValues(alpha: 0.0),
+                    AppTheme.onBackgroundDark.withValues(alpha: 0.7),
                   ],
                   stops: const [0.4, 1.0],
                 ),
@@ -207,7 +208,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       style: TextStyle(
                         fontSize: 32.sp,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: AppTheme.onPrimary,
                         height: 1.2,
                       ),
                     ),
@@ -216,7 +217,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       description,
                       style: TextStyle(
                         fontSize: 18.sp,
-                        color: Colors.white70,
+                        color: AppTheme.onPrimary.withValues(alpha: 0.7),
                         height: 1.5,
                       ),
                     ),
