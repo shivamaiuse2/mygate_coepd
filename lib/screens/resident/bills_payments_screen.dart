@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BillsPaymentsScreen extends StatefulWidget {
@@ -8,7 +9,8 @@ class BillsPaymentsScreen extends StatefulWidget {
   State<BillsPaymentsScreen> createState() => _BillsPaymentsScreenState();
 }
 
-class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerProviderStateMixin {
+class _BillsPaymentsScreenState extends State<BillsPaymentsScreen>
+    with TickerProviderStateMixin {
   String _selectedTab = 'bills';
   final bool _showPaymentMethods = false;
   final TextEditingController _searchController = TextEditingController();
@@ -95,17 +97,17 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
     _filteredBills = _bills;
     _filteredPaymentHistory = _paymentHistory;
     _searchController.addListener(_filterBills);
-    
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    
+
     _fadeAnimation = CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
     );
-    
+
     // Start animations after a small delay
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _animationController.forward();
@@ -115,16 +117,16 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
   void _filterBills() {
     setState(() {
       String searchTerm = _searchController.text.toLowerCase();
-      
+
       _filteredBills = _bills.where((bill) {
-        return searchTerm.isEmpty || 
+        return searchTerm.isEmpty ||
             bill['title'].toLowerCase().contains(searchTerm) ||
             bill['category'].toLowerCase().contains(searchTerm) ||
             bill['status'].toLowerCase().contains(searchTerm);
       }).toList();
-      
+
       _filteredPaymentHistory = _paymentHistory.where((payment) {
-        return searchTerm.isEmpty || 
+        return searchTerm.isEmpty ||
             payment['title'].toLowerCase().contains(searchTerm) ||
             payment['method'].toLowerCase().contains(searchTerm) ||
             payment['status'].toLowerCase().contains(searchTerm);
@@ -142,61 +144,91 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      body: Column(
-        children: [
-          // Tab Selection
-          Padding(
-            padding: EdgeInsets.all(16.w),
-            child: Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => setState(() => _selectedTab = 'bills'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _selectedTab == 'bills'
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).cardTheme.color,
-                      foregroundColor: _selectedTab == 'bills'
-                          ? Colors.white
-                          : Theme.of(context).textTheme.bodyLarge?.color,
-                      padding: EdgeInsets.symmetric(vertical: 16.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      // backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text(
+          'Bills Management',
+          style: TextStyle(
+            fontSize: 24.sp,
+            fontWeight: FontWeight.bold,
+            color: theme.primaryColor,
+          ),
+        ),
+        backgroundColor: theme.scaffoldBackgroundColor,
+        // foregroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          HapticFeedback.mediumImpact();
+          await Future.delayed(const Duration(seconds: 1));
+        },
+        child: Column(
+          spacing: 10.h,
+          children: [
+            // Tab Selection
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () => setState(() => _selectedTab = 'bills'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _selectedTab == 'bills'
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).cardTheme.color,
+                        foregroundColor: _selectedTab == 'bills'
+                            ? Colors.white
+                            : Theme.of(context).textTheme.bodyLarge?.color,
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                      child: Text('Bills', style: TextStyle(fontSize: 16.sp)),
+                    ),
+                  ),
+                  SizedBox(width: 10.w),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () => setState(() => _selectedTab = 'history'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _selectedTab == 'history'
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).cardTheme.color,
+                        foregroundColor: _selectedTab == 'history'
+                            ? Colors.white
+                            : Theme.of(context).textTheme.bodyLarge?.color,
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                      child: Text(
+                        'Payment History',
+                        style: TextStyle(fontSize: 16.sp),
                       ),
                     ),
-                    child: Text('Bills', style: TextStyle(fontSize: 16.sp)),
                   ),
-                ),
-                SizedBox(width: 10.w),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => setState(() => _selectedTab = 'history'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _selectedTab == 'history'
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).cardTheme.color,
-                      foregroundColor: _selectedTab == 'history'
-                          ? Colors.white
-                          : Theme.of(context).textTheme.bodyLarge?.color,
-                      padding: EdgeInsets.symmetric(vertical: 16.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                    ),
-                    child: Text('Payment History', style: TextStyle(fontSize: 16.sp)),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          // Content based on selected tab
-          Expanded(
-            child: _selectedTab == 'bills'
-                ? _buildBillsContent()
-                : _buildPaymentHistory(),
-          ),
-        ],
+            // Content based on selected tab
+            Expanded(
+              child: _selectedTab == 'bills'
+                  ? _buildBillsContent()
+                  : _buildPaymentHistory(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -208,6 +240,7 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Row(
+            spacing: 10.w,
             children: [
               Expanded(
                 child: ScaleTransition(
@@ -287,7 +320,6 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
                   ),
                 ),
               ),
-              SizedBox(width: 10.w),
               Expanded(
                 child: ScaleTransition(
                   scale: Tween<double>(begin: 0.9, end: 1.0).animate(
@@ -369,27 +401,7 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
             ],
           ),
         ),
-        SizedBox(height: 20.h),
-        // Search Bar
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardTheme.color,
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search bills...',
-                prefixIcon: Icon(Icons.search, size: 24.sp),
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.all(16.w),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(height: 20.h),
+        SizedBox(height: 10.h),
         // Bills List
         Expanded(
           child: _filteredBills.isEmpty
@@ -423,7 +435,9 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
                               end: Alignment.bottomRight,
                               colors: [
                                 Theme.of(context).cardTheme.color!,
-                                Theme.of(context).cardTheme.color!.withValues(alpha: 0.95),
+                                Theme.of(
+                                  context,
+                                ).cardTheme.color!.withValues(alpha: 0.95),
                               ],
                             ),
                             borderRadius: BorderRadius.circular(16.r),
@@ -437,7 +451,8 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
                                   children: [
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             bill['title'],
@@ -464,7 +479,9 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
                                       ),
                                       decoration: BoxDecoration(
                                         color: _getStatusColor(bill['status']),
-                                        borderRadius: BorderRadius.circular(12.r),
+                                        borderRadius: BorderRadius.circular(
+                                          12.r,
+                                        ),
                                       ),
                                       child: Text(
                                         bill['status'],
@@ -497,7 +514,8 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
                                 ),
                                 SizedBox(height: 16.h),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       bill['amount'],
@@ -512,13 +530,23 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
                                         _showPaymentOptions(bill);
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: Theme.of(context).primaryColor,
+                                        backgroundColor: Theme.of(
+                                          context,
+                                        ).primaryColor,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12.r),
+                                          borderRadius: BorderRadius.circular(
+                                            12.r,
+                                          ),
                                         ),
-                                        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 20.w,
+                                          vertical: 12.h,
+                                        ),
                                       ),
-                                      child: Text('Pay Now', style: TextStyle(fontSize: 14.sp)),
+                                      child: Text(
+                                        'Pay Now',
+                                        style: TextStyle(fontSize: 14.sp),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -772,10 +800,7 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
                         color: method['color'].withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Icon(
-                        method['icon'],
-                        color: method['color'],
-                      ),
+                      child: Icon(method['icon'], color: method['color']),
                     ),
                     title: Text(method['name']),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
@@ -1038,9 +1063,7 @@ class _BillsPaymentsScreenState extends State<BillsPaymentsScreen> with TickerPr
                       onPressed: () {
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Filters applied'),
-                          ),
+                          const SnackBar(content: Text('Filters applied')),
                         );
                       },
                       style: ElevatedButton.styleFrom(

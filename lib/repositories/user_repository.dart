@@ -57,6 +57,7 @@ class UserRepository {
   Future<User?> register({
     required String name,
     required String phone,
+    required String email,
     required String societyId,
     required String unit,
     required String role,
@@ -66,7 +67,7 @@ class UserRepository {
     final user = User(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       name: name,
-      email: '$phone@example.com',
+      email: email,
       phone: phone,
       unit: unit,
       societyId: societyId,

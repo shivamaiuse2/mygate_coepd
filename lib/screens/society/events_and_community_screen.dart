@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sizer/sizer.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:image_picker/image_picker.dart';
-
 
 class EventsAndCommunityScreen extends StatefulWidget {
   const EventsAndCommunityScreen({super.key});
@@ -65,25 +64,49 @@ class _EventsAndCommunityScreenState extends State<EventsAndCommunityScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      // appBar: _buildAppBar(theme),
-      body: Column(
-        children: [
-          _buildSegmentedControl(theme),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              physics: const BouncingScrollPhysics(),
-              children: [
-                EventsSectionWidget(scrollController: _scrollController),
-                CommunityFeedSectionWidget(scrollController: _scrollController),
-                PollsSectionWidget(scrollController: _scrollController),
-              ],
-            ),
+      // backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text(
+          'Community Management',
+          style: TextStyle(
+            fontSize: 24.sp,
+            fontWeight: FontWeight.bold,
+            color: theme.primaryColor,
           ),
-        ],
+        ),
+        backgroundColor: theme.scaffoldBackgroundColor,
+        // foregroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          HapticFeedback.mediumImpact();
+          await Future.delayed(const Duration(seconds: 1));
+        },
+        child: Column(
+          children: [
+            _buildSegmentedControl(theme),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  EventsSectionWidget(scrollController: _scrollController),
+                  CommunityFeedSectionWidget(
+                    scrollController: _scrollController,
+                  ),
+                  PollsSectionWidget(scrollController: _scrollController),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: _selectedSegment == 1 && _showFab
           ? _buildFloatingActionButton(theme)
@@ -91,61 +114,13 @@ class _EventsAndCommunityScreenState extends State<EventsAndCommunityScreen>
     );
   }
 
-  PreferredSizeWidget _buildAppBar(ThemeData theme) {
-    return AppBar(
-      backgroundColor: theme.colorScheme.surface,
-      elevation: 0,
-      scrolledUnderElevation: 2,
-      shadowColor: theme.colorScheme.shadow.withValues(alpha: 0.12),
-      surfaceTintColor: Colors.transparent,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back_ios_new_rounded, size: 24),
-        onPressed: () {
-          HapticFeedback.lightImpact();
-          Navigator.pop(context);
-        },
-      ),
-      title: Text(
-        'Community & Events',
-        style: theme.textTheme.titleLarge?.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(
-            Icons.search_rounded,
-            color: theme.colorScheme.onSurface,
-            size: 24,
-          ),
-          onPressed: () {
-            HapticFeedback.lightImpact();
-            // Search functionality
-          },
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.filter_list,
-            color: theme.colorScheme.onSurface,
-            size: 24,
-          ),
-          onPressed: () {
-            HapticFeedback.lightImpact();
-            // Filter functionality
-          },
-        ),
-        SizedBox(width: 2.w),
-      ],
-    );
-  }
-
   Widget _buildSegmentedControl(ThemeData theme) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-      padding: EdgeInsets.all(1.w),
+      margin: EdgeInsets.symmetric(horizontal: 16.w),
+      padding: EdgeInsets.all(8.w),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
       ),
       child: Row(
         children: [
@@ -166,22 +141,26 @@ class _EventsAndCommunityScreenState extends State<EventsAndCommunityScreen>
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
-          padding: EdgeInsets.symmetric(vertical: 1.5.h),
+          padding: EdgeInsets.symmetric(vertical: 12.h),
           decoration: BoxDecoration(
             color: isSelected ? theme.colorScheme.primary : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
           ),
           child: Row(
+            spacing: 6.w,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                index == 0 ? Icons.event : index == 1 ? Icons.feed : Icons.poll,
+                index == 0
+                    ? Icons.event
+                    : index == 1
+                    ? Icons.feed
+                    : Icons.poll,
                 color: isSelected
                     ? theme.colorScheme.onPrimary
                     : theme.colorScheme.onSurfaceVariant,
                 size: 18,
               ),
-              SizedBox(width: 2.w),
               Text(
                 label,
                 style: theme.textTheme.labelLarge?.copyWith(
@@ -209,11 +188,7 @@ class _EventsAndCommunityScreenState extends State<EventsAndCommunityScreen>
             onPressed: _showCreatePostSheet,
             backgroundColor: theme.colorScheme.primary,
             elevation: 4,
-            icon: Icon(
-              Icons.add,
-              color: theme.colorScheme.onPrimary,
-              size: 24,
-            ),
+            icon: Icon(Icons.add, color: theme.colorScheme.onPrimary, size: 24),
             label: Text(
               'Create Post',
               style: theme.textTheme.labelLarge?.copyWith(
@@ -316,8 +291,7 @@ class _CommunityFeedSectionWidgetState
           "Wonderful Diwali celebration organized by our society! The decorations were beautiful and the cultural program was amazing. Looking forward to more such events.",
       "images": [
         {
-          "url":
-              "https://images.unsplash.com/photo-1729986918572-8311fedf08a1",
+          "url": "https://images.unsplash.com/photo-1729986918572-8311fedf08a1",
           "semanticLabel":
               "Beautiful Diwali decorations with colorful lights, diyas, and rangoli patterns",
         },
@@ -421,7 +395,7 @@ class _CommunityFeedSectionWidgetState
       child: ListView.builder(
         controller: widget.scrollController,
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         itemCount: _posts.length,
         itemBuilder: (context, index) {
           final post = _posts[index];
@@ -433,10 +407,11 @@ class _CommunityFeedSectionWidgetState
 
   Widget _buildPostCard(Map<String, dynamic> post, ThemeData theme) {
     return Container(
-      margin: EdgeInsets.only(bottom: 2.h),
+      margin: EdgeInsets.only(bottom: 16.h),
+      padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
             color: theme.colorScheme.shadow.withValues(alpha: 0.08),
@@ -446,6 +421,7 @@ class _CommunityFeedSectionWidgetState
         ],
       ),
       child: Column(
+        spacing: 10.h,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildPostHeader(post, theme),
@@ -459,155 +435,140 @@ class _CommunityFeedSectionWidgetState
   }
 
   Widget _buildPostHeader(Map<String, dynamic> post, ThemeData theme) {
-    return Padding(
-      padding: EdgeInsets.all(4.w),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(25),
-            child: Image.network(
-              post["authorAvatar"],
-              width: 12.w,
-              height: 12.w,
-              fit: BoxFit.cover,
-              semanticLabel: post["authorAvatarLabel"],
-            ),
+    return Row(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(25.r),
+          child: Image.network(
+            post["authorAvatar"],
+            width: 36.w,
+            height: 36.w,
+            fit: BoxFit.cover,
+            semanticLabel: post["authorAvatarLabel"],
           ),
-          SizedBox(width: 3.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        post["author"],
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+        ),
+        SizedBox(width: 10.w),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      post["author"],
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(width: 2.w),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 2.w,
-                        vertical: 0.3.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: post["category"] == "Important"
-                            ? theme.colorScheme.error.withValues(alpha: 0.12)
-                            : theme.colorScheme.primary.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        post["category"],
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: post["category"] == "Important"
-                              ? theme.colorScheme.error
-                              : theme.colorScheme.primary,
-                          fontSize: 9.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 0.3.h),
-                Text(
-                  post["timestamp"],
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
                   ),
-                ),
-              ],
-            ),
-          ),
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'report') {
-                _handleReport(post["id"]);
-              }
-            },
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'report',
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.flag,
-                      color: theme.colorScheme.error,
-                      size: 20,
+                  SizedBox(width: 12.w),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 7.w,
+                      vertical: 3.h,
                     ),
-                    SizedBox(width: 3.w),
-                    Text('Report Post', style: theme.textTheme.bodyMedium),
-                  ],
+                    decoration: BoxDecoration(
+                      color: post["category"] == "Important"
+                          ? theme.colorScheme.error.withValues(alpha: 0.12)
+                          : theme.colorScheme.primary.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(4.r),
+                    ),
+                    child: Text(
+                      post["category"],
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: post["category"] == "Important"
+                            ? theme.colorScheme.error
+                            : theme.colorScheme.primary,
+                        fontSize: 9.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 0.3.h),
+              Text(
+                post["timestamp"],
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
             ],
-            child: Padding(
-              padding: EdgeInsets.all(2.w),
-              child: Icon(
-                Icons.more_vert,
-                color: theme.colorScheme.onSurfaceVariant,
-                size: 20,
+          ),
+        ),
+        PopupMenuButton<String>(
+          onSelected: (value) {
+            if (value == 'report') {
+              _handleReport(post["id"]);
+            }
+          },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: 'report',
+              child: Row(
+                children: [
+                  Icon(Icons.flag, color: theme.colorScheme.error, size: 20),
+                  SizedBox(width: 3.w),
+                  Text('Report Post', style: theme.textTheme.bodyMedium),
+                ],
               ),
             ),
+          ],
+          child: Padding(
+            padding: EdgeInsets.all(2.w),
+            child: Icon(
+              Icons.more_vert,
+              color: theme.colorScheme.onSurfaceVariant,
+              size: 20,
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildPostContent(Map<String, dynamic> post, ThemeData theme) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4.w),
-      child: Text(
-        post["content"],
-        style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
-      ),
+    return Text(
+      post["content"],
+      style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
     );
   }
 
   Widget _buildPostImages(Map<String, dynamic> post, ThemeData theme) {
     final images = post["images"] as List;
 
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 2.h),
-      height: images.length > 1 ? 25.h : 30.h,
+    return SizedBox(
+      height: images.length > 1 ? 80.h : 130.h,
       child: images.length == 1
           ? ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                child: Image.network(
-                  images[0]["url"],
-                  width: double.infinity,
-                  height: 30.h,
-                  fit: BoxFit.cover,
-                  semanticLabel: images[0]["semanticLabel"],
-                ),
+              borderRadius: BorderRadius.circular(12.r.r),
+              child: Image.network(
+                images[0]["url"],
+                width: double.infinity,
+                height: 30.h,
+                fit: BoxFit.cover,
+                semanticLabel: images[0]["semanticLabel"],
               ),
             )
           : ListView.builder(
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 4.w),
               itemCount: images.length,
               itemBuilder: (context, index) {
                 return Container(
-                  margin: EdgeInsets.only(right: 2.w),
-                  width: 70.w,
+                  margin: EdgeInsets.only(right: 8.w),
+                  width: 80.w,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                     child: Image.network(
                       images[index]["url"],
-                      width: 70.w,
-                      height: 25.h,
+                      // width: 70.w,
+                      height: 70.h,
                       fit: BoxFit.cover,
                       semanticLabel: images[index]["semanticLabel"],
                     ),
@@ -670,7 +631,7 @@ class _CommunityFeedSectionWidgetState
   ) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(8.r),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 1.h),
         child: Row(
@@ -762,7 +723,7 @@ class _CommentsBottomSheetState extends State<_CommentsBottomSheet> {
             height: 0.5.h,
             decoration: BoxDecoration(
               color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(2),
+              borderRadius: BorderRadius.circular(2.r),
             ),
           ),
           Padding(
@@ -800,7 +761,7 @@ class _CommentsBottomSheetState extends State<_CommentsBottomSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(20.r),
                         child: Image.network(
                           comment["avatar"],
                           width: 10.w,
@@ -863,7 +824,7 @@ class _CommentsBottomSheetState extends State<_CommentsBottomSheet> {
                       decoration: InputDecoration(
                         hintText: 'Write a comment...',
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(24.r),
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
@@ -901,7 +862,6 @@ class _CommentsBottomSheetState extends State<_CommentsBottomSheet> {
     );
   }
 }
-
 
 /// Bottom sheet for creating new posts with text, photos, and polls
 class CreatePostBottomSheet extends StatefulWidget {
@@ -1142,11 +1102,11 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
                 margin: EdgeInsets.only(right: 2.w),
                 width: 35.w,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   color: theme.colorScheme.surfaceContainerHighest,
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   child: Image.network(
                     _selectedImages[index].path,
                     fit: BoxFit.cover,
@@ -1218,7 +1178,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
                         ),
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                         borderSide: BorderSide(
                           color: theme.colorScheme.outlineVariant,
                         ),
@@ -1244,11 +1204,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
         if (_pollOptions.length < 6)
           TextButton.icon(
             onPressed: _addPollOption,
-            icon: Icon(
-              Icons.add,
-              color: theme.colorScheme.primary,
-              size: 20,
-            ),
+            icon: Icon(Icons.add, color: theme.colorScheme.primary, size: 20),
             label: Text(
               'Add Option',
               style: theme.textTheme.labelLarge?.copyWith(
@@ -1265,7 +1221,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
       padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
       ),
       child: Row(
         children: [
@@ -1300,7 +1256,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
               setState(() => _privacySetting = value);
             },
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
             ),
             itemBuilder: (context) => [
               PopupMenuItem(
@@ -1370,11 +1326,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
             ),
             SizedBox(width: 2.w),
             _buildActionButton(
-              Icon(
-                Icons.poll,
-                color: theme.colorScheme.secondary,
-                size: 24,
-              ),
+              Icon(Icons.poll, color: theme.colorScheme.secondary, size: 24),
               'Poll',
               _togglePollCreation,
               theme,
@@ -1394,7 +1346,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
     return Expanded(
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 1.5.h),
           decoration: BoxDecoration(
@@ -1403,7 +1355,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
                     alpha: 0.5,
                   )
                 : theme.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -1432,10 +1384,7 @@ class _CreatePostBottomSheetState extends State<CreatePostBottomSheet> {
 class EventsSectionWidget extends StatefulWidget {
   final ScrollController scrollController;
 
-  const EventsSectionWidget({
-    super.key,
-    required this.scrollController,
-  });
+  const EventsSectionWidget({super.key, required this.scrollController});
 
   @override
   State<EventsSectionWidget> createState() => _EventsSectionWidgetState();
@@ -1443,63 +1392,91 @@ class EventsSectionWidget extends StatefulWidget {
 
 class _EventsSectionWidgetState extends State<EventsSectionWidget> {
   final List<Map<String, dynamic>> _events = [
-{ "id": 1,
-"title": "Annual Society Day Celebration",
-"date": "2025-01-15",
-"time": "6:00 PM - 10:00 PM",
-"location": "Community Hall, Block A",
-"coverImage": "https://img.rocket.new/generatedImages/rocket_gen_img_188fc72e0-1765792683654.png",
-"semanticLabel": "Colorful balloons and decorations in a festive community hall with people celebrating",
-"organizer": "Society Committee",
-"organizerAvatar": "https://img.rocket.new/generatedImages/rocket_gen_img_188fc72e0-1765792683654.png",
-"organizerAvatarLabel": "Professional photo of a woman with shoulder-length brown hair wearing a blue blazer",
-"attendees": 156,
-"rsvpStatus": "going",
-"description": "Join us for our annual celebration featuring cultural performances, dinner, and entertainment for all ages. Special performances by local artists and fun activities for children.",
-"category": "Social" },
-{ "id": 2,
-"title": "Yoga & Wellness Workshop",
-"date": "2025-01-08",
-"time": "7:00 AM - 9:00 AM",
-"location": "Garden Area",
-"coverImage": "https://images.unsplash.com/photo-1594298332319-c04674dbbe3c",
-"semanticLabel": "Group of people practicing yoga poses on mats in a peaceful outdoor garden setting at sunrise",
-"organizer": "Health Committee",
-"organizerAvatar": "https://images.unsplash.com/photo-1594298332319-c04674dbbe3c",
-"organizerAvatarLabel": "Headshot of a man with short black hair and beard wearing a white t-shirt",
-"attendees": 45,
-"rsvpStatus": "interested",
-"description": "Start your day with rejuvenating yoga sessions led by certified instructors. Suitable for all levels from beginners to advanced practitioners.",
-"category": "Health" },
-{ "id": 3,
-"title": "Kids Art & Craft Competition",
-"date": "2025-01-20",
-"time": "4:00 PM - 6:00 PM",
-"location": "Activity Center",
-"coverImage": "https://images.unsplash.com/photo-1691256257482-ac753cb26509",
-"semanticLabel": "Children sitting at tables with colorful art supplies, paints, and craft materials creating artwork",
-"organizer": "Parents Association",
-"organizerAvatar": "https://images.unsplash.com/photo-1691256257482-ac753cb26509",
-"organizerAvatarLabel": "Smiling woman with long dark hair wearing a yellow top",
-"attendees": 78,
-"rsvpStatus": null,
-"description": "Encourage creativity in children with our art competition. Categories for different age groups with exciting prizes and certificates for all participants.",
-"category": "Kids" },
-{ "id": 4,
-"title": "Security Awareness Meeting",
-"date": "2025-01-12",
-"time": "8:00 PM - 9:30 PM",
-"location": "Conference Room",
-"coverImage": "https://images.unsplash.com/photo-1672917187338-7f81ecac3d3f",
-"semanticLabel": "Professional meeting room with people seated around a conference table discussing security matters",
-"organizer": "Security Team",
-"organizerAvatar": "https://images.unsplash.com/photo-1672917187338-7f81ecac3d3f",
-"organizerAvatarLabel": "Man in security uniform with short gray hair and serious expression",
-"attendees": 92,
-"rsvpStatus": "going",
-"description": "Important meeting to discuss enhanced security measures and protocols. All residents are encouraged to attend and share their concerns.",
-"category": "Important" },
-];
+    {
+      "id": 1,
+      "title": "Annual Society Day Celebration",
+      "date": "2025-01-15",
+      "time": "6:00 PM - 10:00 PM",
+      "location": "Community Hall, Block A",
+      "coverImage":
+          "https://img.rocket.new/generatedImages/rocket_gen_img_188fc72e0-1765792683654.png",
+      "semanticLabel":
+          "Colorful balloons and decorations in a festive community hall with people celebrating",
+      "organizer": "Society Committee",
+      "organizerAvatar":
+          "https://img.rocket.new/generatedImages/rocket_gen_img_188fc72e0-1765792683654.png",
+      "organizerAvatarLabel":
+          "Professional photo of a woman with shoulder-length brown hair wearing a blue blazer",
+      "attendees": 156,
+      "rsvpStatus": "going",
+      "description":
+          "Join us for our annual celebration featuring cultural performances, dinner, and entertainment for all ages. Special performances by local artists and fun activities for children.",
+      "category": "Social",
+    },
+    {
+      "id": 2,
+      "title": "Yoga & Wellness Workshop",
+      "date": "2025-01-08",
+      "time": "7:00 AM - 9:00 AM",
+      "location": "Garden Area",
+      "coverImage":
+          "https://images.unsplash.com/photo-1594298332319-c04674dbbe3c",
+      "semanticLabel":
+          "Group of people practicing yoga poses on mats in a peaceful outdoor garden setting at sunrise",
+      "organizer": "Health Committee",
+      "organizerAvatar":
+          "https://images.unsplash.com/photo-1594298332319-c04674dbbe3c",
+      "organizerAvatarLabel":
+          "Headshot of a man with short black hair and beard wearing a white t-shirt",
+      "attendees": 45,
+      "rsvpStatus": "interested",
+      "description":
+          "Start your day with rejuvenating yoga sessions led by certified instructors. Suitable for all levels from beginners to advanced practitioners.",
+      "category": "Health",
+    },
+    {
+      "id": 3,
+      "title": "Kids Art & Craft Competition",
+      "date": "2025-01-20",
+      "time": "4:00 PM - 6:00 PM",
+      "location": "Activity Center",
+      "coverImage":
+          "https://images.unsplash.com/photo-1691256257482-ac753cb26509",
+      "semanticLabel":
+          "Children sitting at tables with colorful art supplies, paints, and craft materials creating artwork",
+      "organizer": "Parents Association",
+      "organizerAvatar":
+          "https://images.unsplash.com/photo-1691256257482-ac753cb26509",
+      "organizerAvatarLabel":
+          "Smiling woman with long dark hair wearing a yellow top",
+      "attendees": 78,
+      "rsvpStatus": null,
+      "description":
+          "Encourage creativity in children with our art competition. Categories for different age groups with exciting prizes and certificates for all participants.",
+      "category": "Kids",
+    },
+    {
+      "id": 4,
+      "title": "Security Awareness Meeting",
+      "date": "2025-01-12",
+      "time": "8:00 PM - 9:30 PM",
+      "location": "Conference Room",
+      "coverImage":
+          "https://images.unsplash.com/photo-1672917187338-7f81ecac3d3f",
+      "semanticLabel":
+          "Professional meeting room with people seated around a conference table discussing security matters",
+      "organizer": "Security Team",
+      "organizerAvatar":
+          "https://images.unsplash.com/photo-1672917187338-7f81ecac3d3f",
+      "organizerAvatarLabel":
+          "Man in security uniform with short gray hair and serious expression",
+      "attendees": 92,
+      "rsvpStatus": "going",
+      "description":
+          "Important meeting to discuss enhanced security measures and protocols. All residents are encouraged to attend and share their concerns.",
+      "category": "Important",
+    },
+  ];
 
   void _handleRSVP(int eventId, String status) {
     HapticFeedback.lightImpact();
@@ -1521,8 +1498,12 @@ class _EventsSectionWidgetState extends State<EventsSectionWidget> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          status == 'going' ? 'You\'re going to this event!' : 'Marked as interested',
-          style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onInverseSurface),
+          status == 'going'
+              ? 'You\'re going to this event!'
+              : 'Marked as interested',
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onInverseSurface,
+          ),
         ),
         backgroundColor: theme.colorScheme.inverseSurface,
         behavior: SnackBarBehavior.floating,
@@ -1546,7 +1527,9 @@ class _EventsSectionWidgetState extends State<EventsSectionWidget> {
       SnackBar(
         content: Text(
           'Event added to calendar',
-          style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onInverseSurface),
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onInverseSurface,
+          ),
         ),
         backgroundColor: theme.colorScheme.inverseSurface,
         behavior: SnackBarBehavior.floating,
@@ -1562,7 +1545,9 @@ class _EventsSectionWidgetState extends State<EventsSectionWidget> {
       SnackBar(
         content: Text(
           'Opening directions to ${event["location"]}',
-          style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onInverseSurface),
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onInverseSurface,
+          ),
         ),
         backgroundColor: theme.colorScheme.inverseSurface,
         behavior: SnackBarBehavior.floating,
@@ -1575,9 +1560,7 @@ class _EventsSectionWidgetState extends State<EventsSectionWidget> {
     HapticFeedback.mediumImpact();
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => _EventDetailScreen(event: event),
-      ),
+      MaterialPageRoute(builder: (context) => _EventDetailScreen(event: event)),
     );
   }
 
@@ -1593,7 +1576,7 @@ class _EventsSectionWidgetState extends State<EventsSectionWidget> {
       child: ListView.builder(
         controller: widget.scrollController,
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         itemCount: _events.length,
         itemBuilder: (context, index) {
           final event = _events[index];
@@ -1615,7 +1598,7 @@ class _EventsSectionWidgetState extends State<EventsSectionWidget> {
             foregroundColor: theme.colorScheme.onPrimary,
             icon: Icons.share,
             label: 'Share',
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
           ),
           SlidableAction(
             onPressed: (_) => _handleAddToCalendar(event),
@@ -1623,17 +1606,17 @@ class _EventsSectionWidgetState extends State<EventsSectionWidget> {
             foregroundColor: theme.colorScheme.onSecondary,
             icon: Icons.calendar_today,
             label: 'Calendar',
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
           ),
         ],
       ),
       child: GestureDetector(
         onTap: () => _showEventDetails(event),
         child: Container(
-          margin: EdgeInsets.only(bottom: 2.h),
+          margin: EdgeInsets.only(bottom: 16.h),
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
             boxShadow: [
               BoxShadow(
                 color: theme.colorScheme.shadow.withValues(alpha: 0.08),
@@ -1647,14 +1630,13 @@ class _EventsSectionWidgetState extends State<EventsSectionWidget> {
             children: [
               _buildEventImage(event, theme),
               Padding(
-                padding: EdgeInsets.all(4.w),
+                padding: EdgeInsets.all(14.w),
                 child: Column(
+                  spacing: 6.h,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildEventHeader(event, theme),
-                    SizedBox(height: 1.h),
                     _buildEventDetails(event, theme),
-                    SizedBox(height: 1.5.h),
                     _buildEventFooter(event, theme),
                   ],
                 ),
@@ -1674,19 +1656,19 @@ class _EventsSectionWidgetState extends State<EventsSectionWidget> {
           child: Image.network(
             event["coverImage"],
             width: double.infinity,
-            height: 20.h,
+            height: 140.h,
             fit: BoxFit.cover,
             semanticLabel: event["semanticLabel"],
           ),
         ),
         Positioned(
-          top: 2.h,
-          right: 4.w,
+          top: 10.w,
+          right: 10.w,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 0.8.h),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
             decoration: BoxDecoration(
               color: theme.colorScheme.primary,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
             ),
             child: Text(
               event["category"],
@@ -1714,90 +1696,13 @@ class _EventsSectionWidgetState extends State<EventsSectionWidget> {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        SizedBox(width: 2.w),
-        _buildRSVPButton(event, theme),
-      ],
-    );
-  }
-
-  Widget _buildRSVPButton(Map<String, dynamic> event, ThemeData theme) {
-    final rsvpStatus = event["rsvpStatus"];
-    
-    return PopupMenuButton<String>(
-      onSelected: (value) => _handleRSVP(event["id"], value),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
-        decoration: BoxDecoration(
-          color: rsvpStatus == 'going'
-              ? theme.colorScheme.primary.withValues(alpha: 0.12)
-              : rsvpStatus == 'interested'
-                  ? theme.colorScheme.secondary.withValues(alpha: 0.12)
-                  : theme.colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.check_circle,
-              color: rsvpStatus == 'going'
-                  ? theme.colorScheme.primary
-                  : rsvpStatus == 'interested'
-                      ? theme.colorScheme.secondary
-                      : theme.colorScheme.onSurfaceVariant,
-              size: 16,
-            ),
-            SizedBox(width: 1.w),
-            Text(
-              rsvpStatus == 'going' ? 'Going' : rsvpStatus == 'interested' ? 'Interested' : 'RSVP',
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: rsvpStatus == 'going'
-                    ? theme.colorScheme.primary
-                    : rsvpStatus == 'interested'
-                        ? theme.colorScheme.secondary
-                        : theme.colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 'going',
-          child: Row(
-            children: [
-              Icon(
-                Icons.check_circle,
-                color: theme.colorScheme.primary,
-                size: 20,
-              ),
-              SizedBox(width: 3.w),
-              Text('Going', style: theme.textTheme.bodyMedium),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'interested',
-          child: Row(
-            children: [
-              Icon(
-                Icons.star,
-                color: theme.colorScheme.secondary,
-                size: 20,
-              ),
-              SizedBox(width: 3.w),
-              Text('Interested', style: theme.textTheme.bodyMedium),
-            ],
-          ),
-        ),
       ],
     );
   }
 
   Widget _buildEventDetails(Map<String, dynamic> event, ThemeData theme) {
     return Column(
+      spacing: 6.h,
       children: [
         _buildDetailRow(
           Icon(
@@ -1808,7 +1713,6 @@ class _EventsSectionWidgetState extends State<EventsSectionWidget> {
           '${event["date"]} • ${event["time"]}',
           theme,
         ),
-        SizedBox(height: 0.8.h),
         _buildDetailRow(
           Icon(
             Icons.location_on,
@@ -1843,18 +1747,18 @@ class _EventsSectionWidgetState extends State<EventsSectionWidget> {
 
   Widget _buildEventFooter(Map<String, dynamic> event, ThemeData theme) {
     return Row(
+      spacing: 10.w,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           child: Image.network(
             event["organizerAvatar"],
-            width: 8.w,
-            height: 8.w,
+            width: 32.w,
+            height: 32.w,
             fit: BoxFit.cover,
             semanticLabel: event["organizerAvatarLabel"],
           ),
         ),
-        SizedBox(width: 2.w),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1983,7 +1887,7 @@ class _EventDetailScreen extends StatelessWidget {
       padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
       ),
       child: Column(
         children: [
@@ -1999,22 +1903,14 @@ class _EventDetailScreen extends StatelessWidget {
           ),
           Divider(height: 3.h),
           _buildInfoRow(
-            Icon(
-              Icons.location_on,
-              color: theme.colorScheme.primary,
-              size: 20,
-            ),
+            Icon(Icons.location_on, color: theme.colorScheme.primary, size: 20),
             'Location',
             event["location"],
             theme,
           ),
           Divider(height: 3.h),
           _buildInfoRow(
-            Icon(
-              Icons.person,
-              color: theme.colorScheme.primary,
-              size: 20,
-            ),
+            Icon(Icons.person, color: theme.colorScheme.primary, size: 20),
             'Organizer',
             event["organizer"],
             theme,
@@ -2024,7 +1920,12 @@ class _EventDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(Widget icon, String label, String value, ThemeData theme) {
+  Widget _buildInfoRow(
+    Widget icon,
+    String label,
+    String value,
+    ThemeData theme,
+  ) {
     return Row(
       children: [
         icon,
@@ -2084,7 +1985,7 @@ class _EventDetailScreen extends StatelessWidget {
               return Container(
                 margin: EdgeInsets.only(right: 2.w),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(25.r),
                   child: Image.network(
                     'https://randomuser.me/api/portraits/${index % 2 == 0 ? 'men' : 'women'}/${index + 20}.jpg',
                     width: 10.w,
@@ -2138,9 +2039,7 @@ class _EventDetailScreen extends StatelessWidget {
                   subject: event["title"],
                 );
               },
-              style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.all(1.8.h),
-              ),
+              style: OutlinedButton.styleFrom(padding: EdgeInsets.all(1.8.h)),
               child: Icon(
                 Icons.share,
                 color: theme.colorScheme.primary,
@@ -2275,7 +2174,7 @@ class _PollsSectionWidgetState extends State<PollsSectionWidget> {
       child: ListView.builder(
         controller: widget.scrollController,
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         itemCount: _polls.length,
         itemBuilder: (context, index) {
           final poll = _polls[index];
@@ -2287,10 +2186,11 @@ class _PollsSectionWidgetState extends State<PollsSectionWidget> {
 
   Widget _buildPollCard(Map<String, dynamic> poll, ThemeData theme) {
     return Container(
-      margin: EdgeInsets.only(bottom: 2.h),
+      margin: EdgeInsets.only(bottom: 16.h),
+      padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
             color: theme.colorScheme.shadow.withValues(alpha: 0.08),
@@ -2300,6 +2200,7 @@ class _PollsSectionWidgetState extends State<PollsSectionWidget> {
         ],
       ),
       child: Column(
+        spacing: 6.h,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildPollHeader(poll, theme),
@@ -2312,89 +2213,83 @@ class _PollsSectionWidgetState extends State<PollsSectionWidget> {
   }
 
   Widget _buildPollHeader(Map<String, dynamic> poll, ThemeData theme) {
-    return Padding(
-      padding: EdgeInsets.all(4.w),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.network(
-              poll["authorAvatar"],
-              width: 10.w,
-              height: 10.w,
-              fit: BoxFit.cover,
-              semanticLabel: poll["authorAvatarLabel"],
-            ),
+    return Row(
+      spacing: 10.w,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(20.r),
+          child: Image.network(
+            poll["authorAvatar"],
+            width: 36.w,
+            height: 36.w,
+            fit: BoxFit.cover,
+            semanticLabel: poll["authorAvatarLabel"],
           ),
-          SizedBox(width: 3.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  poll["author"],
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                poll["author"],
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
                 ),
-                SizedBox(height: 0.3.h),
-                Text(
-                  poll["timestamp"],
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(height: 0.3.h),
+              Text(
+                poll["timestamp"],
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 0.8.h),
-            decoration: BoxDecoration(
-              color: poll["status"] == "active"
-                  ? theme.colorScheme.primary.withValues(alpha: 0.12)
-                  : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  poll["status"] == "active"
-                      ? Icons.access_time
-                      : Icons.check_circle,
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
+          decoration: BoxDecoration(
+            color: poll["status"] == "active"
+                ? theme.colorScheme.primary.withValues(alpha: 0.12)
+                : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Row(
+            spacing: 4.w,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                poll["status"] == "active"
+                    ? Icons.access_time
+                    : Icons.check_circle,
+                color: poll["status"] == "active"
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurfaceVariant,
+                size: 14,
+              ),
+              Text(
+                poll["endsIn"],
+                style: theme.textTheme.labelSmall?.copyWith(
                   color: poll["status"] == "active"
                       ? theme.colorScheme.primary
                       : theme.colorScheme.onSurfaceVariant,
-                  size: 14,
+                  fontWeight: FontWeight.w600,
                 ),
-                SizedBox(width: 1.w),
-                Text(
-                  poll["endsIn"],
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: poll["status"] == "active"
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildPollQuestion(Map<String, dynamic> poll, ThemeData theme) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4.w),
-      child: Text(
-        poll["question"],
-        style: theme.textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
+    return Text(
+      poll["question"],
+      style: theme.textTheme.titleMedium?.copyWith(
+        fontWeight: FontWeight.w600,
       ),
     );
   }
@@ -2405,112 +2300,108 @@ class _PollsSectionWidgetState extends State<PollsSectionWidget> {
     final hasVoted = poll["hasVoted"] as bool;
     final selectedOption = poll["selectedOption"];
 
-    return Padding(
-      padding: EdgeInsets.all(4.w),
-      child: Column(
-        children: List.generate(options.length, (index) {
-          final option = options[index];
-          final votes = option["votes"] as int;
-          final percentage = totalVotes > 0 ? (votes / totalVotes * 100) : 0.0;
-          final isSelected = hasVoted && selectedOption == index;
-
-          return GestureDetector(
-            onTap: poll["status"] == "active"
-                ? () => _handleVote(poll["id"], index)
-                : null,
-            child: Container(
-              margin: EdgeInsets.only(bottom: 2.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          option["text"],
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: isSelected
-                                ? FontWeight.w600
-                                : FontWeight.w400,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+    return Column(
+      children: List.generate(options.length, (index) {
+        final option = options[index];
+        final votes = option["votes"] as int;
+        final percentage = totalVotes > 0 ? (votes / totalVotes * 100) : 0.0;
+        final isSelected = hasVoted && selectedOption == index;
+    
+        return GestureDetector(
+          onTap: poll["status"] == "active"
+              ? () => _handleVote(poll["id"], index)
+              : null,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 2.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        option["text"],
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: isSelected
+                              ? FontWeight.w600
+                              : FontWeight.w400,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (hasVoted) ...[
+                      SizedBox(width: 2.w),
+                      Text(
+                        '${percentage.toStringAsFixed(1)}%',
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: isSelected
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      if (hasVoted) ...[
-                        SizedBox(width: 2.w),
-                        Text(
-                          '${percentage.toStringAsFixed(1)}%',
-                          style: theme.textTheme.labelMedium?.copyWith(
-                            color: isSelected
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.onSurfaceVariant,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
                     ],
-                  ),
-                  SizedBox(height: 1.h),
-                  Stack(
-                    children: [
-                      Container(
-                        height: 1.2.h,
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(6),
+                  ],
+                ),
+                SizedBox(height: 1.h),
+                Stack(
+                  children: [
+                    Container(
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                    ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeOut,
+                      height: 5.h,
+                      width: hasVoted ? (percentage / 100 * 100).w : 0,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: isSelected
+                              ? [
+                                  theme.colorScheme.primary,
+                                  theme.colorScheme.secondary,
+                                ]
+                              : [
+                                  theme.colorScheme.primary.withValues(
+                                    alpha: 0.5,
+                                  ),
+                                  theme.colorScheme.secondary.withValues(
+                                    alpha: 0.5,
+                                  ),
+                                ],
+                        ),
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                    ),
+                    if (isSelected)
+                      Positioned(
+                        right: 2.w,
+                        top: 0,
+                        bottom: 0,
+                        child: Icon(
+                          Icons.check_circle,
+                          color: theme.colorScheme.onPrimary,
+                          size: 16,
                         ),
                       ),
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeOut,
-                        height: 1.2.h,
-                        width: hasVoted ? (percentage / 100 * 100).w : 0,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: isSelected
-                                ? [
-                                    theme.colorScheme.primary,
-                                    theme.colorScheme.secondary,
-                                  ]
-                                : [
-                                    theme.colorScheme.primary.withValues(
-                                      alpha: 0.5,
-                                    ),
-                                    theme.colorScheme.secondary.withValues(
-                                      alpha: 0.5,
-                                    ),
-                                  ],
-                          ),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                      ),
-                      if (isSelected)
-                        Positioned(
-                          right: 2.w,
-                          top: 0,
-                          bottom: 0,
-                          child: Icon(
-                            Icons.check_circle,
-                            color: theme.colorScheme.onPrimary,
-                            size: 16,
-                          ),
-                        ),
-                    ],
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
-          );
-        }),
-      ),
+          ),
+        );
+      }),
     );
   }
 
   Widget _buildPollFooter(Map<String, dynamic> poll, ThemeData theme) {
     return Container(
-      padding: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest,
         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
@@ -2536,19 +2427,16 @@ class _PollsSectionWidgetState extends State<PollsSectionWidget> {
           ),
           if (poll["hasVoted"])
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 0.8.h),
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
               decoration: BoxDecoration(
                 color: theme.colorScheme.primary.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
               ),
               child: Row(
+                spacing: 2.w,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.check,
-                    color: theme.colorScheme.primary,
-                    size: 14,
-                  ),
+                  Icon(Icons.check, color: theme.colorScheme.primary, size: 14),
                   SizedBox(width: 1.w),
                   Text(
                     'Voted',

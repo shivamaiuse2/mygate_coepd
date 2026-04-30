@@ -229,7 +229,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
   }) {
     final cardColor = isDarkMode ? AppTheme.surfaceDark : AppTheme.surfaceLight;
     final borderColor = isDarkMode ? AppTheme.onBackgroundLight.withValues(alpha: 0.4) : AppTheme.onBackgroundLight.withValues(alpha: 0.2);
-    final shadowColor = isDarkMode ? AppTheme.onBackgroundDark.withValues(alpha: 0.5) : AppTheme.onBackgroundLight.withValues(alpha: 0.15);
+    final shadowColor = isDarkMode ? AppTheme.onBackgroundLight.withValues(alpha: 0.15) : AppTheme.onBackgroundDark.withValues(alpha: 0.5);
     final primaryColor = AppTheme.primary;
 
     return GestureDetector(

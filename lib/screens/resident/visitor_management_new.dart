@@ -2,11 +2,13 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sizer/sizer.dart';
 import 'package:camera/camera.dart';
+
+enum FieldType { name, phone, purpose }
 
 /// Visitor Management Screen for handling visitor pre-approvals and real-time entry management
 class VisitorManagementScreenNew extends StatefulWidget {
@@ -231,17 +233,28 @@ class _VisitorManagementScreenState extends State<VisitorManagementScreenNew> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? const Color(0xFF0F172A)
-          : const Color(0xFFFDFDFD),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      // backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('Visitor Management'),
+        title: Text(
+          'Visitor Management',
+          style: TextStyle(
+            fontSize: 24.sp,
+            fontWeight: FontWeight.bold,
+            color: theme.primaryColor,
+          ),
+        ),
+        backgroundColor: theme.scaffoldBackgroundColor,
+        // foregroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+
         actions: [
           IconButton(
             icon: Icon(
               _isBulkMode ? Icons.close : Icons.checklist,
-              color: Colors.white,
-              size: 24,
+              color: theme.primaryColor,
+              size: 24.sp,
             ),
             onPressed: _toggleBulkMode,
           ),
@@ -249,8 +262,8 @@ class _VisitorManagementScreenState extends State<VisitorManagementScreenNew> {
             IconButton(
               icon: Icon(
                 Icons.check_circle,
-                color: Colors.white,
-                size: 24,
+                color: theme.primaryColor,
+                size: 24.sp,
               ),
               onPressed: _bulkApprove,
             ),
@@ -305,7 +318,7 @@ class _VisitorManagementScreenState extends State<VisitorManagementScreenNew> {
                           ),
                         )
                       : ListView.builder(
-                          padding: EdgeInsets.only(bottom: 10.h),
+                          padding: EdgeInsets.only(bottom: 80.h, top: 10.h),
                           itemCount: _filteredVisitors.length,
                           itemBuilder: (context, index) {
                             final visitor = _filteredVisitors[index];
@@ -571,22 +584,21 @@ class _AddVisitorBottomSheetState extends State<AddVisitorBottomSheet> {
       ),
       child: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(4.w),
+          padding: EdgeInsets.all(16.w),
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 1.h),
-                  width: 10.w,
-                  height: 0.5.h,
+                  width: 50.w,
+                  height: 5.h,
                   decoration: BoxDecoration(
-                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
+                SizedBox(height: 6.h),
                 Text(
                   'Add New Visitor',
                   style: theme.textTheme.headlineSmall?.copyWith(
@@ -594,22 +606,23 @@ class _AddVisitorBottomSheetState extends State<AddVisitorBottomSheet> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 3.h),
-
+                SizedBox(height: 6.h),
                 // Camera/Photo Section
                 Container(
-                  height: 30.h,
+                  height: 240.h,
+                  width: double.infinity,
+                  // margin: EdgeInsets.only(top: 4.h),
                   decoration: BoxDecoration(
                     color: isDark
                         ? const Color(0xFF1E293B)
                         : const Color(0xFFF8FAFC),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.r),
                   ),
                   child: _capturedImage != null
                       ? Stack(
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.r),
                               child: Image.network(
                                 _capturedImage!.path,
                                 width: double.infinity,
@@ -630,7 +643,7 @@ class _AddVisitorBottomSheetState extends State<AddVisitorBottomSheet> {
                                   child: Icon(
                                     Icons.close,
                                     color: colorScheme.onError,
-                                    size: 20,
+                                    size: 20.sp,
                                   ),
                                 ),
                                 onPressed: () =>
@@ -641,7 +654,7 @@ class _AddVisitorBottomSheetState extends State<AddVisitorBottomSheet> {
                         )
                       : _isCameraInitialized && _cameraController != null
                       ? ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(16.r),
                           child: CameraPreview(_cameraController!),
                         )
                       : Center(
@@ -650,12 +663,12 @@ class _AddVisitorBottomSheetState extends State<AddVisitorBottomSheet> {
                             children: [
                               Icon(
                                 Icons.photo_camera,
-                                size: 48,
+                                size: 48.sp,
                                 color: colorScheme.onSurfaceVariant.withValues(
                                   alpha: 0.5,
                                 ),
                               ),
-                              SizedBox(height: 2.h),
+                              SizedBox(height: 1.h),
                               Text(
                                 'Camera not available',
                                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -666,9 +679,9 @@ class _AddVisitorBottomSheetState extends State<AddVisitorBottomSheet> {
                           ),
                         ),
                 ),
-                SizedBox(height: 2.h),
-
+                SizedBox(height: 16.h),
                 Row(
+                  spacing: 8.w,
                   children: [
                     Expanded(
                       child: ElevatedButton.icon(
@@ -676,74 +689,53 @@ class _AddVisitorBottomSheetState extends State<AddVisitorBottomSheet> {
                         icon: Icon(
                           Icons.camera_alt,
                           color: colorScheme.onPrimary,
-                          size: 20,
+                          size: 20.sp,
                         ),
                         label: const Text('Capture'),
                       ),
                     ),
-                    SizedBox(width: 2.w),
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: _pickFromGallery,
                         icon: Icon(
                           Icons.photo_library,
                           color: colorScheme.primary,
-                          size: 20,
+                          size: 20.sp,
                         ),
                         label: const Text('Gallery'),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 3.h),
-
-                TextFormField(
+                SizedBox(height: 12.h),
+                AppTextField(
                   controller: _nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Visitor Name',
-                    prefixIcon: Icon(Icons.person_outline),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter visitor name';
-                    }
-                    return null;
-                  },
+                  label: 'Visitor Name',
+                  hint: 'Enter full name',
+                  icon: Icons.person_outline,
+                  type: FieldType.name,
+                  keyboardType: TextInputType.name,
                 ),
-                SizedBox(height: 2.h),
-
-                TextFormField(
+                SizedBox(height: 12.h),
+                AppTextField(
                   controller: _phoneController,
-                  decoration: const InputDecoration(
-                    labelText: 'Phone Number',
-                    prefixIcon: Icon(Icons.phone_outlined),
-                  ),
+                  label: 'Phone Number',
+                  hint: 'Enter 10-digit number',
+                  icon: Icons.phone_outlined,
+                  type: FieldType.phone,
                   keyboardType: TextInputType.phone,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter phone number';
-                    }
-                    return null;
-                  },
                 ),
-                SizedBox(height: 2.h),
-
-                TextFormField(
+                SizedBox(height: 12.h),
+                AppTextField(
                   controller: _purposeController,
-                  decoration: const InputDecoration(
-                    labelText: 'Purpose of Visit',
-                    prefixIcon: Icon(Icons.work_outline),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter purpose';
-                    }
-                    return null;
-                  },
+                  label: 'Purpose of Visit',
+                  hint: 'Why are you visiting?',
+                  icon: Icons.work_outline,
+                  type: FieldType.purpose,
                 ),
-                SizedBox(height: 2.h),
-
+                SizedBox(height: 12.h),
                 Row(
+                  spacing: 8.w,
                   children: [
                     Expanded(
                       child: OutlinedButton.icon(
@@ -751,7 +743,7 @@ class _AddVisitorBottomSheetState extends State<AddVisitorBottomSheet> {
                         icon: Icon(
                           Icons.calendar_today,
                           color: colorScheme.primary,
-                          size: 20,
+                          size: 20.sp,
                         ),
                         label: Text(
                           _selectedDate != null
@@ -760,14 +752,13 @@ class _AddVisitorBottomSheetState extends State<AddVisitorBottomSheet> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 2.w),
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: _selectTime,
                         icon: Icon(
                           Icons.access_time,
                           color: colorScheme.primary,
-                          size: 20,
+                          size: 20.sp,
                         ),
                         label: Text(
                           _selectedTime != null
@@ -778,14 +769,13 @@ class _AddVisitorBottomSheetState extends State<AddVisitorBottomSheet> {
                     ),
                   ],
                 ),
-                SizedBox(height: 3.h),
-
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 2.h),
+                SizedBox(height: 16.h),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _submitForm,
+                    child: const Text('Add Visitor'),
                   ),
-                  child: const Text('Add Visitor'),
                 ),
               ],
             ),
@@ -815,44 +805,74 @@ class FilterChipsWidget extends StatelessWidget {
 
     final filters = ['Today', 'Pending', 'Approved', 'Rejected'];
 
-    return Container(
-      height: 6.h,
-      padding: EdgeInsets.symmetric(horizontal: 4.w),
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: filters.length,
-        separatorBuilder: (context, index) => SizedBox(width: 2.w),
-        itemBuilder: (context, index) {
-          final filter = filters[index];
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 8.h),
+      child: Row(
+        spacing: 10.w,
+        children: filters.map((filter) {
           final isSelected = selectedFilter == filter;
 
-          return FilterChip(
-            label: Text(filter),
-            selected: isSelected,
-            onSelected: (_) => onFilterChanged(filter),
-            backgroundColor: isDark
-                ? const Color(0xFF1E293B)
-                : const Color(0xFFF8FAFC),
-            selectedColor: colorScheme.primary.withValues(alpha: 0.2),
-            checkmarkColor: colorScheme.primary,
-            labelStyle: theme.textTheme.labelLarge?.copyWith(
-              color: isSelected
-                  ? colorScheme.primary
-                  : colorScheme.onSurfaceVariant,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              side: BorderSide(
+          return GestureDetector(
+            onTap: () => onFilterChanged(filter),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+              decoration: BoxDecoration(
                 color: isSelected
                     ? colorScheme.primary
-                    : colorScheme.outline.withValues(alpha: 0.3),
-                width: isSelected ? 2 : 1,
+                    : (isDark
+                          ? const Color(0xFF1E293B)
+                          : const Color(0xFFF1F5F9)),
+                borderRadius: BorderRadius.circular(30.r),
+                border: Border.all(
+                  color: isSelected
+                      ? colorScheme.primary
+                      : colorScheme.outline.withOpacity(0.2),
+                  width: isSelected ? 1.5 : 1,
+                ),
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: colorScheme.primary.withOpacity(0.25),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ]
+                    : [],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  /// Dot indicator
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    width: isSelected ? 6.w : 0,
+                    height: 6.w,
+                    margin: EdgeInsets.only(right: isSelected ? 6.w : 0),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+
+                  Text(
+                    filter,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      fontSize: 13.sp,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w500,
+                      color: isSelected
+                          ? Colors.white
+                          : colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
               ),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 1.h),
           );
-        },
+        }).toList(),
       ),
     );
   }
@@ -878,7 +898,7 @@ class FloatingSearchBarWidget extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+      margin: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -956,51 +976,44 @@ class NotificationBannerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
-      margin: EdgeInsets.all(4.w),
-      padding: EdgeInsets.all(3.w),
+      margin: EdgeInsets.all(12.w),
+      padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            colorScheme.primary.withValues(alpha: 0.1),
-            colorScheme.secondary.withValues(alpha: 0.1),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: colorScheme.primary.withValues(alpha: 0.3),
-          width: 2,
-        ),
+        borderRadius: BorderRadius.circular(18.r),
+        color: theme.scaffoldBackgroundColor,
+        border: Border.all(color: colorScheme.primary.withOpacity(0.25)),
         boxShadow: [
           BoxShadow(
-            color: colorScheme.primary.withValues(alpha: 0.2),
+            color: colorScheme.primary.withOpacity(0.15),
             blurRadius: 12,
-            offset: const Offset(0, 4),
+            offset: const Offset(0, 6),
           ),
         ],
       ),
+
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          /// HEADER
           Row(
             children: [
               Container(
-                padding: EdgeInsets.all(2.w),
+                padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
-                  color: colorScheme.primary.withValues(alpha: 0.2),
+                  color: colorScheme.primary.withOpacity(0.15),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  Icons.notifications_active,
+                  Icons.notifications_active_rounded,
                   color: colorScheme.primary,
-                  size: 24,
+                  size: 20.sp,
                 ),
               ),
-              SizedBox(width: 3.w),
+
+              SizedBox(width: 10.w),
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1009,10 +1022,9 @@ class NotificationBannerWidget extends StatelessWidget {
                       'Visitor at Gate',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: colorScheme.primary,
                       ),
                     ),
-                    SizedBox(height: 0.5.h),
+                    SizedBox(height: 2.h),
                     Text(
                       '${visitor['name']} has arrived',
                       style: theme.textTheme.bodyMedium,
@@ -1022,38 +1034,56 @@ class NotificationBannerWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.close,
-                  color: colorScheme.onSurfaceVariant,
-                  size: 20,
+
+              GestureDetector(
+                onTap: onDismiss,
+                child: Container(
+                  padding: EdgeInsets.all(6.w),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: colorScheme.surfaceVariant,
+                  ),
+                  child: Icon(Icons.close, size: 16.sp),
                 ),
-                onPressed: onDismiss,
               ),
             ],
           ),
-          SizedBox(height: 2.h),
+
+          SizedBox(height: 12.h),
+
+          /// ACTION BUTTONS
           Row(
             children: [
               Expanded(
                 child: ElevatedButton(
                   onPressed: onApprove,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: colorScheme.primary,
-                    foregroundColor: colorScheme.onPrimary,
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    elevation: 0,
                   ),
-                  child: const Text('Approve'),
+                  child: Text('Approve', style: TextStyle(fontSize: 13.sp)),
                 ),
               ),
-              SizedBox(width: 2.w),
+
+              SizedBox(width: 10.w),
+
               Expanded(
                 child: OutlinedButton(
                   onPressed: onDeny,
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: colorScheme.error,
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
                     side: BorderSide(color: colorScheme.error),
                   ),
-                  child: const Text('Deny'),
+                  child: Text(
+                    'Deny',
+                    style: TextStyle(fontSize: 13.sp, color: colorScheme.error),
+                  ),
                 ),
               ),
             ],
@@ -1098,26 +1128,52 @@ class VisitorCardWidget extends StatelessWidget {
   Color _getStatusColor(String status, ColorScheme colorScheme) {
     switch (status.toLowerCase()) {
       case 'approved':
-        return colorScheme.primary;
+        return const Color(0xFF22C55E); // vivid green
       case 'pending':
-        return colorScheme.tertiary;
+        return const Color(0xFFF59E0B); // amber
       case 'rejected':
-        return colorScheme.error;
+        return const Color(0xFFEF4444); // red
       default:
         return colorScheme.onSurfaceVariant;
+    }
+  }
+
+  Color _getStatusBgColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'approved':
+        return const Color(0xFFDCFCE7);
+      case 'pending':
+        return const Color(0xFFFEF3C7);
+      case 'rejected':
+        return const Color(0xFFFEE2E2);
+      default:
+        return const Color(0xFFF1F5F9);
     }
   }
 
   IconData _getStatusIcon(String status) {
     switch (status.toLowerCase()) {
       case 'approved':
-        return Icons.check_circle_rounded;
+        return Icons.verified_rounded;
       case 'pending':
-        return Icons.schedule_rounded;
+        return Icons.hourglass_top_rounded;
       case 'rejected':
-        return Icons.cancel_rounded;
+        return Icons.remove_circle_rounded;
       default:
         return Icons.help_outline_rounded;
+    }
+  }
+
+  String _getStatusLabel(String status) {
+    switch (status.toLowerCase()) {
+      case 'approved':
+        return 'Approved';
+      case 'pending':
+        return 'Pending';
+      case 'rejected':
+        return 'Rejected';
+      default:
+        return status;
     }
   }
 
@@ -1128,58 +1184,57 @@ class VisitorCardWidget extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final status = visitor['status'] as String;
     final statusColor = _getStatusColor(status, colorScheme);
+    final statusBgColor = isDark
+        ? statusColor.withOpacity(0.15)
+        : _getStatusBgColor(status);
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 5.h),
       child: Slidable(
         key: ValueKey(visitor['id']),
         startActionPane: ActionPane(
-          motion: const StretchMotion(),
+          motion: const BehindMotion(),
+          extentRatio: 0.78,
           children: [
-            SlidableAction(
-              onPressed: (_) => onApprove(),
-              backgroundColor: colorScheme.primary,
-              foregroundColor: colorScheme.onPrimary,
+            _buildSlideAction(
               icon: Icons.check_rounded,
               label: 'Approve',
-              borderRadius: BorderRadius.circular(16),
+              color: const Color(0xFF22C55E),
+              onTap: (_) => onApprove(),
+              isFirst: true,
             ),
-            SlidableAction(
-              onPressed: (_) => onReject(),
-              backgroundColor: colorScheme.error,
-              foregroundColor: colorScheme.onError,
+            _buildSlideAction(
               icon: Icons.close_rounded,
               label: 'Reject',
-              borderRadius: BorderRadius.circular(16),
+              color: const Color(0xFFEF4444),
+              onTap: (_) => onReject(),
             ),
-            SlidableAction(
-              onPressed: (_) => onCall(),
-              backgroundColor: colorScheme.secondary,
-              foregroundColor: colorScheme.onSecondary,
+            _buildSlideAction(
               icon: Icons.phone_rounded,
               label: 'Call',
-              borderRadius: BorderRadius.circular(16),
+              color: colorScheme.secondary,
+              onTap: (_) => onCall(),
             ),
-            SlidableAction(
-              onPressed: (_) => onShare(),
-              backgroundColor: colorScheme.tertiary,
-              foregroundColor: colorScheme.onTertiary,
-              icon: Icons.share_rounded,
+            _buildSlideAction(
+              icon: Icons.ios_share_rounded,
               label: 'Share',
-              borderRadius: BorderRadius.circular(16),
+              color: const Color(0xFF8B5CF6),
+              onTap: (_) => onShare(),
+              isLast: true,
             ),
           ],
         ),
         endActionPane: ActionPane(
-          motion: const StretchMotion(),
+          motion: const BehindMotion(),
+          extentRatio: 0.22,
           children: [
-            SlidableAction(
-              onPressed: (_) => onDelete(),
-              backgroundColor: colorScheme.error,
-              foregroundColor: colorScheme.onError,
-              icon: Icons.delete_rounded,
+            _buildSlideAction(
+              icon: Icons.delete_outline_rounded,
               label: 'Delete',
-              borderRadius: BorderRadius.circular(16),
+              color: const Color(0xFFEF4444),
+              onTap: (_) => onDelete(),
+              isFirst: true,
+              isLast: true,
             ),
           ],
         ),
@@ -1188,122 +1243,209 @@ class VisitorCardWidget extends StatelessWidget {
             showModalBottomSheet(
               context: context,
               backgroundColor: Colors.transparent,
+              isScrollControlled: true,
               builder: (context) => _buildContextMenu(context, theme),
             );
           },
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF1E293B) : Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(20.r),
               border: Border.all(
-                color: statusColor.withValues(alpha: 0.3),
-                width: 2,
+                color: isSelected
+                    ? colorScheme.primary
+                    : statusColor.withOpacity(0.2),
+                width: isSelected ? 2 : 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: isDark
-                      ? Colors.black.withValues(alpha: 0.05)
-                      : Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 4,
+                  color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
+                  blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
               ],
             ),
             child: Padding(
-              padding: EdgeInsets.all(3.w),
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
               child: Row(
+                spacing: 12.w,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // Bulk Mode Checkbox
                   if (isBulkMode)
-                    Padding(
-                      padding: EdgeInsets.only(right: 3.w),
-                      child: Checkbox(
-                        value: isSelected,
-                        onChanged: (_) => onSelectionChanged?.call(),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      width: 22.w,
+                      height: 22.w,
+                      // margin: EdgeInsets.only(right: 10.w),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? colorScheme.primary
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(6.r),
+                        border: Border.all(
+                          color: isSelected
+                              ? colorScheme.primary
+                              : colorScheme.onSurfaceVariant.withOpacity(0.4),
+                          width: 2,
                         ),
                       ),
+                      child: isSelected
+                          ? Icon(
+                              Icons.check_rounded,
+                              size: 14.sp,
+                              color: colorScheme.onPrimary,
+                            )
+                          : null,
                     ),
+
+                  // Avatar with status indicator
                   Stack(
+                    clipBehavior: Clip.none,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          visitor['photo'] as String,
-                          width: 15.w,
-                          height: 15.w,
-                          fit: BoxFit.cover,
-                          semanticLabel:
-                              visitor['photoSemanticLabel'] as String,
+                      Container(
+                        width: 56.w,
+                        height: 56.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.r),
+                          border: Border.all(
+                            color: statusColor.withOpacity(0.3),
+                            width: 2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: statusColor.withOpacity(0.2),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(14.r),
+                          child: Image.network(
+                            visitor['photo'] as String,
+                            width: 56.w,
+                            height: 56.w,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Container(
+                              color: statusColor.withOpacity(0.1),
+                              child: Icon(
+                                Icons.person_rounded,
+                                size: 28.sp,
+                                color: statusColor,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
-                        right: 0,
+                        bottom: -3,
+                        right: -3,
                         child: Container(
-                          padding: EdgeInsets.all(0.5.w),
+                          padding: EdgeInsets.all(3.w),
                           decoration: BoxDecoration(
                             color: statusColor,
                             shape: BoxShape.circle,
+                            border: Border.all(
+                              color: isDark
+                                  ? const Color(0xFF1E293B)
+                                  : Colors.white,
+                              width: 2,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: statusColor.withOpacity(0.4),
+                                blurRadius: 4,
+                              ),
+                            ],
                           ),
                           child: Icon(
-                            _getStatusIcon(
-                              status,
-                            ),
-                            size: 12,
-                            color: colorScheme.onPrimary,
+                            _getStatusIcon(status),
+                            size: 10.sp,
+                            color: Colors.white,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(width: 3.w),
+
+                  // Info Section
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        // Name
                         Text(
                           visitor['name'] as String,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w700,
+                            color: isDark
+                                ? Colors.white
+                                : const Color(0xFF0F172A),
+                            letterSpacing: -0.3,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 0.5.h),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.work_outline,
-                              size: 14,
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                            SizedBox(width: 1.w),
-                            Expanded(
-                              child: Text(
+                        
+                        SizedBox(height: 5.h),
+
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 7.w,
+                            vertical: 3.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: colorScheme.primary.withOpacity(0.08),
+                            borderRadius: BorderRadius.circular(6.r),
+                          ),
+                          child: Row(
+                            spacing: 4.w,
+                            children: [
+                              Icon(
+                                Icons.work_outline_rounded,
+                                size: 11.sp,
+                                color: colorScheme.primary,
+                              ),
+                              Text(
                                 visitor['purpose'] as String,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
+                                style: TextStyle(
+                                  fontSize: 11.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: colorScheme.primary,
                                 ),
-                                maxLines: 1,
+                                maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        SizedBox(height: 0.5.h),
+
+                        SizedBox(height: 5.h),
+
+                        // Time row
                         Row(
                           children: [
                             Icon(
-                              Icons.schedule,
-                              size: 14,
-                              color: colorScheme.onSurfaceVariant,
+                              Icons.schedule_rounded,
+                              size: 12.sp,
+                              color: colorScheme.onSurfaceVariant.withOpacity(
+                                0.7,
+                              ),
                             ),
-                            SizedBox(width: 1.w),
+                            SizedBox(width: 4.w),
                             Text(
                               visitor['expectedTime'] as String,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
+                              style: TextStyle(
+                                fontSize: 11.sp,
+                                fontWeight: FontWeight.w500,
+                                color: colorScheme.onSurfaceVariant.withOpacity(
+                                  0.8,
+                                ),
+                                letterSpacing: 0.1,
                               ),
                             ),
                           ],
@@ -1311,22 +1453,44 @@ class VisitorCardWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 2.w,
-                      vertical: 0.5.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: statusColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      status,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: statusColor,
-                        fontWeight: FontWeight.w600,
+
+                  // Status Badge — vertical pill
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10.w,
+                          vertical: 6.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: statusBgColor,
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(
+                            color: statusColor.withOpacity(0.25),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Icon(
+                              _getStatusIcon(status),
+                              size: 15.sp,
+                              color: statusColor,
+                            ),
+                            SizedBox(height: 3.h),
+                            Text(
+                              _getStatusLabel(status),
+                              style: TextStyle(
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.w700,
+                                color: statusColor,
+                                letterSpacing: 0.2,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -1337,63 +1501,395 @@ class VisitorCardWidget extends StatelessWidget {
     );
   }
 
+  CustomSlidableAction _buildSlideAction({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required void Function(BuildContext) onTap,
+    bool isFirst = false,
+    bool isLast = false,
+  }) {
+    return CustomSlidableAction(
+      onPressed: onTap,
+      backgroundColor: color.withOpacity(0.12),
+      foregroundColor: color,
+      padding: EdgeInsets.zero,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(8.w),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.15),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, size: 18.sp, color: color),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10.sp,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildContextMenu(BuildContext context, ThemeData theme) {
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
+    final status = visitor['status'] as String;
+    final statusColor = _getStatusColor(status, colorScheme);
 
     return Container(
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1E293B) : Colors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 20,
+            offset: const Offset(0, -4),
+          ),
+        ],
       ),
       child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 1.h),
-              width: 10.w,
-              height: 0.5.h,
-              decoration: BoxDecoration(
-                color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(4),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Drag handle
+              Center(
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 12.h),
+                  width: 36.w,
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                    color: colorScheme.onSurfaceVariant.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
               ),
-            ),
-            ListTile(
-              leading: Icon(Icons.edit, color: colorScheme.primary, size: 24),
-              title: Text('Edit Details', style: theme.textTheme.bodyLarge),
-              onTap: () {
-                Navigator.pop(context);
-                onEdit();
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.access_time,
-                color: colorScheme.secondary,
-                size: 24,
+
+              // Visitor mini header
+              Container(
+                padding: EdgeInsets.all(14.w),
+                margin: EdgeInsets.only(bottom: 12.h),
+                decoration: BoxDecoration(
+                  color: statusColor.withOpacity(0.06),
+                  borderRadius: BorderRadius.circular(16.r),
+                  border: Border.all(color: statusColor.withOpacity(0.15)),
+                ),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10.r),
+                      child: Image.network(
+                        visitor['photo'] as String,
+                        width: 40.w,
+                        height: 40.w,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          width: 40.w,
+                          height: 40.w,
+                          color: statusColor.withOpacity(0.1),
+                          child: Icon(Icons.person_rounded, color: statusColor),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            visitor['name'] as String,
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w700,
+                              color: isDark
+                                  ? Colors.white
+                                  : const Color(0xFF0F172A),
+                            ),
+                          ),
+                          Text(
+                            visitor['purpose'] as String,
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 4.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: statusColor.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Text(
+                        _getStatusLabel(status),
+                        style: TextStyle(
+                          fontSize: 11.sp,
+                          fontWeight: FontWeight.w700,
+                          color: statusColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              title: Text('Extend Time', style: theme.textTheme.bodyLarge),
-              onTap: () {
-                Navigator.pop(context);
-                onExtendTime();
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.note_add,
-                color: colorScheme.tertiary,
-                size: 24,
+
+              // Actions
+              _buildMenuTile(
+                context: context,
+                theme: theme,
+                icon: Icons.edit_rounded,
+                title: 'Edit Details',
+                subtitle: 'Modify visitor information',
+                color: colorScheme.primary,
+                onTap: () {
+                  Navigator.pop(context);
+                  onEdit();
+                },
               ),
-              title: Text('Add Note', style: theme.textTheme.bodyLarge),
-              onTap: () {
-                Navigator.pop(context);
-                onAddNote();
-              },
-            ),
-            SizedBox(height: 2.h),
-          ],
+              _buildMenuTile(
+                context: context,
+                theme: theme,
+                icon: Icons.access_time_rounded,
+                title: 'Extend Time',
+                subtitle: 'Increase visit duration',
+                color: const Color(0xFFF59E0B),
+                onTap: () {
+                  Navigator.pop(context);
+                  onExtendTime();
+                },
+              ),
+              _buildMenuTile(
+                context: context,
+                theme: theme,
+                icon: Icons.note_add_rounded,
+                title: 'Add Note',
+                subtitle: 'Attach a note to this visit',
+                color: const Color(0xFF8B5CF6),
+                onTap: () {
+                  Navigator.pop(context);
+                  onAddNote();
+                },
+                isLast: true,
+              ),
+
+              SizedBox(height: 8.h),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildMenuTile({
+    required BuildContext context,
+    required ThemeData theme,
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color color,
+    required VoidCallback onTap,
+    bool isLast = false,
+  }) {
+    final isDark = theme.brightness == Brightness.dark;
+    return Column(
+      children: [
+        InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(14.r),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 4.w),
+            child: Row(
+              children: [
+                Container(
+                  width: 44.w,
+                  height: 44.w,
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Icon(icon, color: color, size: 20.sp),
+                ),
+                SizedBox(width: 14.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: isDark
+                              ? Colors.white
+                              : const Color(0xFF0F172A),
+                        ),
+                      ),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 11.sp,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  size: 20.sp,
+                  color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (!isLast)
+          Divider(
+            height: 1,
+            indent: 58.w,
+            color: theme.colorScheme.onSurfaceVariant.withOpacity(0.1),
+          ),
+      ],
+    );
+  }
+}
+
+class AppTextField extends StatefulWidget {
+  final TextEditingController controller;
+  final String label;
+  final String hint;
+  final IconData icon;
+  final FieldType type;
+  final TextInputType? keyboardType;
+
+  const AppTextField({
+    super.key,
+    required this.controller,
+    required this.label,
+    required this.hint,
+    required this.icon,
+    required this.type,
+    this.keyboardType,
+  });
+
+  @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  final FocusNode _focusNode = FocusNode();
+  bool _isFocused = false;
+
+  String? validateField(FieldType type, String? value) {
+    final v = value?.trim() ?? '';
+
+    switch (type) {
+      case FieldType.name:
+        if (v.isEmpty) return 'Please enter name';
+        if (v.length < 2) return 'Name is too short';
+        return null;
+
+      case FieldType.phone:
+        if (v.isEmpty) return 'Please enter phone number';
+        if (!RegExp(r'^[0-9]{10}$').hasMatch(v)) {
+          return 'Enter valid 10-digit number';
+        }
+        return null;
+
+      case FieldType.purpose:
+        if (v.isEmpty) return 'Please enter purpose';
+        if (v.length < 3) return 'Too short';
+        return null;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _focusNode.addListener(() {
+      setState(() {
+        _isFocused = _focusNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E1E1E) : Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [
+          if (_isFocused)
+            BoxShadow(
+              color: theme.colorScheme.primary.withOpacity(0.15),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+        ],
+      ),
+      child: TextFormField(
+        controller: widget.controller,
+        focusNode: _focusNode,
+        keyboardType: widget.keyboardType,
+        style: TextStyle(
+          fontSize: 14.5,
+          fontWeight: FontWeight.w500,
+          color: isDark ? Colors.white : Colors.black87,
+        ),
+        decoration: InputDecoration(
+          labelText: widget.label,
+          hintText: widget.hint,
+
+          prefixIcon: Icon(widget.icon, size: 18),
+
+          border: InputBorder.none,
+
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 14,
+          ),
+
+          labelStyle: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: _isFocused
+                ? theme.colorScheme.primary
+                : Colors.grey.shade600,
+          ),
+
+          hintStyle: TextStyle(fontSize: 13, color: Colors.grey.shade500),
+        ),
+
+        validator: (value) => validateField(widget.type, value),
       ),
     );
   }

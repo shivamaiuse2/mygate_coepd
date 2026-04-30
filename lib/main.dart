@@ -15,6 +15,7 @@ import 'package:mygate_coepd/screens/auth/splash_screen.dart';
 import 'package:mygate_coepd/screens/auth/onboarding_screen.dart';
 import 'package:mygate_coepd/screens/auth/role_selection_screen.dart';
 import 'package:mygate_coepd/screens/auth/auth_screen.dart';
+import 'package:mygate_coepd/screens/auth/otp_verification_screen.dart';
 import 'package:mygate_coepd/screens/resident/resident_main_screen.dart';
 import 'package:mygate_coepd/screens/guard/guard_main_screen.dart';
 import 'package:mygate_coepd/screens/admin/admin_main_screen.dart';
@@ -169,6 +170,7 @@ class _MyGateBellState extends State<MyGateBell> with WidgetsBindingObserver {
       '/community': (context) => const CommunityScreen(),
       '/profile': (context) => const ProfileScreen(),
       '/location-selection': (context) => const LocationSelectionScreen(),
+      '/otp-verification': (context) => throw UnimplementedError('OTP Verification Screen requires parameters'),
     };
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:smart_auth/smart_auth.dart';
 import 'package:mygate_coepd/blocs/auth/auth_bloc.dart';
 import 'package:mygate_coepd/blocs/auth/auth_event.dart';
 import 'package:mygate_coepd/blocs/auth/auth_state.dart';
@@ -11,6 +11,7 @@ import 'package:mygate_coepd/screens/resident/resident_main_screen.dart';
 import 'package:mygate_coepd/screens/guard/guard_main_screen.dart';
 import 'package:mygate_coepd/screens/admin/admin_main_screen.dart';
 import 'package:mygate_coepd/screens/auth/approval_pending_screen.dart';
+import 'package:mygate_coepd/screens/auth/otp_verification_screen.dart';
 import 'package:mygate_coepd/theme/app_theme.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -22,11 +23,7 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   bool _isLogin = true;
-  bool _otpSent = false;
-  String _otp = '';
-  String _otpErrorMessage = ''; // Added for OTP error messages
   final _formKey = GlobalKey<FormState>();
-  late SmartAuth _smartAuth; // SmartAuth instance
 
   // Controllers
   final TextEditingController _nameController = TextEditingController();
@@ -38,7 +35,6 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   void initState() {
     super.initState();
-    _smartAuth = SmartAuth.instance;
     // Pre-fill phone if remember device is enabled
     // Only pre-fill actual phone numbers, not role names
     if (AppConfig.rememberDevice && AppConfig.selectedRole != null) {
@@ -60,90 +56,33 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void _submitForm() {
-    // Clear previous OTP error message
-    setState(() {
-      _otpErrorMessage = '';
-    });
-    
     if (_formKey.currentState!.validate()) {
-      // Validate OTP if it's sent
-      if (_otpSent) {
-        // Validate OTP format
-        if (_otp.length != 6 || !RegExp(r'^[0-9]{6}$').hasMatch(_otp)) {
-          setState(() {
-            _otpErrorMessage = 'Please enter a valid 6-digit OTP';
-          });
-          return;
-        }
-      }
-      
       if (_isLogin) {
-        if (!_otpSent) {
-          setState(() {
-            _otpSent = true;
-          });
-          // Request OTP using SmartAuth
-          _requestOtp();
-        } else {
-          // Login with OTP
-          context.read<AuthBloc>().add(
-            LoginRequested(phone: _phoneController.text, otp: _otp),
-          );
-        }
-      } else {
-        if (!_otpSent) {
-          setState(() {
-            _otpSent = true;
-          });
-          // Request OTP using SmartAuth
-          _requestOtp();
-        } else {
-          // Register
-          context.read<AuthBloc>().add(
-            RegisterRequested(
-              name: _nameController.text,
+        // Navigate to OTP verification screen for login
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => OtpVerificationScreen(
               phone: _phoneController.text,
+              isLogin: true,
+            ),
+          ),
+        );
+      } else {
+        // Navigate to OTP verification screen for registration
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => OtpVerificationScreen(
+              phone: _phoneController.text,
+              isLogin: false,
+              name: _nameController.text,
               email: _emailController.text,
               societyId: _societyIdController.text,
               unit: _unitController.text,
               role: AppConfig.selectedRole ?? 'resident',
             ),
-          );
-        }
+          ),
+        );
       }
-    }
-  }
-
-  // Request OTP using SmartAuth
-  void _requestOtp() async {
-    try {
-      // Show loading state
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sending OTP...'), backgroundColor: AppTheme.primary),
-      );
-      
-      // In a real implementation, you would call your backend API to send OTP
-      // For now, we'll simulate it with a delay
-      await Future.delayed(const Duration(seconds: 1));
-      
-      // Hide loading snackbar
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('OTP sent successfully!'), backgroundColor: AppTheme.success),
-      );
-    } catch (e) {
-      // Hide loading snackbar
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      
-      // Show error message
-      setState(() {
-        _otpErrorMessage = 'Failed to send OTP. Please try again.';
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: AppTheme.error),
-      );
     }
   }
 
@@ -295,24 +234,10 @@ class _AuthScreenState extends State<AuthScreen> {
               child: BlocListener<AuthBloc, AuthState>(
                 listener: (context, state) {
                   if (state is AuthError) {
-                    // Check if it's an OTP related error
-                    if (state.message.toLowerCase().contains('otp') || 
-                        state.message.toLowerCase().contains('code')) {
-                      setState(() {
-                        _otpErrorMessage = state.message;
-                      });
-                    }
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(state.message),
                         backgroundColor: AppTheme.error,
-                      ),
-                    );
-                  } else if (state is AuthLoading) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Processing...'),
-                        backgroundColor: AppTheme.primary,
                       ),
                     );
                   } else if (state is Authenticated) {
@@ -320,11 +245,6 @@ class _AuthScreenState extends State<AuthScreen> {
                     // This ensures navigation follows the role selected in role selection screen
                     final selectedRole = AppConfig.selectedRole ?? 'resident';
                     if (selectedRole == 'guard') {
-                      // Navigator.of(context).pushReplacement(
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const GuardMainScreen(),
-                      //   ),
-                      // );
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                           builder: (context) => const GuardMainScreen(),
@@ -551,65 +471,8 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                         SizedBox(height: 20.h),
 
-                        // Email address
-                        Container(
-                          decoration: BoxDecoration(
-                            color: surfaceColor,
-                            borderRadius: BorderRadius.circular(16.r),
-                            boxShadow: isDarkMode
-                                ? []
-                                : [
-                                    BoxShadow(
-                                      color: AppTheme.onBackgroundLight.withValues(alpha: 0.1),
-                                      blurRadius: 10.r,
-                                      offset: Offset(0, 5.h),
-                                    ),
-                                  ],
-                          ),
-                          child: TextFormField(
-                            controller: _emailController,
-                            style: TextStyle(color: textColor),
-                            decoration: InputDecoration(
-                              labelText: 'Email Address',
-                              labelStyle: TextStyle(color: secondaryTextColor),
-                              prefixIcon: Icon(
-                                Icons.email_outlined,
-                                color: iconColor,
-                              ),
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.w,
-                                vertical: 18.h,
-                              ),
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter your email address';
-                              }
-                              // Simple phone validation
-                              if (!RegExp(
-                                r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                              ).hasMatch(value)) {
-                                return 'Please enter a valid email address';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 20.h),
-                        if (_otpSent) ...[
-                          SizedBox(height: 20.h),
-                          Text(
-                            'Enter OTP',
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                              color: textColor,
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          // SmartAuth OTP Input Field
+                        // Email address - Only show for registration
+                        if (!_isLogin)
                           Container(
                             decoration: BoxDecoration(
                               color: surfaceColor,
@@ -625,13 +488,13 @@ class _AuthScreenState extends State<AuthScreen> {
                                     ],
                             ),
                             child: TextFormField(
-                              initialValue: _otp,
-                              style: TextStyle(color: textColor, fontSize: 18.sp),
+                              controller: _emailController,
+                              style: TextStyle(color: textColor),
                               decoration: InputDecoration(
-                                labelText: 'OTP',
+                                labelText: 'Email Address',
                                 labelStyle: TextStyle(color: secondaryTextColor),
                                 prefixIcon: Icon(
-                                  Icons.lock_outline,
+                                  Icons.email_outlined,
                                   color: iconColor,
                                 ),
                                 border: InputBorder.none,
@@ -640,59 +503,21 @@ class _AuthScreenState extends State<AuthScreen> {
                                   vertical: 18.h,
                                 ),
                               ),
-                              keyboardType: TextInputType.number,
-                              maxLength: 6,
-                              onChanged: (value) {
-                                setState(() {
-                                  _otp = value;
-                                });
-                              },
+                              keyboardType: TextInputType.emailAddress,
                               validator: (value) {
-                                if (_otpSent && (value == null || value.isEmpty)) {
-                                  return 'Please enter OTP';
+                                if (!_isLogin && (value == null || value.isEmpty)) {
+                                  return 'Please enter your email address';
                                 }
-                                if (_otpSent && (value?.length != 6)) {
-                                  return 'OTP must be 6 digits';
+                                if (!_isLogin && value != null && !RegExp(
+                                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                                ).hasMatch(value)) {
+                                  return 'Please enter a valid email address';
                                 }
                                 return null;
                               },
                             ),
                           ),
-                          SizedBox(height: 10.h),
-                          // OTP Error Message Display
-                          if (_otpErrorMessage.isNotEmpty)
-                            Padding(
-                              padding: EdgeInsets.only(top: 10.h),
-                              child: Text(
-                                _otpErrorMessage,
-                                style: TextStyle(
-                                  color: AppTheme.error,
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          if (_isLogin)
-                            Row(
-                              children: [
-                                Checkbox(
-                                  value: AppConfig.rememberDevice,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      AppConfig.setRememberDevice(
-                                        value ?? false,
-                                      );
-                                    });
-                                  },
-                                  activeColor: iconColor,
-                                ),
-                                Text(
-                                  'Remember this device',
-                                  style: TextStyle(color: textColor, fontSize: 14.sp),
-                                ),
-                              ],
-                            ),
-                        ],
+                        if (!_isLogin) SizedBox(height: 20.h),
                         SizedBox(height: 30.h),
                         SizedBox(
                           width: double.infinity,
@@ -712,27 +537,14 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ),
                                   elevation: isDarkMode ? 2 : 5,
                                 ),
-                                child: state is AuthLoading
-                                    ? const CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                              AppTheme.onPrimary,
-                                            ),
-                                      )
-                                    : Text(
-                                        _otpSent
-                                            ? (_isLogin
-                                                  ? 'Sign In'
-                                                  : 'Create Account')
-                                            : (_isLogin
-                                                  ? 'Send OTP'
-                                                  : 'Send OTP'),
-                                        style: TextStyle(
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppTheme.onPrimary,
-                                        ),
-                                      ),
+                                child: Text(
+                                  _isLogin ? 'Send OTP' : 'Send OTP',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.onPrimary,
+                                  ),
+                                ),
                               );
                             },
                           ),
@@ -743,9 +555,6 @@ class _AuthScreenState extends State<AuthScreen> {
                             onPressed: () {
                               setState(() {
                                 _isLogin = !_isLogin;
-                                _otpSent = false;
-                                _otp = '';
-                                _otpErrorMessage = ''; // Clear OTP error message
                               });
                             },
                             child: Text(

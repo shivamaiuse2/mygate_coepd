@@ -459,34 +459,6 @@ class _BuildAnimatedNavItem extends StatelessWidget {
                   color: isSelected ? primaryColor : Colors.grey.shade600,
                 ),
 
-                // Badge
-                if (item.badgeCount > 0)
-                  Positioned(
-                    right: 0.w,
-                    top: -5.h,
-                    child: Container(
-                      padding: EdgeInsets.all(4.r),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2.w),
-                      ),
-                      constraints: BoxConstraints(
-                        minWidth: 16.w,
-                        minHeight: 16.h,
-                      ),
-                      child: Text(
-                        item.badgeCount.toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.r,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-
                 // Active indicator dot
                 if (isSelected)
                   Positioned(
@@ -496,7 +468,10 @@ class _BuildAnimatedNavItem extends StatelessWidget {
                       child: Container(
                         width: 20.w,
                         height: 4.h,
-                        decoration: BoxDecoration(color: primaryColor),
+                        decoration: BoxDecoration(
+                          color: primaryColor,
+                          shape: BoxShape.circle,
+                        ),
                       ),
                     ),
                   ),
